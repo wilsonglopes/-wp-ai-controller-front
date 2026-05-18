@@ -1,20 +1,9 @@
-import fs from "fs"
-import path from "path"
 import { createClient } from "./supabase-server"
-
-function readKnowledgeFile(filename: string): unknown {
-  try {
-    const filePath = path.join(process.cwd(), "knowledge", filename)
-    return JSON.parse(fs.readFileSync(filePath, "utf-8"))
-  } catch {
-    return {}
-  }
-}
+import base from "../../knowledge/base.json"
+import advanced from "../../knowledge/elementor-advanced.json"
+import political from "../../knowledge/political-recipe.json"
 
 export async function getBuilderKnowledge(): Promise<string> {
-  const base = readKnowledgeFile("base.json") as Record<string, unknown>
-  const advanced = readKnowledgeFile("elementor-advanced.json") as Record<string, unknown>
-  const political = readKnowledgeFile("political-recipe.json") as Record<string, unknown>
 
   let snippetWidgets: Record<string, unknown> = {}
   let snippetTips: string[] = []
@@ -48,7 +37,7 @@ export async function getBuilderKnowledge(): Promise<string> {
     special_widgets: advanced.special_widgets,
     color_palettes: advanced.color_palettes,
     responsive_guide: advanced.responsive_guide,
-    political_campaign_template: (political as Record<string, unknown>).political_campaign_template,
+    political_campaign_template: (political as unknown as Record<string, unknown>).political_campaign_template,
   }
 
   let result = JSON.stringify(merged, null, 2)
