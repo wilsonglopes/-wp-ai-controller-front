@@ -3,16 +3,18 @@ import { runBuilder, type BuilderEvent } from "@/lib/ai-builder"
 
 export async function POST(request: Request) {
   const body = await request.json()
-  const { site_id, message } = body as { site_id?: string; message?: string }
+  const { site_id, message, recipe_base } = body as {
+    site_id?: string
+    message?: string
+    recipe_base?: string
+  }
 
   if (!site_id || !message?.trim()) {
     return Response.json({ error: "Campos obrigatórios: site_id, message" }, { status: 400 })
   }
 
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
     return Response.json({ error: "Não autenticado" }, { status: 401 })
@@ -50,15 +52,31 @@ export async function POST(request: Request) {
       }
 
       try {
-        await runBuilder({
+        const result = await runBuilder({
           provider: aiConfig.provider,
           model: aiConfig.model,
           apiKey: aiConfig.api_key,
           wpUrl: site.wp_url,
           wpApiKey: site.api_key,
           userMessage: message,
+          recipeBase: recipe_base,
           sendEvent: send,
         })
+
+        // Salvar build no histórico silenciosamente
+        if (result.pageUrl || result.pageId) {
+          supabase.from("builds").insert({
+            user_id: user.id,
+            site_id,
+            prompt: message,
+            page_url: result.pageUrl ?? null,
+            page_id: result.pageId ?? null,
+          }).then(
+            () => {},
+            (err: unknown) => console.error("build save error:", err)
+          )
+        }
+
         send({ type: "done" })
       } catch (err) {
         send({

@@ -1,0 +1,876 @@
+{
+  "version": "1.0.0",
+  "description": "Template completo para sites de campanha política — vereador, prefeito, deputado",
+
+  "political_campaign_template": {
+    "description": "Site completo de campanha eleitoral com 7 seções. Substitua os placeholders [NOME], [CARGO], [CIDADE], [PARTIDO], [NUMERO], [COR_PRINCIPAL], [COR_SECUNDARIA], [WHATSAPP] pelos dados reais.",
+    "sections": ["hero", "sobre", "propostas", "conquistas", "galeria", "depoimentos", "contato"],
+    "page_settings": {
+      "template": "elementor_canvas"
+    },
+    "structure": [
+
+      {
+        "_comment": "=== SEÇÃO 1: HERO === Full screen com foto do candidato + overlay + nome + botões",
+        "id": "sec10001",
+        "elType": "container",
+        "settings": {
+          "content_width": "full",
+          "flex_direction": "column",
+          "flex_justify_content": "center",
+          "flex_align_items": "center",
+          "min_height": { "unit": "vh", "size": 100 },
+          "background_background": "classic",
+          "background_image": { "url": "[URL_FOTO_CANDIDATO]", "id": 0 },
+          "background_position": "center center",
+          "background_size": "cover",
+          "background_overlay_background": "classic",
+          "background_overlay_color": "rgba(0,0,0,0.65)",
+          "padding": { "unit": "px", "top": "100", "right": "40", "bottom": "100", "left": "40", "isLinked": false }
+        },
+        "elements": [
+          {
+            "id": "bad10001",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style='color:[COR_SECUNDARIA];font-weight:800;letter-spacing:4px;font-size:13px;text-transform:uppercase;text-align:center;margin-bottom:8px'>[PARTIDO] • Nº [NUMERO]</p>",
+              "animation": "fadeIn",
+              "animation_duration": "slow"
+            },
+            "elements": []
+          },
+          {
+            "id": "nam10001",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "[NOME]",
+              "header_size": "h1",
+              "align": "center",
+              "title_color": "#ffffff",
+              "typography_font_family": "Montserrat",
+              "typography_font_size": { "unit": "px", "size": 72 },
+              "typography_font_size_tablet": { "unit": "px", "size": 52 },
+              "typography_font_size_mobile": { "unit": "px", "size": 38 },
+              "typography_font_weight": "800",
+              "typography_line_height": { "unit": "em", "size": 1.1 },
+              "animation": "fadeInDown",
+              "animation_duration": "slow",
+              "animation_delay": 100
+            },
+            "elements": []
+          },
+          {
+            "id": "car10001",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Candidato a [CARGO] por [CIDADE]",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "[COR_SECUNDARIA]",
+              "typography_font_family": "Montserrat",
+              "typography_font_size": { "unit": "px", "size": 26 },
+              "typography_font_size_mobile": { "unit": "px", "size": 18 },
+              "typography_font_weight": "600",
+              "animation": "fadeIn",
+              "animation_delay": 300
+            },
+            "elements": []
+          },
+          {
+            "id": "slo10001",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style='color:rgba(255,255,255,0.9);font-size:20px;text-align:center;max-width:650px;margin:16px auto 0;line-height:1.7;font-family:Open Sans,sans-serif'>[SLOGAN DO CANDIDATO]</p>",
+              "animation": "fadeInUp",
+              "animation_delay": 400
+            },
+            "elements": []
+          },
+          {
+            "id": "sp110001",
+            "elType": "widget",
+            "widgetType": "spacer",
+            "settings": { "space": { "unit": "px", "size": 32 } },
+            "elements": []
+          },
+          {
+            "id": "cta10001",
+            "elType": "container",
+            "settings": {
+              "content_width": "full",
+              "flex_direction": "row",
+              "flex_justify_content": "center",
+              "flex_wrap": "wrap",
+              "gap": { "unit": "px", "size": 16 },
+              "animation": "fadeInUp",
+              "animation_delay": 500
+            },
+            "elements": [
+              {
+                "id": "bt110001",
+                "elType": "widget",
+                "widgetType": "button",
+                "settings": {
+                  "text": "Conheça as Propostas",
+                  "link": { "url": "#propostas", "is_external": false },
+                  "background_color": "[COR_PRINCIPAL]",
+                  "button_text_color": "#ffffff",
+                  "border_radius": { "unit": "px", "top": "50", "right": "50", "bottom": "50", "left": "50", "isLinked": true },
+                  "size": "lg",
+                  "hover_animation": "grow"
+                },
+                "elements": []
+              },
+              {
+                "id": "wha10001",
+                "elType": "widget",
+                "widgetType": "html",
+                "settings": {
+                  "html": "<a href='https://wa.me/55[WHATSAPP]?text=Olá [NOME], quero saber mais sobre sua campanha!' target='_blank' style='background:#25D366;color:#fff;padding:14px 32px;border-radius:50px;text-decoration:none;font-weight:700;font-size:16px;display:inline-flex;align-items:center;gap:10px;font-family:Montserrat,sans-serif'><svg width='22' height='22' viewBox='0 0 24 24' fill='white'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg>WhatsApp</a>"
+                },
+                "elements": []
+              }
+            ]
+          },
+          {
+            "id": "soc10001",
+            "elType": "container",
+            "settings": {
+              "content_width": "full",
+              "flex_direction": "row",
+              "flex_justify_content": "center",
+              "padding": { "unit": "px", "top": "32", "right": "0", "bottom": "0", "left": "0", "isLinked": false }
+            },
+            "elements": [
+              {
+                "id": "sic10001",
+                "elType": "widget",
+                "widgetType": "social-icons",
+                "settings": {
+                  "social_icon_list": [
+                    { "social_icon": { "value": "fab fa-facebook", "library": "fa-brands" }, "link": { "url": "https://facebook.com/[FACEBOOK]", "is_external": true } },
+                    { "social_icon": { "value": "fab fa-instagram", "library": "fa-brands" }, "link": { "url": "https://instagram.com/[INSTAGRAM]", "is_external": true } },
+                    { "social_icon": { "value": "fab fa-youtube", "library": "fa-brands" }, "link": { "url": "https://youtube.com/@[YOUTUBE]", "is_external": true } }
+                  ],
+                  "icon_size": { "unit": "px", "size": 18 },
+                  "shape": "circle",
+                  "color": "custom",
+                  "icon_color": "#ffffff",
+                  "icon_secondary_color": "rgba(255,255,255,0.2)",
+                  "space_between": { "unit": "px", "size": 8 }
+                },
+                "elements": []
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "_comment": "=== SEÇÃO 2: SOBRE === Foto + texto lado a lado",
+        "id": "sec20001",
+        "elType": "container",
+        "settings": {
+          "content_width": "boxed",
+          "flex_direction": "row",
+          "flex_wrap": "wrap",
+          "flex_align_items": "center",
+          "gap": { "unit": "px", "size": 60 },
+          "padding": { "unit": "px", "top": "100", "right": "20", "bottom": "100", "left": "20", "isLinked": false },
+          "background_background": "classic",
+          "background_color": "#ffffff"
+        },
+        "elements": [
+          {
+            "id": "img20001",
+            "elType": "container",
+            "settings": {
+              "width": { "unit": "%", "size": 45 },
+              "flex_direction": "column",
+              "flex_align_items": "center"
+            },
+            "elements": [
+              {
+                "id": "iw120001",
+                "elType": "widget",
+                "widgetType": "image",
+                "settings": {
+                  "image": { "url": "[URL_FOTO_CANDIDATO_FORMAL]", "id": 0 },
+                  "image_size": "full",
+                  "align": "center",
+                  "border_radius": { "unit": "px", "top": "16", "right": "16", "bottom": "16", "left": "16", "isLinked": true },
+                  "box_shadow_box_shadow_type": "yes",
+                  "box_shadow_box_shadow": { "horizontal": 0, "vertical": 8, "blur": 40, "spread": 0, "color": "rgba(0,0,0,0.15)" }
+                },
+                "elements": []
+              }
+            ]
+          },
+          {
+            "id": "txt20001",
+            "elType": "container",
+            "settings": {
+              "width": { "unit": "%", "size": 50 },
+              "flex_direction": "column"
+            },
+            "elements": [
+              {
+                "id": "lbl20001",
+                "elType": "widget",
+                "widgetType": "text-editor",
+                "settings": {
+                  "editor": "<p style='color:[COR_PRINCIPAL];font-weight:800;letter-spacing:3px;font-size:12px;text-transform:uppercase;margin-bottom:8px'>Conheça o Candidato</p>"
+                },
+                "elements": []
+              },
+              {
+                "id": "hd120001",
+                "elType": "widget",
+                "widgetType": "heading",
+                "settings": {
+                  "title": "Quem é [NOME_CURTO]?",
+                  "header_size": "h2",
+                  "align": "left",
+                  "title_color": "#1a1a2e",
+                  "typography_font_family": "Montserrat",
+                  "typography_font_size": { "unit": "px", "size": 42 },
+                  "typography_font_weight": "700",
+                  "animation": "fadeInLeft"
+                },
+                "elements": []
+              },
+              {
+                "id": "div20001",
+                "elType": "widget",
+                "widgetType": "divider",
+                "settings": {
+                  "color": { "color": "[COR_PRINCIPAL]" },
+                  "weight": { "unit": "px", "size": 4 },
+                  "width": { "unit": "%", "size": 15 },
+                  "align": "left",
+                  "gap": { "unit": "px", "size": 24 }
+                },
+                "elements": []
+              },
+              {
+                "id": "tex20001",
+                "elType": "widget",
+                "widgetType": "text-editor",
+                "settings": {
+                  "editor": "<p style='font-size:17px;line-height:1.8;color:#555;font-family:Open Sans,sans-serif'>[TEXTO_SOBRE_O_CANDIDATO - história, trajetória, valores, motivação para candidatura. 2 a 3 parágrafos.]</p>"
+                },
+                "elements": []
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "_comment": "=== SEÇÃO 3: PROPOSTAS === Grid de 3 colunas com icon-box",
+        "id": "sec30001",
+        "elType": "container",
+        "settings": {
+          "content_width": "full",
+          "flex_direction": "column",
+          "flex_align_items": "center",
+          "padding": { "unit": "px", "top": "100", "right": "20", "bottom": "100", "left": "20", "isLinked": false },
+          "background_background": "classic",
+          "background_color": "#f8f9fa"
+        },
+        "elements": [
+          {
+            "id": "lbl30001",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style='color:[COR_PRINCIPAL];font-weight:800;letter-spacing:3px;font-size:12px;text-transform:uppercase;text-align:center'>Plataforma de Governo</p>"
+            },
+            "elements": []
+          },
+          {
+            "id": "hd130001",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Nossas Propostas",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#1a1a2e",
+              "typography_font_family": "Montserrat",
+              "typography_font_size": { "unit": "px", "size": 42 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "sp130001",
+            "elType": "widget",
+            "widgetType": "spacer",
+            "settings": { "space": { "unit": "px", "size": 48 } },
+            "elements": []
+          },
+          {
+            "id": "grd30001",
+            "elType": "container",
+            "settings": {
+              "content_width": "boxed",
+              "flex_direction": "row",
+              "flex_wrap": "wrap",
+              "gap": { "unit": "px", "size": 24 },
+              "flex_justify_content": "center"
+            },
+            "elements": [
+              {
+                "id": "p0130001",
+                "elType": "container",
+                "settings": {
+                  "width": { "unit": "%", "size": 30 },
+                  "flex_direction": "column",
+                  "flex_align_items": "flex-start",
+                  "padding": { "unit": "px", "top": "32", "right": "28", "bottom": "32", "left": "28", "isLinked": false },
+                  "background_background": "classic",
+                  "background_color": "#ffffff",
+                  "border_radius": { "unit": "px", "top": "16", "right": "16", "bottom": "16", "left": "16", "isLinked": true },
+                  "box_shadow_box_shadow_type": "yes",
+                  "box_shadow_box_shadow": { "horizontal": 0, "vertical": 4, "blur": 24, "spread": 0, "color": "rgba(0,0,0,0.07)" },
+                  "animation": "fadeInUp",
+                  "animation_delay": 0
+                },
+                "elements": [
+                  {
+                    "id": "ic130001",
+                    "elType": "widget",
+                    "widgetType": "icon",
+                    "settings": {
+                      "icon": { "value": "fas fa-graduation-cap", "library": "fa-solid" },
+                      "icon_size": { "unit": "px", "size": 42 },
+                      "primary_color": "[COR_PRINCIPAL]",
+                      "view": "default"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "id": "sp230001",
+                    "elType": "widget",
+                    "widgetType": "spacer",
+                    "settings": { "space": { "unit": "px", "size": 16 } },
+                    "elements": []
+                  },
+                  {
+                    "id": "hd230001",
+                    "elType": "widget",
+                    "widgetType": "heading",
+                    "settings": {
+                      "title": "Educação de Qualidade",
+                      "header_size": "h3",
+                      "align": "left",
+                      "title_color": "#1a1a2e",
+                      "typography_font_size": { "unit": "px", "size": 20 },
+                      "typography_font_weight": "700"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "id": "te130001",
+                    "elType": "widget",
+                    "widgetType": "text-editor",
+                    "settings": {
+                      "editor": "<p style='color:#666;line-height:1.7;font-size:15px'>[DESCRIÇÃO DA PROPOSTA DE EDUCAÇÃO]</p>"
+                    },
+                    "elements": []
+                  }
+                ]
+              },
+              {
+                "id": "p0230001",
+                "elType": "container",
+                "settings": {
+                  "width": { "unit": "%", "size": 30 },
+                  "flex_direction": "column",
+                  "flex_align_items": "flex-start",
+                  "padding": { "unit": "px", "top": "32", "right": "28", "bottom": "32", "left": "28", "isLinked": false },
+                  "background_background": "classic",
+                  "background_color": "#ffffff",
+                  "border_radius": { "unit": "px", "top": "16", "right": "16", "bottom": "16", "left": "16", "isLinked": true },
+                  "box_shadow_box_shadow_type": "yes",
+                  "box_shadow_box_shadow": { "horizontal": 0, "vertical": 4, "blur": 24, "spread": 0, "color": "rgba(0,0,0,0.07)" },
+                  "animation": "fadeInUp",
+                  "animation_delay": 150
+                },
+                "elements": [
+                  {
+                    "id": "ic230001",
+                    "elType": "widget",
+                    "widgetType": "icon",
+                    "settings": {
+                      "icon": { "value": "fas fa-heartbeat", "library": "fa-solid" },
+                      "icon_size": { "unit": "px", "size": 42 },
+                      "primary_color": "[COR_PRINCIPAL]",
+                      "view": "default"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "id": "sp330001",
+                    "elType": "widget",
+                    "widgetType": "spacer",
+                    "settings": { "space": { "unit": "px", "size": 16 } },
+                    "elements": []
+                  },
+                  {
+                    "id": "hd330001",
+                    "elType": "widget",
+                    "widgetType": "heading",
+                    "settings": {
+                      "title": "Saúde para Todos",
+                      "header_size": "h3",
+                      "align": "left",
+                      "title_color": "#1a1a2e",
+                      "typography_font_size": { "unit": "px", "size": 20 },
+                      "typography_font_weight": "700"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "id": "te230001",
+                    "elType": "widget",
+                    "widgetType": "text-editor",
+                    "settings": {
+                      "editor": "<p style='color:#666;line-height:1.7;font-size:15px'>[DESCRIÇÃO DA PROPOSTA DE SAÚDE]</p>"
+                    },
+                    "elements": []
+                  }
+                ]
+              },
+              {
+                "id": "p0330001",
+                "elType": "container",
+                "settings": {
+                  "width": { "unit": "%", "size": 30 },
+                  "flex_direction": "column",
+                  "flex_align_items": "flex-start",
+                  "padding": { "unit": "px", "top": "32", "right": "28", "bottom": "32", "left": "28", "isLinked": false },
+                  "background_background": "classic",
+                  "background_color": "#ffffff",
+                  "border_radius": { "unit": "px", "top": "16", "right": "16", "bottom": "16", "left": "16", "isLinked": true },
+                  "box_shadow_box_shadow_type": "yes",
+                  "box_shadow_box_shadow": { "horizontal": 0, "vertical": 4, "blur": 24, "spread": 0, "color": "rgba(0,0,0,0.07)" },
+                  "animation": "fadeInUp",
+                  "animation_delay": 300
+                },
+                "elements": [
+                  {
+                    "id": "ic330001",
+                    "elType": "widget",
+                    "widgetType": "icon",
+                    "settings": {
+                      "icon": { "value": "fas fa-shield-alt", "library": "fa-solid" },
+                      "icon_size": { "unit": "px", "size": 42 },
+                      "primary_color": "[COR_PRINCIPAL]",
+                      "view": "default"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "id": "sp430001",
+                    "elType": "widget",
+                    "widgetType": "spacer",
+                    "settings": { "space": { "unit": "px", "size": 16 } },
+                    "elements": []
+                  },
+                  {
+                    "id": "hd430001",
+                    "elType": "widget",
+                    "widgetType": "heading",
+                    "settings": {
+                      "title": "Segurança Pública",
+                      "header_size": "h3",
+                      "align": "left",
+                      "title_color": "#1a1a2e",
+                      "typography_font_size": { "unit": "px", "size": 20 },
+                      "typography_font_weight": "700"
+                    },
+                    "elements": []
+                  },
+                  {
+                    "id": "te330001",
+                    "elType": "widget",
+                    "widgetType": "text-editor",
+                    "settings": {
+                      "editor": "<p style='color:#666;line-height:1.7;font-size:15px'>[DESCRIÇÃO DA PROPOSTA DE SEGURANÇA]</p>"
+                    },
+                    "elements": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "_comment": "=== SEÇÃO 4: CONQUISTAS === Contadores animados em fundo escuro",
+        "id": "sec40001",
+        "elType": "container",
+        "settings": {
+          "content_width": "full",
+          "flex_direction": "column",
+          "flex_align_items": "center",
+          "padding": { "unit": "px", "top": "80", "right": "20", "bottom": "80", "left": "20", "isLinked": false },
+          "background_background": "classic",
+          "background_color": "[COR_PRINCIPAL]"
+        },
+        "elements": [
+          {
+            "id": "hd140001",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Resultados que Falam por Si",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#ffffff",
+              "typography_font_family": "Montserrat",
+              "typography_font_size": { "unit": "px", "size": 38 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "sp140001",
+            "elType": "widget",
+            "widgetType": "spacer",
+            "settings": { "space": { "unit": "px", "size": 48 } },
+            "elements": []
+          },
+          {
+            "id": "ctr40001",
+            "elType": "container",
+            "settings": {
+              "content_width": "boxed",
+              "flex_direction": "row",
+              "flex_wrap": "wrap",
+              "gap": { "unit": "px", "size": 20 },
+              "flex_justify_content": "center"
+            },
+            "elements": [
+              {
+                "id": "c0140001",
+                "elType": "container",
+                "settings": {
+                  "width": { "unit": "%", "size": 22 },
+                  "flex_direction": "column",
+                  "flex_align_items": "center",
+                  "padding": { "unit": "px", "top": "30", "right": "20", "bottom": "30", "left": "20", "isLinked": false }
+                },
+                "elements": [
+                  {
+                    "id": "cn140001",
+                    "elType": "widget",
+                    "widgetType": "counter",
+                    "settings": {
+                      "starting_number": 0,
+                      "ending_number": 1200,
+                      "duration": 2000,
+                      "thousand_separator": "yes",
+                      "thousand_separator_char": ".",
+                      "suffix": "+",
+                      "number_size": { "unit": "px", "size": 56 },
+                      "number_color": "[COR_SECUNDARIA]",
+                      "title": "Famílias Atendidas",
+                      "title_size": { "unit": "px", "size": 15 },
+                      "title_color": "rgba(255,255,255,0.85)",
+                      "title_font_weight": "600"
+                    },
+                    "elements": []
+                  }
+                ]
+              },
+              {
+                "id": "c0240001",
+                "elType": "container",
+                "settings": {
+                  "width": { "unit": "%", "size": 22 },
+                  "flex_direction": "column",
+                  "flex_align_items": "center",
+                  "padding": { "unit": "px", "top": "30", "right": "20", "bottom": "30", "left": "20", "isLinked": false }
+                },
+                "elements": [
+                  {
+                    "id": "cn240001",
+                    "elType": "widget",
+                    "widgetType": "counter",
+                    "settings": {
+                      "starting_number": 0,
+                      "ending_number": 48,
+                      "duration": 2000,
+                      "suffix": "",
+                      "number_size": { "unit": "px", "size": 56 },
+                      "number_color": "[COR_SECUNDARIA]",
+                      "title": "Projetos Aprovados",
+                      "title_size": { "unit": "px", "size": 15 },
+                      "title_color": "rgba(255,255,255,0.85)",
+                      "title_font_weight": "600"
+                    },
+                    "elements": []
+                  }
+                ]
+              },
+              {
+                "id": "c0340001",
+                "elType": "container",
+                "settings": {
+                  "width": { "unit": "%", "size": 22 },
+                  "flex_direction": "column",
+                  "flex_align_items": "center",
+                  "padding": { "unit": "px", "top": "30", "right": "20", "bottom": "30", "left": "20", "isLinked": false }
+                },
+                "elements": [
+                  {
+                    "id": "cn340001",
+                    "elType": "widget",
+                    "widgetType": "counter",
+                    "settings": {
+                      "starting_number": 0,
+                      "ending_number": 15,
+                      "duration": 2000,
+                      "suffix": " anos",
+                      "number_size": { "unit": "px", "size": 56 },
+                      "number_color": "[COR_SECUNDARIA]",
+                      "title": "de Mandato",
+                      "title_size": { "unit": "px", "size": 15 },
+                      "title_color": "rgba(255,255,255,0.85)",
+                      "title_font_weight": "600"
+                    },
+                    "elements": []
+                  }
+                ]
+              },
+              {
+                "id": "c0440001",
+                "elType": "container",
+                "settings": {
+                  "width": { "unit": "%", "size": 22 },
+                  "flex_direction": "column",
+                  "flex_align_items": "center",
+                  "padding": { "unit": "px", "top": "30", "right": "20", "bottom": "30", "left": "20", "isLinked": false }
+                },
+                "elements": [
+                  {
+                    "id": "cn440001",
+                    "elType": "widget",
+                    "widgetType": "counter",
+                    "settings": {
+                      "starting_number": 0,
+                      "ending_number": 32,
+                      "duration": 2000,
+                      "suffix": " bairros",
+                      "number_size": { "unit": "px", "size": 56 },
+                      "number_color": "[COR_SECUNDARIA]",
+                      "title": "Contemplados",
+                      "title_size": { "unit": "px", "size": 15 },
+                      "title_color": "rgba(255,255,255,0.85)",
+                      "title_font_weight": "600"
+                    },
+                    "elements": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "_comment": "=== SEÇÃO 5: CTA FINAL + WHATSAPP FLUTUANTE ===",
+        "id": "sec50001",
+        "elType": "container",
+        "settings": {
+          "content_width": "full",
+          "flex_direction": "column",
+          "flex_align_items": "center",
+          "padding": { "unit": "px", "top": "100", "right": "20", "bottom": "100", "left": "20", "isLinked": false },
+          "background_background": "gradient",
+          "background_gradient_type": "linear",
+          "background_color": "[COR_PRINCIPAL]",
+          "background_color_b": "#1a1a2e",
+          "background_gradient_angle": { "unit": "deg", "size": 135 }
+        },
+        "elements": [
+          {
+            "id": "hd150001",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Juntos Construímos [CIDADE] Melhor",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#ffffff",
+              "typography_font_family": "Montserrat",
+              "typography_font_size": { "unit": "px", "size": 44 },
+              "typography_font_size_mobile": { "unit": "px", "size": 28 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "te150001",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style='color:rgba(255,255,255,0.85);font-size:18px;text-align:center;max-width:600px;margin:16px auto;line-height:1.7'>Seu apoio é fundamental. Fale comigo diretamente e faça parte desta transformação.</p>"
+            },
+            "elements": []
+          },
+          {
+            "id": "sp150001",
+            "elType": "widget",
+            "widgetType": "spacer",
+            "settings": { "space": { "unit": "px", "size": 24 } },
+            "elements": []
+          },
+          {
+            "id": "wha50001",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style='text-align:center'><a href='https://wa.me/55[WHATSAPP]?text=Quero apoiar a campanha de [NOME]!' target='_blank' style='background:#25D366;color:#fff;padding:18px 48px;border-radius:50px;text-decoration:none;font-weight:700;font-size:18px;display:inline-flex;align-items:center;gap:12px;font-family:Montserrat,sans-serif;box-shadow:0 8px 30px rgba(37,211,102,0.4)'><svg width='26' height='26' viewBox='0 0 24 24' fill='white'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg>Apoie pelo WhatsApp</a></div>"
+            },
+            "elements": []
+          }
+        ]
+      },
+
+      {
+        "_comment": "=== RODAPÉ === Fundo escuro com logo/nome, links e copyright",
+        "id": "fot10001",
+        "elType": "container",
+        "settings": {
+          "content_width": "boxed",
+          "flex_direction": "column",
+          "flex_align_items": "center",
+          "padding": { "unit": "px", "top": "48", "right": "20", "bottom": "32", "left": "20", "isLinked": false },
+          "background_background": "classic",
+          "background_color": "#0d1117"
+        },
+        "elements": [
+          {
+            "id": "nm1f0001",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "[NOME]",
+              "header_size": "h3",
+              "align": "center",
+              "title_color": "#ffffff",
+              "typography_font_family": "Montserrat",
+              "typography_font_size": { "unit": "px", "size": 24 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "car1f001",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style='color:[COR_SECUNDARIA];font-size:13px;text-align:center;letter-spacing:2px;text-transform:uppercase;margin:4px 0 16px'>[CARGO] • [PARTIDO] • Nº [NUMERO]</p>"
+            },
+            "elements": []
+          },
+          {
+            "id": "soc1f001",
+            "elType": "widget",
+            "widgetType": "social-icons",
+            "settings": {
+              "social_icon_list": [
+                { "social_icon": { "value": "fab fa-facebook", "library": "fa-brands" }, "link": { "url": "https://facebook.com/[FACEBOOK]", "is_external": true } },
+                { "social_icon": { "value": "fab fa-instagram", "library": "fa-brands" }, "link": { "url": "https://instagram.com/[INSTAGRAM]", "is_external": true } },
+                { "social_icon": { "value": "fab fa-youtube", "library": "fa-brands" }, "link": { "url": "https://youtube.com/@[YOUTUBE]", "is_external": true } },
+                { "social_icon": { "value": "fab fa-whatsapp", "library": "fa-brands" }, "link": { "url": "https://wa.me/55[WHATSAPP]", "is_external": true } }
+              ],
+              "icon_size": { "unit": "px", "size": 18 },
+              "shape": "circle",
+              "color": "custom",
+              "icon_color": "#ffffff",
+              "icon_secondary_color": "rgba(255,255,255,0.15)",
+              "space_between": { "unit": "px", "size": 8 }
+            },
+            "elements": []
+          },
+          {
+            "id": "div1f001",
+            "elType": "widget",
+            "widgetType": "divider",
+            "settings": {
+              "color": { "color": "rgba(255,255,255,0.1)" },
+              "weight": { "unit": "px", "size": 1 },
+              "gap": { "unit": "px", "size": 20 }
+            },
+            "elements": []
+          },
+          {
+            "id": "cpf1f001",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style='color:rgba(255,255,255,0.4);font-size:13px;text-align:center'>© [ANO] [NOME] — Material de campanha • [PARTIDO] • CNPJ: [CNPJ_COMITE]</p>"
+            },
+            "elements": []
+          }
+        ]
+      },
+
+      {
+        "_comment": "=== BOTÃO FLUTUANTE WHATSAPP === Fixo no canto inferior direito",
+        "id": "flt10001",
+        "elType": "container",
+        "settings": {
+          "content_width": "full",
+          "flex_direction": "row",
+          "position": "fixed",
+          "z_index": 9999
+        },
+        "elements": [
+          {
+            "id": "wfl10001",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<a href='https://wa.me/55[WHATSAPP]' target='_blank' style='position:fixed;bottom:30px;right:30px;background:#25D366;color:#fff;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;z-index:9999;box-shadow:0 4px 24px rgba(37,211,102,0.5);animation:pulse 2s infinite' title='Falar no WhatsApp'><svg width='32' height='32' viewBox='0 0 24 24' fill='white'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg></a>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ],
+
+    "placeholders": {
+      "[NOME]": "Nome completo do candidato",
+      "[NOME_CURTO]": "Primeiro nome ou apelido",
+      "[CARGO]": "Vereador / Prefeito / Deputado Estadual / Deputado Federal",
+      "[CIDADE]": "Nome da cidade",
+      "[PARTIDO]": "Sigla do partido (ex: MDB, PT, PL)",
+      "[NUMERO]": "Número de urna (ex: 15123)",
+      "[SLOGAN DO CANDIDATO]": "Frase de campanha impactante",
+      "[COR_PRINCIPAL]": "Cor primária em hex (ex: #1a237e)",
+      "[COR_SECUNDARIA]": "Cor de destaque em hex (ex: #FFD700)",
+      "[WHATSAPP]": "Número sem + e sem traços (ex: 11999998888)",
+      "[URL_FOTO_CANDIDATO]": "URL da foto para o hero",
+      "[URL_FOTO_CANDIDATO_FORMAL]": "URL da foto formal para seção Sobre",
+      "[FACEBOOK]": "Nome da página no Facebook",
+      "[INSTAGRAM]": "@ do Instagram",
+      "[YOUTUBE]": "@ do canal no YouTube",
+      "[TEXTO_SOBRE_O_CANDIDATO]": "Biografia e trajetória política",
+      "[ANO]": "Ano atual (ex: 2024)",
+      "[CNPJ_COMITE]": "CNPJ do comitê eleitoral"
+    },
+
+    "adaptation_instructions": "Ao usar este template, a IA deve: 1) Substituir TODOS os placeholders pelos dados reais fornecidos pelo usuário. 2) Adaptar as cores nos estilos inline dos widgets HTML. 3) Personalizar as propostas (educação, saúde, segurança) pelas bandeiras reais do candidato. 4) Ajustar os números nos counters pelas conquistas reais. 5) Adicionar ou remover seções conforme necessário."
+  }
+}

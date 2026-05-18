@@ -1,0 +1,462 @@
+{
+  "version": "1.0.0",
+  "description": "Conhecimento avançado do Elementor — backgrounds, overlays, tipografia, animações, ícones, layouts e padrões",
+
+  "container_advanced": {
+    "background": {
+      "description": "Todos os tipos de background para containers",
+      "classic_color": {
+        "example": {
+          "background_background": "classic",
+          "background_color": "#1a1a2e"
+        }
+      },
+      "classic_image": {
+        "example": {
+          "background_background": "classic",
+          "background_image": { "url": "https://url-da-imagem.jpg", "id": 0 },
+          "background_position": "center center",
+          "background_size": "cover",
+          "background_repeat": "no-repeat",
+          "background_attachment": "fixed"
+        }
+      },
+      "image_with_overlay": {
+        "description": "PADRÃO HERO: imagem de fundo + overlay escuro para texto legível",
+        "example": {
+          "background_background": "classic",
+          "background_image": { "url": "https://url-foto-candidato.jpg", "id": 0 },
+          "background_position": "center center",
+          "background_size": "cover",
+          "background_overlay_background": "classic",
+          "background_overlay_color": "rgba(0,0,0,0.65)",
+          "background_overlay_opacity": { "unit": "px", "size": 0.65 }
+        }
+      },
+      "gradient_linear": {
+        "example": {
+          "background_background": "gradient",
+          "background_gradient_type": "linear",
+          "background_color": "#1a237e",
+          "background_color_b": "#0d47a1",
+          "background_gradient_angle": { "unit": "deg", "size": 135 }
+        }
+      },
+      "gradient_with_overlay": {
+        "description": "Gradiente diagonal — ótimo para hero sem foto",
+        "example": {
+          "background_background": "gradient",
+          "background_gradient_type": "linear",
+          "background_color": "#0d47a1",
+          "background_color_b": "#1b5e20",
+          "background_gradient_angle": { "unit": "deg", "size": 135 }
+        }
+      },
+      "video_background": {
+        "example": {
+          "background_background": "video",
+          "background_video_link": "https://www.youtube.com/watch?v=VIDEO_ID",
+          "background_play_on_mobile": "yes",
+          "background_video_fallback": { "url": "https://fallback-image.jpg", "id": 0 }
+        }
+      }
+    },
+
+    "layout_patterns": {
+      "full_screen_hero": {
+        "description": "Hero full screen — usado como primeira seção do site",
+        "settings": {
+          "content_width": "full",
+          "flex_direction": "column",
+          "flex_justify_content": "center",
+          "flex_align_items": "center",
+          "min_height": { "unit": "vh", "size": 100 },
+          "padding": { "unit": "px", "top": "80", "right": "40", "bottom": "80", "left": "40", "isLinked": false }
+        }
+      },
+      "section_boxed": {
+        "description": "Seção de conteúdo centralizado com largura máxima",
+        "settings": {
+          "content_width": "boxed",
+          "flex_direction": "column",
+          "flex_align_items": "center",
+          "padding": { "unit": "px", "top": "80", "right": "20", "bottom": "80", "left": "20", "isLinked": false }
+        }
+      },
+      "two_columns": {
+        "description": "Layout de duas colunas lado a lado — pai row, filhos 50%",
+        "parent_settings": {
+          "content_width": "boxed",
+          "flex_direction": "row",
+          "gap": { "unit": "px", "size": 40 },
+          "flex_align_items": "center",
+          "flex_wrap": "wrap",
+          "padding": { "unit": "px", "top": "80", "right": "20", "bottom": "80", "left": "20", "isLinked": false }
+        },
+        "child_settings": {
+          "width": { "unit": "%", "size": 50 },
+          "flex_direction": "column"
+        },
+        "note": "Em mobile, os filhos automaticamente ficam 100% de largura quando flex_wrap=wrap"
+      },
+      "three_columns": {
+        "description": "Grade de três colunas — para cards de propostas ou serviços",
+        "parent_settings": {
+          "content_width": "boxed",
+          "flex_direction": "row",
+          "flex_wrap": "wrap",
+          "gap": { "unit": "px", "size": 30 },
+          "padding": { "unit": "px", "top": "60", "right": "20", "bottom": "60", "left": "20", "isLinked": false }
+        },
+        "child_settings": {
+          "width": { "unit": "%", "size": 30 },
+          "flex_direction": "column",
+          "flex_align_items": "center",
+          "padding": { "unit": "px", "top": "30", "right": "20", "bottom": "30", "left": "20", "isLinked": false },
+          "background_background": "classic",
+          "background_color": "#ffffff",
+          "border_radius": { "unit": "px", "top": "12", "right": "12", "bottom": "12", "left": "12", "isLinked": true },
+          "box_shadow_box_shadow_type": "yes",
+          "box_shadow_box_shadow": { "horizontal": 0, "vertical": 4, "blur": 20, "spread": 0, "color": "rgba(0,0,0,0.08)" }
+        }
+      },
+      "sticky_header": {
+        "description": "Container fixo no topo da página",
+        "settings": {
+          "content_width": "full",
+          "flex_direction": "row",
+          "flex_justify_content": "space-between",
+          "flex_align_items": "center",
+          "padding": { "unit": "px", "top": "15", "right": "40", "bottom": "15", "left": "40", "isLinked": false },
+          "background_background": "classic",
+          "background_color": "#ffffff",
+          "position": "sticky",
+          "sticky": "top",
+          "z_index": 100,
+          "box_shadow_box_shadow_type": "yes",
+          "box_shadow_box_shadow": { "horizontal": 0, "vertical": 2, "blur": 10, "spread": 0, "color": "rgba(0,0,0,0.1)" }
+        }
+      }
+    },
+
+    "borders_and_shadows": {
+      "card_shadow": {
+        "box_shadow_box_shadow_type": "yes",
+        "box_shadow_box_shadow": { "horizontal": 0, "vertical": 4, "blur": 20, "spread": 0, "color": "rgba(0,0,0,0.1)" }
+      },
+      "strong_shadow": {
+        "box_shadow_box_shadow_type": "yes",
+        "box_shadow_box_shadow": { "horizontal": 0, "vertical": 10, "blur": 40, "spread": 0, "color": "rgba(0,0,0,0.2)" }
+      },
+      "rounded_card": {
+        "border_radius": { "unit": "px", "top": "12", "right": "12", "bottom": "12", "left": "12", "isLinked": true }
+      },
+      "pill": {
+        "border_radius": { "unit": "px", "top": "50", "right": "50", "bottom": "50", "left": "50", "isLinked": true }
+      },
+      "border_bottom_accent": {
+        "border_border": "solid",
+        "border_width": { "unit": "px", "top": "0", "right": "0", "bottom": "4", "left": "0", "isLinked": false },
+        "border_color": "#e74c3c"
+      }
+    }
+  },
+
+  "typography_guide": {
+    "description": "Guia completo de tipografia para widgets Elementor",
+    "font_families": {
+      "political": ["Montserrat", "Raleway", "Oswald", "Bebas Neue"],
+      "institutional": ["Open Sans", "Lato", "Source Sans Pro"],
+      "elegant": ["Playfair Display", "Merriweather", "Georgia"],
+      "modern": ["Inter", "Poppins", "Nunito"]
+    },
+    "hero_heading": {
+      "description": "Título principal do hero — grande e impactante",
+      "settings": {
+        "typography_font_family": "Montserrat",
+        "typography_font_size": { "unit": "px", "size": 72 },
+        "typography_font_weight": "800",
+        "typography_line_height": { "unit": "em", "size": 1.1 },
+        "typography_letter_spacing": { "unit": "px", "size": 1 },
+        "typography_text_transform": "none"
+      }
+    },
+    "section_heading": {
+      "description": "Título de seção — h2",
+      "settings": {
+        "typography_font_family": "Montserrat",
+        "typography_font_size": { "unit": "px", "size": 42 },
+        "typography_font_weight": "700",
+        "typography_line_height": { "unit": "em", "size": 1.2 }
+      }
+    },
+    "card_title": {
+      "description": "Título de card — h3",
+      "settings": {
+        "typography_font_family": "Montserrat",
+        "typography_font_size": { "unit": "px", "size": 22 },
+        "typography_font_weight": "600"
+      }
+    },
+    "body_text": {
+      "description": "Texto corrido",
+      "settings": {
+        "typography_font_size": { "unit": "px", "size": 17 },
+        "typography_line_height": { "unit": "em", "size": 1.7 },
+        "typography_font_weight": "400"
+      }
+    },
+    "badge_label": {
+      "description": "Label/badge pequeno acima de títulos",
+      "settings": {
+        "typography_font_size": { "unit": "px", "size": 13 },
+        "typography_font_weight": "700",
+        "typography_letter_spacing": { "unit": "px", "size": 3 },
+        "typography_text_transform": "uppercase"
+      }
+    }
+  },
+
+  "animations": {
+    "description": "Animações de entrada (entrance animations) disponíveis no Elementor",
+    "how_to_use": "Adicione 'animation' e opcionalmente 'animation_duration' e 'animation_delay' nas settings de qualquer widget",
+    "available": {
+      "fade": ["fadeIn", "fadeInDown", "fadeInUp", "fadeInLeft", "fadeInRight"],
+      "zoom": ["zoomIn", "zoomInDown", "zoomInUp"],
+      "slide": ["slideInDown", "slideInUp", "slideInLeft", "slideInRight"],
+      "bounce": ["bounceIn", "bounceInDown", "bounceInUp"],
+      "special": ["flipInX", "flipInY", "rotateIn", "lightSpeedIn"]
+    },
+    "durations": ["slow", "normal", "fast"],
+    "examples": {
+      "hero_title": {
+        "animation": "fadeInDown",
+        "animation_duration": "slow",
+        "animation_delay": 0
+      },
+      "hero_subtitle": {
+        "animation": "fadeInUp",
+        "animation_duration": "normal",
+        "animation_delay": 300
+      },
+      "card": {
+        "animation": "fadeInUp",
+        "animation_duration": "normal",
+        "animation_delay": 150
+      }
+    }
+  },
+
+  "font_awesome_icons": {
+    "description": "Ícones Font Awesome para uso em icon-box e icon widgets. Format: 'fas fa-NOME' ou 'fab fa-NOME' (brands)",
+    "political_campaign": {
+      "fas fa-handshake": "Compromisso / acordo",
+      "fas fa-flag": "Bandeira / partido",
+      "fas fa-balance-scale": "Justiça / igualdade",
+      "fas fa-users": "Comunidade / pessoas",
+      "fas fa-graduation-cap": "Educação",
+      "fas fa-heartbeat": "Saúde",
+      "fas fa-home": "Habitação / moradia",
+      "fas fa-shield-alt": "Segurança",
+      "fas fa-leaf": "Meio ambiente",
+      "fas fa-briefcase": "Emprego / economia",
+      "fas fa-road": "Infraestrutura / obras",
+      "fas fa-child": "Crianças / família",
+      "fas fa-star": "Destaque / qualidade",
+      "fas fa-award": "Conquista / reconhecimento",
+      "fas fa-check-circle": "Realização / done",
+      "fas fa-bullhorn": "Comunicação / discurso",
+      "fas fa-hands-helping": "Solidariedade",
+      "fas fa-building": "Governo / administração"
+    },
+    "contact": {
+      "fas fa-phone": "Telefone",
+      "fas fa-envelope": "E-mail",
+      "fas fa-map-marker-alt": "Localização",
+      "fas fa-clock": "Horário",
+      "fab fa-whatsapp": "WhatsApp",
+      "fab fa-facebook": "Facebook",
+      "fab fa-instagram": "Instagram",
+      "fab fa-youtube": "YouTube",
+      "fab fa-twitter": "Twitter/X",
+      "fab fa-tiktok": "TikTok"
+    },
+    "general": {
+      "fas fa-arrow-right": "Seta direita",
+      "fas fa-chevron-down": "Chevron baixo",
+      "fas fa-plus": "Mais",
+      "fas fa-quote-left": "Aspas (depoimento)",
+      "fas fa-bars": "Menu hamburguer",
+      "fas fa-times": "Fechar",
+      "fas fa-search": "Busca",
+      "fas fa-share-alt": "Compartilhar",
+      "fas fa-download": "Download",
+      "fas fa-external-link-alt": "Link externo"
+    },
+    "icon_usage": {
+      "in_icon_widget": {
+        "icon": { "value": "fas fa-check", "library": "fa-solid" }
+      },
+      "in_icon_box_widget": {
+        "icon": { "value": "fas fa-graduation-cap", "library": "fa-solid" },
+        "icon_size": { "unit": "px", "size": 40 },
+        "icon_color": "#1a237e"
+      },
+      "brand_icons": {
+        "note": "Para ícones de marcas (Facebook, Instagram, WhatsApp), use library: 'fa-brands'",
+        "icon": { "value": "fab fa-whatsapp", "library": "fa-brands" }
+      }
+    }
+  },
+
+  "special_widgets": {
+    "whatsapp_button": {
+      "description": "Botão flutuante de WhatsApp — use widget HTML",
+      "widgetType": "html",
+      "simple": {
+        "settings": {
+          "html": "<a href='https://wa.me/55DDDNUMERO?text=Olá!' style='background:#25D366;color:#fff;padding:15px 35px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-flex;align-items:center;gap:10px'><svg width='24' height='24' viewBox='0 0 24 24' fill='white'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg>Falar no WhatsApp</a>"
+        }
+      },
+      "floating_fixed": {
+        "description": "Botão flutuante fixo no canto inferior direito da tela",
+        "settings": {
+          "html": "<a href='https://wa.me/55DDDNUMERO' target='_blank' style='position:fixed;bottom:30px;right:30px;background:#25D366;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;z-index:9999;box-shadow:0 4px 20px rgba(37,211,102,0.5)'><svg width='30' height='30' viewBox='0 0 24 24' fill='white'><path d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/></svg></a>"
+        }
+      }
+    },
+    "social_icons_widget": {
+      "description": "Ícones de redes sociais com links",
+      "widgetType": "social-icons",
+      "example_settings": {
+        "social_icon_list": [
+          { "social_icon": { "value": "fab fa-facebook", "library": "fa-brands" }, "link": { "url": "https://facebook.com/PAGINA", "is_external": true } },
+          { "social_icon": { "value": "fab fa-instagram", "library": "fa-brands" }, "link": { "url": "https://instagram.com/PERFIL", "is_external": true } },
+          { "social_icon": { "value": "fab fa-youtube", "library": "fa-brands" }, "link": { "url": "https://youtube.com/@CANAL", "is_external": true } },
+          { "social_icon": { "value": "fab fa-whatsapp", "library": "fa-brands" }, "link": { "url": "https://wa.me/55DDDNUMERO", "is_external": true } }
+        ],
+        "icon_size": { "unit": "px", "size": 20 },
+        "shape": "circle",
+        "color": "custom",
+        "icon_color": "#ffffff",
+        "icon_secondary_color": "rgba(255,255,255,0.2)",
+        "space_between": { "unit": "px", "size": 10 }
+      }
+    },
+    "counter_widget": {
+      "description": "Contador animado — ótimo para mostrar conquistas",
+      "widgetType": "counter",
+      "example_settings": {
+        "starting_number": 0,
+        "ending_number": 1200,
+        "duration": 2000,
+        "thousand_separator": "yes",
+        "thousand_separator_char": ".",
+        "suffix": "+",
+        "prefix": "",
+        "number_size": { "unit": "px", "size": 60 },
+        "number_color": "#1a237e",
+        "title": "Famílias Atendidas",
+        "title_size": { "unit": "px", "size": 16 }
+      }
+    },
+    "testimonial_carousel": {
+      "description": "Carrossel de depoimentos (Elementor Pro)",
+      "widgetType": "testimonial-carousel",
+      "example_settings": {
+        "slides": [
+          {
+            "content": "Conteúdo do depoimento aqui.",
+            "name": "Nome da Pessoa",
+            "title": "Morador do Bairro X",
+            "image": { "url": "" }
+          }
+        ],
+        "navigation": "dots",
+        "autoplay": "yes",
+        "autoplay_speed": 5000,
+        "pause_on_hover": "yes"
+      }
+    }
+  },
+
+  "color_palettes": {
+    "description": "Paletas de cores prontas para sites políticos",
+    "blue_patriot": {
+      "name": "Azul Patriota",
+      "primary": "#1a237e",
+      "secondary": "#FFD700",
+      "background": "#0d1442",
+      "text_light": "#ffffff",
+      "text_dark": "#1a1a2e",
+      "accent": "#e53935",
+      "usage": "PT, PL, MDB candidatos tradicionais"
+    },
+    "green_hope": {
+      "name": "Verde Esperança",
+      "primary": "#1b5e20",
+      "secondary": "#FFD700",
+      "background": "#0a2e0e",
+      "text_light": "#ffffff",
+      "text_dark": "#1a2e1a",
+      "accent": "#ffeb3b",
+      "usage": "PV, candidatos com pauta ambiental"
+    },
+    "red_energy": {
+      "name": "Vermelho Energia",
+      "primary": "#b71c1c",
+      "secondary": "#ffffff",
+      "background": "#7f0000",
+      "text_light": "#ffffff",
+      "text_dark": "#1a1a1a",
+      "accent": "#ffeb3b",
+      "usage": "PT, PDT, candidatos progressistas"
+    },
+    "teal_modern": {
+      "name": "Verde-Azul Moderno",
+      "primary": "#00695c",
+      "secondary": "#ffffff",
+      "background": "#004d40",
+      "text_light": "#ffffff",
+      "text_dark": "#1a2e2a",
+      "accent": "#80cbc4",
+      "usage": "Candidatos jovens, inovação"
+    },
+    "orange_bold": {
+      "name": "Laranja Ousado",
+      "primary": "#e65100",
+      "secondary": "#ffffff",
+      "background": "#bf360c",
+      "text_light": "#ffffff",
+      "text_dark": "#1a1a1a",
+      "accent": "#ffeb3b",
+      "usage": "Novo, PDT, candidatos populares"
+    }
+  },
+
+  "responsive_guide": {
+    "description": "Como tornar elementos responsivos no Elementor",
+    "breakpoints": {
+      "desktop": "acima de 1024px — sem sufixo nas propriedades",
+      "tablet": "768px a 1024px — sufixo _tablet",
+      "mobile": "abaixo de 767px — sufixo _mobile"
+    },
+    "examples": {
+      "font_size_responsive": {
+        "desktop": { "typography_font_size": { "unit": "px", "size": 72 } },
+        "tablet": { "typography_font_size_tablet": { "unit": "px", "size": 48 } },
+        "mobile": { "typography_font_size_mobile": { "unit": "px", "size": 36 } }
+      },
+      "padding_responsive": {
+        "desktop": { "padding": { "unit": "px", "top": "80", "right": "40", "bottom": "80", "left": "40", "isLinked": false } },
+        "mobile": { "padding_mobile": { "unit": "px", "top": "50", "right": "20", "bottom": "50", "left": "20", "isLinked": false } }
+      },
+      "hide_on_mobile": {
+        "hide_mobile": "yes"
+      },
+      "flex_column_on_mobile": {
+        "note": "Use flex_wrap: wrap no pai + width 50% nos filhos. No mobile ficam 100% automaticamente"
+      }
+    }
+  }
+}

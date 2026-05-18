@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk"
 import OpenAI from "openai"
 import { callWpApi } from "./wp-client"
+import { getBuilderKnowledge, getTopRecipesContext } from "./knowledge"
 
 // ─── Tipos de eventos SSE ────────────────────────────────────────────────────
 
@@ -13,26 +14,31 @@ export type BuilderEvent =
   | { type: "done" }
   | { type: "error"; message: string }
 
+export type BuilderResult = {
+  pageUrl?: string
+  pageId?: number
+}
+
 // ─── Definições de ferramentas ───────────────────────────────────────────────
 
 const TOOL_DEFS = [
   {
     name: "wp_get_status",
     description:
-      "Obtém status do WordPress, versão do Elementor e knowledge base completo (widgets, recipes, schemas). SEMPRE chame como primeiro passo para entender o site.",
+      "Obtém status do WordPress e versão do Elementor. Chame para confirmar que o site está ativo antes de construir.",
     parameters: { type: "object", properties: {}, required: [] as string[] },
   },
   {
     name: "wp_create_page",
     description:
-      "Cria nova página no WordPress. Retorna post_id (necessário para wp_elementor_set) e permalink.",
+      "Cria nova página no WordPress. Retorna post_id (use no wp_elementor_set) e permalink. Use status 'publish' para publicar diretamente.",
     parameters: {
       type: "object",
       properties: {
         title: { type: "string", description: "Título da página" },
-        content: { type: "string", description: "Conteúdo HTML (string vazia se usar Elementor)" },
-        status: { type: "string", enum: ["draft", "publish"] },
-        post_type: { type: "string", description: "Tipo: 'page' ou 'post'. Padrão: 'page'" },
+        content: { type: "string", description: "Conteúdo HTML (string vazia ao usar Elementor)" },
+        status: { type: "string", enum: ["draft", "publish"], description: "Use 'publish'" },
+        post_type: { type: "string", description: "'page' ou 'post'. Padrão: 'page'" },
       },
       required: ["title"] as string[],
     },
@@ -43,7 +49,7 @@ const TOOL_DEFS = [
     parameters: {
       type: "object",
       properties: {
-        post_type: { type: "string", description: "'page' ou 'post'" },
+        post_type: { type: "string" },
         limit: { type: "number" },
         post_status: { type: "string", enum: ["publish", "draft", "any"] },
       },
@@ -53,19 +59,19 @@ const TOOL_DEFS = [
   {
     name: "wp_elementor_set",
     description:
-      "Define a estrutura Elementor completa de uma página de uma vez. 'data' é array de containers raiz. Use page_settings: {template: 'elementor_canvas'} para página sem header/footer.",
+      "Define toda a estrutura Elementor de uma página de uma vez. 'data' é o array de containers raiz. Esta é a ferramenta principal de construção — use-a com um JSON completo e bem estruturado.",
     parameters: {
       type: "object",
       properties: {
         post_id: { type: "number", description: "ID do post (retornado por wp_create_page)" },
         data: {
           type: "array",
-          description: "Array de containers/elementos Elementor de nível raiz",
+          description: "Array de containers/elementos Elementor de nível raiz. Construa a página COMPLETA aqui.",
           items: { type: "object" },
         },
         page_settings: {
           type: "object",
-          description: "Configurações: {template: 'elementor_canvas'} para sem header/footer",
+          description: "Use {template: 'elementor_canvas'} para página sem header/footer do tema",
         },
       },
       required: ["post_id", "data"] as string[],
@@ -73,29 +79,26 @@ const TOOL_DEFS = [
   },
   {
     name: "wp_elementor_add_element",
-    description: "Adiciona um elemento (container ou widget) a uma página Elementor existente",
+    description: "Adiciona um elemento a uma página Elementor existente. Use para refinamentos após wp_elementor_set.",
     parameters: {
       type: "object",
       properties: {
         post_id: { type: "number" },
-        element: {
-          type: "object",
-          description: "Elemento com: id (8 hex chars), elType, settings, elements",
-        },
-        target_id: { type: "string", description: "ID do container pai. Omita para nível raiz." },
-        position: { type: "number", description: "Posição no pai (0 = início)" },
+        element: { type: "object", description: "Elemento com id (8 hex), elType, settings, elements" },
+        target_id: { type: "string", description: "ID do container pai. Omita para raiz." },
+        position: { type: "number" },
       },
       required: ["post_id", "element"] as string[],
     },
   },
   {
     name: "wp_elementor_update_element",
-    description: "Atualiza settings de um elemento Elementor existente",
+    description: "Atualiza settings de um elemento existente",
     parameters: {
       type: "object",
       properties: {
         post_id: { type: "number" },
-        element_id: { type: "string", description: "ID hex do elemento" },
+        element_id: { type: "string" },
         settings: { type: "object" },
         merge: { type: "boolean", description: "Merge com settings existentes (padrão: true)" },
       },
@@ -117,17 +120,12 @@ const TOOL_DEFS = [
     parameters: {
       type: "object",
       properties: {
-        action: {
-          type: "string",
-          enum: ["list", "create", "add_items", "set_location"],
-          description: "Ação a executar",
-        },
+        action: { type: "string", enum: ["list", "create", "add_items", "set_location"] },
         menu_name: { type: "string" },
         menu_id: { type: "number" },
         items: {
           type: "array",
-          description:
-            "Itens para add_items: [{type:'post_type', object:'page', object_id:123, title:'Home'}]",
+          description: "Para add_items: [{type:'post_type', object:'page', object_id:123, title:'Home'}]",
           items: { type: "object" },
         },
         location: { type: "string", description: "Ex: primary, footer" },
@@ -135,94 +133,116 @@ const TOOL_DEFS = [
       required: ["action"] as string[],
     },
   },
+  {
+    name: "wp_set_option",
+    description: "Define uma opção global do WordPress (wp_options)",
+    parameters: {
+      type: "object",
+      properties: {
+        action: { type: "string", enum: ["get", "set"] },
+        option_name: { type: "string", description: "Nome da opção (ex: blogname, blogdescription)" },
+        option_value: { type: "string", description: "Valor a definir (para action=set)" },
+      },
+      required: ["action", "option_name"] as string[],
+    },
+  },
 ]
 
-// ─── System prompt ───────────────────────────────────────────────────────────
+// ─── Construtor do system prompt dinâmico ────────────────────────────────────
 
-const SYSTEM_PROMPT = `Você é um especialista em construção de sites WordPress com Elementor para campanhas políticas e sites institucionais.
+function buildSystemPrompt(knowledge: string, recipesCtx: string, recipeBase?: string): string {
+  return `Você é o WP AI Builder — um agente especialista em construção de páginas WordPress com o Elementor.
 
-Você recebe instruções em português e constrói páginas profissionais usando a API REST do plugin WP AI Controller.
+Você recebe comandos em português e constrói páginas profissionais e completas usando a API REST do plugin WP AI Controller.
+${recipeBase ? `\n## 🎯 RECEITA BASE SELECIONADA PELO USUÁRIO:\n${recipeBase}\n\nAdapte esta receita exatamente às instruções fornecidas pelo usuário.\n` : ""}${recipesCtx}
 
-## FLUXO OBRIGATÓRIO:
-1. Chame wp_get_status PRIMEIRO para entender o site e obter o knowledge base do Elementor
-2. Crie a página com wp_create_page com status "publish" (guarde o post_id retornado)
-3. Construa o layout completo com wp_elementor_set usando o post_id
+## FLUXO DE TRABALHO OBRIGATÓRIO:
+1. Chame wp_get_status para verificar que o site está ativo
+2. Crie a página com wp_create_page (status: "publish")
+3. Construa o layout COMPLETO com wp_elementor_set em uma única chamada
 4. Configure menu de navegação se solicitado (wp_manage_menu)
-5. Informe ao usuário o permalink da página criada
+5. Informe o permalink da página ao usuário
 
-## ESTRUTURA JSON DO ELEMENTOR:
+## REGRAS ABSOLUTAS DE CONSTRUÇÃO:
 
-O campo "data" do wp_elementor_set é um array de containers de nível raiz.
+### IDs dos elementos
+- Cada elemento DEVE ter um "id" único de 8 caracteres hexadecimais
+- Exemplos válidos: "a1b2c3d4", "ff123abc", "90e8d7c6"
+- NUNCA repita o mesmo ID em uma página
 
-Container (layout flex):
+### Estrutura obrigatória de cada elemento
+Container:
 {
-  "id": "abc12345",
+  "id": "XXXXXXXX",
   "elType": "container",
-  "settings": {
-    "content_width": "boxed",
-    "flex_direction": "column",
-    "background_color": "#1a1a2e",
-    "padding": {"unit":"px","top":"80","right":"20","bottom":"80","left":"20","isLinked":false},
-    "min_height": {"unit":"vh","size":100}
-  },
-  "elements": [...]
+  "settings": { ... },
+  "elements": [ ... ]
 }
 
 Widget:
 {
-  "id": "def67890",
+  "id": "XXXXXXXX",
   "elType": "widget",
-  "widgetType": "heading",
+  "widgetType": "NOME_DO_WIDGET",
   "settings": { ... },
   "elements": []
 }
 
-## WIDGETS PRINCIPAIS:
+### Layouts em colunas (FUNDAMENTAL)
+Para colocar dois blocos lado a lado:
+- Container PAI: flex_direction="row", flex_wrap="wrap", gap={unit:"px",size:40}
+- Containers FILHOS: width={unit:"%",size:50}
+Para 3 colunas: filhos com width={unit:"%",size:30}
 
-heading:
-  title, header_size ("h1"–"h6"), align ("left"/"center"/"right"),
-  title_color, typography_font_size: {"unit":"px","size":60}, typography_font_weight: "700"
+### Backgrounds com imagem e overlay (ESSENCIAL para heroes)
+{
+  "background_background": "classic",
+  "background_image": {"url": "URL_AQUI", "id": 0},
+  "background_size": "cover",
+  "background_position": "center center",
+  "background_overlay_background": "classic",
+  "background_overlay_color": "rgba(0,0,0,0.65)"
+}
 
-text-editor:
-  editor: "<p>Texto HTML</p>"
+### Botão WhatsApp (sempre incluir em sites políticos)
+Use widget "html" com o SVG do WhatsApp — veja special_widgets.whatsapp_button no knowledge.
 
-image:
-  image: {"url":"https://..."}, image_size: "full", align: "center"
+### Tipografia responsiva
+Desktop: typography_font_size: {unit:"px", size:72}
+Mobile:  typography_font_size_mobile: {unit:"px", size:36}
 
-button:
-  text, link: {"url":"https://..."}, background_color, button_text_color,
-  border_radius: {"unit":"px","top":"4","right":"4","bottom":"4","left":"4","isLinked":true}
+### Animações de entrada
+Adicione nas settings de qualquer widget:
+"animation": "fadeInUp", "animation_duration": "normal", "animation_delay": 200
 
-spacer:
-  space: {"unit":"px","size":50}
+## TEMPLATE DE CAMPANHA POLÍTICA
+O knowledge.json contém political_campaign_template com estrutura completa.
+Quando o usuário pedir site político, use esse template como base e substitua todos os placeholders [NOME], [CARGO], [COR_PRINCIPAL], etc.
 
-divider:
-  color: {"color":"#cccccc"}, weight: {"unit":"px","size":1}
-
-icon-box:
-  icon: {"value":"fas fa-check","library":"fa-solid"}, title_text, description_text
-
-## REGRAS DE IDs:
-- Gere IDs hex de 8 caracteres ÚNICOS para cada elemento
-- Exemplos válidos: "a1b2c3d4", "f9e8d7c6", "12345678"
-
-## SITES POLÍTICOS — SEÇÕES RECOMENDADAS:
-- Hero: foto do candidato + nome em destaque + slogan + botão de ação
-- Sobre: trajetória e valores
-- Propostas: ícones + texto para cada bandeira
-- Conquistas/Realizações
-- Galeria de fotos
-- Contato / WhatsApp
-
-## REGRAS:
+## IMPORTANTE:
 - Construa a página COMPLETA em uma única chamada wp_elementor_set
-- Use containers aninhados para layouts em colunas (flex_direction: "row" no pai)
-- Adapte cores exatamente às instruções do usuário
-- Se não tiver URL de imagem, use background_color como placeholder
-- Sempre informe o permalink ao final para o usuário visualizar
-- Consulte o knowledge base retornado por wp_get_status para widgets avançados`
+- Use page_settings: {template: "elementor_canvas"} para sites políticos (sem header/footer do tema)
+- Adapte EXATAMENTE as cores solicitadas em TODOS os elementos, incluindo inline styles dos widgets HTML
+- Para ícones FontAwesome, use o formato: {value:"fas fa-NOME", library:"fa-solid"} ou {value:"fab fa-NOME", library:"fa-brands"}
+- Sempre finalize informando o permalink para o usuário visualizar o resultado
+
+## KNOWLEDGE BASE COMPLETO:
+${knowledge}`
+}
 
 // ─── Executor de ferramentas ─────────────────────────────────────────────────
+
+function extractResult(tool: string, result: unknown): Partial<BuilderResult> {
+  if (!result || typeof result !== "object") return {}
+  const r = result as Record<string, unknown>
+  if (tool === "wp_create_page") {
+    return {
+      pageUrl: r.permalink as string | undefined,
+      pageId: r.post_id as number | undefined,
+    }
+  }
+  return {}
+}
 
 async function executeTool(
   name: string,
@@ -247,12 +267,14 @@ async function executeTool(
       return callWpApi(wpUrl, wpApiKey, "/elementor/get", "POST", args)
     case "wp_manage_menu":
       return callWpApi(wpUrl, wpApiKey, "/menus/manage", "POST", args)
+    case "wp_set_option":
+      return callWpApi(wpUrl, wpApiKey, "/options", "POST", args)
     default:
       throw new Error(`Ferramenta desconhecida: ${name}`)
   }
 }
 
-// ─── Loop agnético — Claude ──────────────────────────────────────────────────
+// ─── Loop agêntico — Claude ──────────────────────────────────────────────────
 
 async function runClaudeLoop(
   apiKey: string,
@@ -260,8 +282,9 @@ async function runClaudeLoop(
   userMessage: string,
   wpUrl: string,
   wpApiKey: string,
+  systemPrompt: string,
   sendEvent: (e: BuilderEvent) => void
-) {
+): Promise<BuilderResult> {
   const client = new Anthropic({ apiKey })
 
   const claudeTools: Anthropic.Tool[] = TOOL_DEFS.map((t) => ({
@@ -271,13 +294,14 @@ async function runClaudeLoop(
   }))
 
   let messages: Anthropic.MessageParam[] = [{ role: "user", content: userMessage }]
-  const MAX_ITER = 15
+  const result: BuilderResult = {}
+  const MAX_ITER = 20
 
   for (let i = 0; i < MAX_ITER; i++) {
     const response = await client.messages.create({
       model,
-      max_tokens: 8096,
-      system: SYSTEM_PROMPT,
+      max_tokens: 16000,
+      system: systemPrompt,
       tools: claudeTools,
       messages,
     })
@@ -290,8 +314,8 @@ async function runClaudeLoop(
 
     if (response.stop_reason !== "tool_use") {
       const finalText = response.content
-        .filter((b) => b.type === "text")
-        .map((b) => (b as Anthropic.TextBlock).text)
+        .filter((b): b is Anthropic.TextBlock => b.type === "text")
+        .map((b) => b.text)
         .join("\n")
         .trim()
       if (finalText) sendEvent({ type: "message", text: finalText })
@@ -307,12 +331,13 @@ async function runClaudeLoop(
       const args = tool.input as Record<string, unknown>
       sendEvent({ type: "tool_start", tool: tool.name, args })
       try {
-        const result = await executeTool(tool.name, args, wpUrl, wpApiKey)
-        sendEvent({ type: "tool_done", tool: tool.name, result })
+        const res = await executeTool(tool.name, args, wpUrl, wpApiKey)
+        sendEvent({ type: "tool_done", tool: tool.name, result: res })
+        Object.assign(result, extractResult(tool.name, res))
         toolResults.push({
           type: "tool_result",
           tool_use_id: tool.id,
-          content: JSON.stringify(result),
+          content: JSON.stringify(res),
         })
       } catch (err) {
         const error = err instanceof Error ? err.message : "Erro desconhecido"
@@ -332,11 +357,13 @@ async function runClaudeLoop(
       { role: "user", content: toolResults },
     ]
   }
+
+  return result
 }
 
-// ─── Loop agnético — OpenAI / DeepSeek / Gemini ──────────────────────────────
+// ─── Loop agêntico — OpenAI / DeepSeek / Gemini ──────────────────────────────
 
-function getOpenAIClient(provider: string, apiKey: string): OpenAI {
+function makeOpenAIClient(provider: string, apiKey: string): OpenAI {
   const baseURLs: Record<string, string> = {
     deepseek: "https://api.deepseek.com",
     gemini: "https://generativelanguage.googleapis.com/v1beta/openai/",
@@ -351,9 +378,10 @@ async function runOpenAILoop(
   userMessage: string,
   wpUrl: string,
   wpApiKey: string,
+  systemPrompt: string,
   sendEvent: (e: BuilderEvent) => void
-) {
-  const client = getOpenAIClient(provider, apiKey)
+): Promise<BuilderResult> {
+  const client = makeOpenAIClient(provider, apiKey)
 
   const tools: OpenAI.Chat.ChatCompletionTool[] = TOOL_DEFS.map((t) => ({
     type: "function" as const,
@@ -361,14 +389,21 @@ async function runOpenAILoop(
   }))
 
   const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-    { role: "system", content: SYSTEM_PROMPT },
+    { role: "system", content: systemPrompt },
     { role: "user", content: userMessage },
   ]
 
-  const MAX_ITER = 15
+  const result: BuilderResult = {}
+  const MAX_ITER = 20
 
   for (let i = 0; i < MAX_ITER; i++) {
-    const response = await client.chat.completions.create({ model, max_tokens: 8096, tools, messages })
+    const response = await client.chat.completions.create({
+      model,
+      max_tokens: 16000,
+      tools,
+      messages,
+    })
+
     const choice = response.choices[0]
 
     if (choice.message.content?.trim()) {
@@ -386,25 +421,26 @@ async function runOpenAILoop(
 
     for (const call of choice.message.tool_calls) {
       if (!("function" in call)) continue
-      const fnCall = call as OpenAI.Chat.Completions.ChatCompletionMessageFunctionToolCall
+      const fn = call as OpenAI.Chat.Completions.ChatCompletionMessageFunctionToolCall
 
       let args: Record<string, unknown> = {}
-      try {
-        args = JSON.parse(fnCall.function.arguments)
-      } catch { /* args vazio */ }
+      try { args = JSON.parse(fn.function.arguments) } catch { /* args vazio */ }
 
-      sendEvent({ type: "tool_start", tool: fnCall.function.name, args })
+      sendEvent({ type: "tool_start", tool: fn.function.name, args })
       try {
-        const result = await executeTool(fnCall.function.name, args, wpUrl, wpApiKey)
-        sendEvent({ type: "tool_done", tool: fnCall.function.name, result })
-        messages.push({ role: "tool", tool_call_id: fnCall.id, content: JSON.stringify(result) })
+        const res = await executeTool(fn.function.name, args, wpUrl, wpApiKey)
+        sendEvent({ type: "tool_done", tool: fn.function.name, result: res })
+        Object.assign(result, extractResult(fn.function.name, res))
+        messages.push({ role: "tool", tool_call_id: fn.id, content: JSON.stringify(res) })
       } catch (err) {
         const error = err instanceof Error ? err.message : "Erro desconhecido"
-        sendEvent({ type: "tool_error", tool: fnCall.function.name, error })
-        messages.push({ role: "tool", tool_call_id: fnCall.id, content: `Erro: ${error}` })
+        sendEvent({ type: "tool_error", tool: fn.function.name, error })
+        messages.push({ role: "tool", tool_call_id: fn.id, content: `Erro: ${error}` })
       }
     }
   }
+
+  return result
 }
 
 // ─── Entrada pública ─────────────────────────────────────────────────────────
@@ -416,13 +452,20 @@ export async function runBuilder(opts: {
   wpUrl: string
   wpApiKey: string
   userMessage: string
+  recipeBase?: string
   sendEvent: (e: BuilderEvent) => void
-}) {
-  const { provider, model, apiKey, wpUrl, wpApiKey, userMessage, sendEvent } = opts
+}): Promise<BuilderResult> {
+  const { provider, model, apiKey, wpUrl, wpApiKey, userMessage, recipeBase, sendEvent } = opts
+
+  const [knowledge, recipesCtx] = await Promise.all([
+    getBuilderKnowledge(),
+    getTopRecipesContext(5),
+  ])
+
+  const systemPrompt = buildSystemPrompt(knowledge, recipesCtx, recipeBase)
 
   if (provider === "claude") {
-    await runClaudeLoop(apiKey, model, userMessage, wpUrl, wpApiKey, sendEvent)
-  } else {
-    await runOpenAILoop(provider, apiKey, model, userMessage, wpUrl, wpApiKey, sendEvent)
+    return runClaudeLoop(apiKey, model, userMessage, wpUrl, wpApiKey, systemPrompt, sendEvent)
   }
+  return runOpenAILoop(provider, apiKey, model, userMessage, wpUrl, wpApiKey, systemPrompt, sendEvent)
 }

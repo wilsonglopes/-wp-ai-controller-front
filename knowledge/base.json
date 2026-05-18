@@ -1,0 +1,5736 @@
+{
+  "version": "2.0.0",
+  "description": "WP AI Controller Knowledge Base - Catálogo de widgets Elementor, schemas e receitas de layout",
+  "plugin": {
+    "name": "WP AI Controller",
+    "min_version": "1.1.0",
+    "docs": "https://github.com/wilsonglopes/wp-ai-knowledge",
+    "base_url": "{site_url}/wp-json/ai-controller/v1"
+  },
+  "schemas": {
+    "container": {
+      "id": "string (8 chars hex)",
+      "elType": "container",
+      "isInner": false,
+      "settings": {},
+      "elements": []
+    },
+    "widget": {
+      "id": "string (8 chars hex)",
+      "elType": "widget",
+      "widgetType": "string",
+      "isInner": false,
+      "settings": {},
+      "elements": []
+    },
+    "elementor_page": {
+      "title": "string",
+      "type": "page|post|header|footer|popup|error-404",
+      "version": "0.4",
+      "page_settings": {},
+      "content": []
+    },
+    "dimension": {
+      "unit": "px|%|em|rem|vh|vw",
+      "top": "string",
+      "right": "string",
+      "bottom": "string",
+      "left": "string",
+      "isLinked": true
+    },
+    "responsive_value": {
+      "unit": "px|%|em|rem",
+      "size": 0,
+      "sizes": []
+    },
+    "link": {
+      "url": "string",
+      "is_external": false,
+      "nofollow": false
+    },
+    "color": "#rrggbb or rgba(r,g,b,a)"
+  },
+  "widgets": {
+    "heading": {
+      "category": "basic",
+      "description": "Título de seção (h1 até h6) com alinhamento e cor",
+      "icon": "eicon-heading",
+      "is_nested": false,
+      "settings": {
+        "title": {
+          "type": "string",
+          "required": true,
+          "description": "Texto do título"
+        },
+        "link": {
+          "type": "object",
+          "required": false,
+          "description": "Link no título",
+          "schema": "link"
+        },
+        "header_size": {
+          "type": "string",
+          "required": false,
+          "default": "h2",
+          "options": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "left",
+          "options": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ]
+        },
+        "title_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor do texto em hex (#rrggbb)"
+        }
+      },
+      "example": {
+        "id": "abc12345",
+        "elType": "widget",
+        "widgetType": "heading",
+        "isInner": false,
+        "settings": {
+          "title": "Bem-vindo ao Site",
+          "header_size": "h1",
+          "align": "center"
+        },
+        "elements": []
+      }
+    },
+    "text-editor": {
+      "category": "basic",
+      "description": "Editor de texto rico (HTML) para parágrafos e conteúdo",
+      "icon": "eicon-text",
+      "is_nested": false,
+      "settings": {
+        "editor": {
+          "type": "string",
+          "required": true,
+          "description": "Conteúdo HTML do texto"
+        },
+        "drop_cap": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "text_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor do texto em hex"
+        },
+        "typography_typography": {
+          "type": "string",
+          "required": false,
+          "default": "custom",
+          "description": "Tipografia"
+        }
+      },
+      "example": {
+        "id": "abc12346",
+        "elType": "widget",
+        "widgetType": "text-editor",
+        "isInner": false,
+        "settings": {
+          "editor": "<p>Texto do parágrafo aqui.</p>"
+        },
+        "elements": []
+      }
+    },
+    "image": {
+      "category": "basic",
+      "description": "Imagem com opções de tamanho, link e legenda",
+      "icon": "eicon-image",
+      "is_nested": false,
+      "settings": {
+        "image": {
+          "type": "object",
+          "required": true,
+          "description": "Objeto com id e url da imagem",
+          "schema": "media"
+        },
+        "image_size": {
+          "type": "string",
+          "required": false,
+          "default": "full",
+          "options": [
+            "thumbnail",
+            "medium",
+            "large",
+            "full",
+            "custom"
+          ]
+        },
+        "caption": {
+          "type": "string",
+          "required": false,
+          "description": "Legenda da imagem"
+        },
+        "link_to": {
+          "type": "string",
+          "required": false,
+          "default": "none",
+          "options": [
+            "none",
+            "file",
+            "custom"
+          ]
+        },
+        "link": {
+          "type": "object",
+          "required": false,
+          "description": "Link quando link_to=custom",
+          "schema": "link"
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "center",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "width": {
+          "type": "object",
+          "required": false,
+          "description": "Largura da imagem",
+          "schema": "responsive_value"
+        }
+      },
+      "example": {
+        "id": "abc12347",
+        "elType": "widget",
+        "widgetType": "image",
+        "isInner": false,
+        "settings": {
+          "image": {
+            "id": 42,
+            "url": "https://site.com/imagem.jpg"
+          },
+          "image_size": "full"
+        },
+        "elements": []
+      }
+    },
+    "button": {
+      "category": "basic",
+      "description": "Botão clicável com texto, link, cor e alinhamento",
+      "icon": "eicon-button",
+      "is_nested": false,
+      "settings": {
+        "text": {
+          "type": "string",
+          "required": true,
+          "description": "Texto do botão"
+        },
+        "link": {
+          "type": "object",
+          "required": false,
+          "description": "Link do botão",
+          "schema": "link"
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "center",
+          "options": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ]
+        },
+        "button_text_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor do texto em hex"
+        },
+        "background_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor de fundo em hex"
+        },
+        "border_radius": {
+          "type": "object",
+          "required": false,
+          "description": "Arredondamento das bordas",
+          "schema": "dimension"
+        },
+        "size": {
+          "type": "string",
+          "required": false,
+          "default": "md",
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ]
+        },
+        "icon": {
+          "type": "string",
+          "required": false,
+          "description": "Ícone (ex: fas fa-arrow-right)"
+        },
+        "icon_align": {
+          "type": "string",
+          "required": false,
+          "default": "right",
+          "options": [
+            "left",
+            "right"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12348",
+        "elType": "widget",
+        "widgetType": "button",
+        "isInner": false,
+        "settings": {
+          "text": "Saiba Mais",
+          "link": {
+            "url": "#"
+          },
+          "button_text_color": "#ffffff",
+          "background_color": "#0066cc",
+          "align": "center",
+          "size": "lg"
+        },
+        "elements": []
+      }
+    },
+    "icon": {
+      "category": "basic",
+      "description": "Ícone (Font Awesome) com cor, tamanho e alinhamento",
+      "icon": "eicon-icon-box",
+      "is_nested": false,
+      "settings": {
+        "selected_icon": {
+          "type": "object",
+          "required": true,
+          "description": "Ícone Font Awesome",
+          "schema": "icon_picker"
+        },
+        "view": {
+          "type": "string",
+          "required": false,
+          "default": "default",
+          "options": [
+            "default",
+            "stacked",
+            "framed"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "center",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "primary_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor do ícone em hex"
+        },
+        "secondary_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor de fundo (stacked/framed)"
+        },
+        "size": {
+          "type": "object",
+          "required": false,
+          "description": "Tamanho do ícone",
+          "schema": "responsive_value"
+        }
+      },
+      "example": {
+        "id": "abc12349",
+        "elType": "widget",
+        "widgetType": "icon",
+        "isInner": false,
+        "settings": {
+          "selected_icon": {
+            "value": "fas fa-star",
+            "library": "fa-solid"
+          },
+          "primary_color": "#f0c040"
+        },
+        "elements": []
+      }
+    },
+    "spacer": {
+      "category": "basic",
+      "description": "Espaçador vertical para criar distância entre elementos",
+      "icon": "eicon-spacer",
+      "is_nested": false,
+      "settings": {
+        "space": {
+          "type": "object",
+          "required": false,
+          "description": "Altura do espaçador",
+          "schema": "responsive_value"
+        }
+      },
+      "example": {
+        "id": "abc12350",
+        "elType": "widget",
+        "widgetType": "spacer",
+        "isInner": false,
+        "settings": {
+          "space": {
+            "unit": "px",
+            "size": 50,
+            "sizes": []
+          }
+        },
+        "elements": []
+      }
+    },
+    "divider": {
+      "category": "basic",
+      "description": "Linha divisória horizontal com estilo e cor",
+      "icon": "eicon-divider",
+      "is_nested": false,
+      "settings": {
+        "style": {
+          "type": "string",
+          "required": false,
+          "default": "solid",
+          "options": [
+            "solid",
+            "double",
+            "dotted",
+            "dashed"
+          ]
+        },
+        "weight": {
+          "type": "object",
+          "required": false,
+          "description": "Espessura da linha",
+          "schema": "responsive_value"
+        },
+        "color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor da linha em hex"
+        },
+        "width": {
+          "type": "object",
+          "required": false,
+          "description": "Largura da linha em %",
+          "schema": "responsive_value"
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "center",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12351",
+        "elType": "widget",
+        "widgetType": "divider",
+        "isInner": false,
+        "settings": {
+          "style": "solid",
+          "color": "#cccccc"
+        },
+        "elements": []
+      }
+    },
+    "icon-box": {
+      "category": "general",
+      "description": "Caixa com ícone, título e descrição (ideal para cards de serviço)",
+      "icon": "eicon-icon-box",
+      "is_nested": false,
+      "settings": {
+        "selected_icon": {
+          "type": "object",
+          "required": false,
+          "description": "Ícone Font Awesome",
+          "schema": "icon_picker"
+        },
+        "view": {
+          "type": "string",
+          "required": false,
+          "default": "default",
+          "options": [
+            "default",
+            "stacked",
+            "framed"
+          ]
+        },
+        "title_text": {
+          "type": "string",
+          "required": false,
+          "description": "Título da caixa"
+        },
+        "description_text": {
+          "type": "string",
+          "required": false,
+          "description": "Texto descritivo"
+        },
+        "title_size": {
+          "type": "string",
+          "required": false,
+          "default": "h3"
+        },
+        "icon_position": {
+          "type": "string",
+          "required": false,
+          "default": "top",
+          "options": [
+            "top",
+            "left",
+            "right"
+          ]
+        },
+        "primary_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor do ícone"
+        },
+        "title_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor do título"
+        },
+        "description_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor da descrição"
+        }
+      },
+      "example": {
+        "id": "abc12352",
+        "elType": "widget",
+        "widgetType": "icon-box",
+        "isInner": false,
+        "settings": {
+          "selected_icon": {
+            "value": "fas fa-rocket",
+            "library": "fa-solid"
+          },
+          "title_text": "Rápido",
+          "description_text": "Performance otimizada para seu negócio"
+        },
+        "elements": []
+      }
+    },
+    "image-box": {
+      "category": "general",
+      "description": "Caixa com imagem, título e descrição (ideal para destaque de conteúdo)",
+      "icon": "eicon-image-box",
+      "is_nested": false,
+      "settings": {
+        "image": {
+          "type": "object",
+          "required": true,
+          "description": "Imagem",
+          "schema": "media"
+        },
+        "image_size": {
+          "type": "string",
+          "required": false,
+          "default": "full"
+        },
+        "title_text": {
+          "type": "string",
+          "required": false,
+          "description": "Título"
+        },
+        "description_text": {
+          "type": "string",
+          "required": false,
+          "description": "Descrição"
+        },
+        "title_size": {
+          "type": "string",
+          "required": false,
+          "default": "h3"
+        },
+        "position": {
+          "type": "string",
+          "required": false,
+          "default": "top",
+          "options": [
+            "top",
+            "left",
+            "right"
+          ]
+        },
+        "button_text": {
+          "type": "string",
+          "required": false,
+          "description": "Texto do botão (opcional)"
+        }
+      },
+      "example": {
+        "id": "abc12353",
+        "elType": "widget",
+        "widgetType": "image-box",
+        "isInner": false,
+        "settings": {
+          "image": {
+            "id": 43,
+            "url": "https://site.com/foto.jpg"
+          },
+          "title_text": "Produto X",
+          "description_text": "Melhor produto do mercado"
+        },
+        "elements": []
+      }
+    },
+    "image-carousel": {
+      "category": "general",
+      "description": "Carrossel de imagens com navegação",
+      "icon": "eicon-slider-push",
+      "is_nested": false,
+      "settings": {
+        "carousel": {
+          "type": "array",
+          "required": true,
+          "description": "Array de objetos com id e url das imagens"
+        },
+        "slides_to_show": {
+          "type": "string",
+          "required": false,
+          "default": "3",
+          "description": "Quantas imagens mostrar por vez"
+        },
+        "slides_to_scroll": {
+          "type": "string",
+          "required": false,
+          "default": "1"
+        },
+        "autoplay": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "navigation": {
+          "type": "string",
+          "required": false,
+          "default": "both",
+          "options": [
+            "both",
+            "dots",
+            "arrows",
+            "none"
+          ]
+        },
+        "image_stretch": {
+          "type": "string",
+          "required": false,
+          "default": "yes"
+        }
+      }
+    },
+    "icon-list": {
+      "category": "general",
+      "description": "Lista com ícones para cada item (ideal para features, checklists)",
+      "icon": "eicon-bullet-list",
+      "is_nested": false,
+      "settings": {
+        "icon_list": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { text: string, selected_icon: { value, library } }"
+        },
+        "text_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor do texto"
+        },
+        "icon_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor dos ícones"
+        },
+        "space_between": {
+          "type": "object",
+          "required": false,
+          "description": "Espaçamento entre itens",
+          "schema": "responsive_value"
+        }
+      },
+      "example": {
+        "id": "abc12358",
+        "elType": "widget",
+        "widgetType": "icon-list",
+        "isInner": false,
+        "settings": {
+          "icon_list": [
+            {
+              "text": "Feature 1",
+              "selected_icon": {
+                "value": "fas fa-check",
+                "library": "fa-solid"
+              }
+            },
+            {
+              "text": "Feature 2",
+              "selected_icon": {
+                "value": "fas fa-check",
+                "library": "fa-solid"
+              }
+            }
+          ]
+        },
+        "elements": []
+      }
+    },
+    "counter": {
+      "category": "general",
+      "description": "Contador animado com número e título",
+      "icon": "eicon-counter",
+      "is_nested": false,
+      "settings": {
+        "starting_number": {
+          "type": "number",
+          "required": false,
+          "default": 0
+        },
+        "ending_number": {
+          "type": "number",
+          "required": true,
+          "description": "Número final da contagem"
+        },
+        "number_prefix": {
+          "type": "string",
+          "required": false,
+          "description": "Prefixo (ex: R$)"
+        },
+        "number_suffix": {
+          "type": "string",
+          "required": false,
+          "description": "Sufixo (ex: +, %)"
+        },
+        "title": {
+          "type": "string",
+          "required": false,
+          "description": "Título abaixo do número"
+        },
+        "duration": {
+          "type": "number",
+          "required": false,
+          "default": 2000,
+          "description": "Duração em ms"
+        }
+      }
+    },
+    "testimonial": {
+      "category": "general",
+      "description": "Depoimento com foto, nome, cargo e texto",
+      "icon": "eicon-testimonial",
+      "is_nested": false,
+      "settings": {
+        "testimonial_content": {
+          "type": "string",
+          "required": true,
+          "description": "Texto do depoimento"
+        },
+        "testimonial_image": {
+          "type": "object",
+          "required": false,
+          "description": "Foto",
+          "schema": "media"
+        },
+        "testimonial_name": {
+          "type": "string",
+          "required": false,
+          "description": "Nome da pessoa"
+        },
+        "testimonial_job": {
+          "type": "string",
+          "required": false,
+          "description": "Cargo/empresa"
+        },
+        "content_color": {
+          "type": "string",
+          "required": false
+        },
+        "name_color": {
+          "type": "string",
+          "required": false
+        },
+        "image_position": {
+          "type": "string",
+          "required": false,
+          "default": "top",
+          "options": [
+            "top",
+            "left",
+            "right"
+          ]
+        }
+      }
+    },
+    "social-icons": {
+      "category": "general",
+      "description": "Ícones de redes sociais com links",
+      "icon": "eicon-social-icons",
+      "is_nested": false,
+      "settings": {
+        "social_icon_list": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { social_icon: { value, library }, social_url: string }"
+        },
+        "shape": {
+          "type": "string",
+          "required": false,
+          "default": "circle",
+          "options": [
+            "circle",
+            "square",
+            "rounded"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "center"
+        },
+        "icon_color": {
+          "type": "string",
+          "required": false
+        },
+        "icon_bg_color": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "video": {
+      "category": "general",
+      "description": "Vídeo do YouTube, Vimeo ou autohospedado",
+      "icon": "eicon-video-camera",
+      "is_nested": false,
+      "settings": {
+        "video_type": {
+          "type": "string",
+          "required": false,
+          "default": "youtube",
+          "options": [
+            "youtube",
+            "vimeo",
+            "hosted"
+          ]
+        },
+        "youtube_url": {
+          "type": "string",
+          "required": false,
+          "description": "URL do YouTube"
+        },
+        "vimeo_url": {
+          "type": "string",
+          "required": false,
+          "description": "URL do Vimeo"
+        },
+        "autoplay": {
+          "type": "string",
+          "required": false,
+          "default": "no"
+        },
+        "controls": {
+          "type": "string",
+          "required": false,
+          "default": "yes"
+        },
+        "mute": {
+          "type": "string",
+          "required": false,
+          "default": "no"
+        },
+        "loop": {
+          "type": "string",
+          "required": false,
+          "default": "no"
+        },
+        "image_overlay": {
+          "type": "object",
+          "required": false,
+          "description": "Imagem de capa",
+          "schema": "media"
+        }
+      }
+    },
+    "google_maps": {
+      "category": "general",
+      "description": "Mapa do Google Maps embedado",
+      "icon": "eicon-google-maps",
+      "is_nested": false,
+      "settings": {
+        "address": {
+          "type": "string",
+          "required": true,
+          "description": "Endereço do mapa"
+        },
+        "zoom": {
+          "type": "number",
+          "required": false,
+          "default": 10
+        },
+        "height": {
+          "type": "object",
+          "required": false,
+          "description": "Altura do mapa",
+          "schema": "responsive_value"
+        },
+        "prevent_scroll": {
+          "type": "string",
+          "required": false,
+          "default": "yes"
+        }
+      }
+    },
+    "alert": {
+      "category": "general",
+      "description": "Caixa de alerta/aviso colorida com texto e ícone",
+      "icon": "eicon-alert",
+      "is_nested": false,
+      "settings": {
+        "alert_title": {
+          "type": "string",
+          "required": false,
+          "description": "Título do alerta"
+        },
+        "alert_description": {
+          "type": "string",
+          "required": true,
+          "description": "Mensagem"
+        },
+        "alert_type": {
+          "type": "string",
+          "required": false,
+          "default": "info",
+          "options": [
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ]
+        },
+        "show_dismiss": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      }
+    },
+    "html": {
+      "category": "general",
+      "description": "Bloco de HTML/JavaScript customizado",
+      "icon": "eicon-code",
+      "is_nested": false,
+      "settings": {
+        "html": {
+          "type": "string",
+          "required": true,
+          "description": "Código HTML/JS a ser inserido"
+        }
+      }
+    },
+    "shortcode": {
+      "category": "general",
+      "description": "Inserir shortcode WordPress",
+      "icon": "eicon-shortcode",
+      "is_nested": false,
+      "settings": {
+        "shortcode": {
+          "type": "string",
+          "required": true,
+          "description": "Shortcode WordPress (ex: [contact-form-7 id='123'])"
+        }
+      }
+    },
+    "menu-anchor": {
+      "category": "general",
+      "description": "Âncora para navegação interna na página (âncora de menu one-page)",
+      "icon": "eicon-anchor",
+      "is_nested": false,
+      "settings": {
+        "anchor": {
+          "type": "string",
+          "required": true,
+          "description": "ID da âncora (sem #)"
+        }
+      }
+    },
+    "tabs": {
+      "category": "general",
+      "description": "Abas com conteúdo (cada aba = título + conteúdo)",
+      "icon": "eicon-tabs",
+      "is_nested": true,
+      "settings": {
+        "tabs": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { tab_title: string, tab_content: string }"
+        },
+        "type": {
+          "type": "string",
+          "required": false,
+          "default": "horizontal",
+          "options": [
+            "horizontal",
+            "vertical"
+          ]
+        }
+      }
+    },
+    "accordion": {
+      "category": "general",
+      "description": "Acordeão (sanfona) com itens expansíveis (FAQ)",
+      "icon": "eicon-accordion",
+      "is_nested": true,
+      "settings": {
+        "tabs": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { tab_title: string, tab_content: string }"
+        },
+        "faq_schema": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "description": "Marcar como FAQ Schema"
+        },
+        "title_html_tag": {
+          "type": "string",
+          "required": false,
+          "default": "div"
+        }
+      }
+    },
+    "nested-tabs": {
+      "category": "pro",
+      "description": "Tabs avançadas com containers aninhados (Elementor Pro)",
+      "icon": "eicon-tabs",
+      "is_nested": true,
+      "settings": {
+        "tabs": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { tab_title: string } — conteúdo vai nos elements filhos"
+        }
+      }
+    },
+    "nested-accordion": {
+      "category": "pro",
+      "description": "Acordeão avançado com containers aninhados (Elementor Pro)",
+      "icon": "eicon-accordion",
+      "is_nested": true,
+      "settings": {
+        "tabs": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { tab_title: string } — conteúdo vai nos elements filhos"
+        }
+      }
+    },
+    "form": {
+      "category": "pro",
+      "description": "Formulário de contato (Elementor Pro) com campos configuráveis",
+      "icon": "eicon-form-horizontal",
+      "is_nested": false,
+      "settings": {
+        "form_name": {
+          "type": "string",
+          "required": false,
+          "description": "Nome do formulário"
+        },
+        "form_fields": {
+          "type": "array",
+          "required": true,
+          "description": "Array de objetos de campo (field_type, field_label, field_placeholder, required)"
+        },
+        "submit_label": {
+          "type": "string",
+          "required": false,
+          "default": "Enviar"
+        },
+        "button_text_color": {
+          "type": "string",
+          "required": false
+        },
+        "button_background_color": {
+          "type": "string",
+          "required": false
+        },
+        "email_to": {
+          "type": "string",
+          "required": false,
+          "description": "Email de destino (deixe vazio = admin)"
+        },
+        "success_message": {
+          "type": "string",
+          "required": false,
+          "default": "Mensagem enviada com sucesso!"
+        },
+        "error_message": {
+          "type": "string",
+          "required": false,
+          "default": "Erro ao enviar. Tente novamente."
+        }
+      }
+    },
+    "posts": {
+      "category": "pro",
+      "description": "Grid de posts do blog com filtros e skin customizável (Elementor Pro)",
+      "icon": "eicon-posts-grid",
+      "is_nested": false,
+      "settings": {
+        "posts_per_page": {
+          "type": "number",
+          "required": false,
+          "default": 6
+        },
+        "columns": {
+          "type": "string",
+          "required": false,
+          "default": "3"
+        },
+        "orderby": {
+          "type": "string",
+          "required": false,
+          "default": "date"
+        },
+        "order": {
+          "type": "string",
+          "required": false,
+          "default": "DESC"
+        },
+        "show_image": {
+          "type": "string",
+          "required": false,
+          "default": "yes"
+        },
+        "show_title": {
+          "type": "string",
+          "required": false,
+          "default": "yes"
+        },
+        "show_excerpt": {
+          "type": "string",
+          "required": false,
+          "default": "yes"
+        },
+        "show_read_more": {
+          "type": "string",
+          "required": false,
+          "default": "yes"
+        }
+      }
+    },
+    "progress-bar": {
+      "category": "basic",
+      "description": "Barra de progresso com percentual, título e texto interno",
+      "icon": "eicon-progress-tracker",
+      "is_nested": false,
+      "settings": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "description": "Título da barra de progresso"
+        },
+        "percent": {
+          "type": "number",
+          "required": false,
+          "default": 50,
+          "description": "Percentual de progresso (0-100)"
+        },
+        "inner_text": {
+          "type": "string",
+          "required": false,
+          "description": "Texto exibido dentro da barra"
+        },
+        "display_percentage": {
+          "type": "string",
+          "required": false,
+          "default": "show",
+          "options": [
+            "show",
+            "hide"
+          ],
+          "description": "Exibir valor do percentual"
+        },
+        "color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor da barra preenchida em hex"
+        },
+        "bar_bg_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor de fundo da barra vazia em hex"
+        }
+      },
+      "example": {
+        "id": "abc12360",
+        "elType": "widget",
+        "widgetType": "progress-bar",
+        "isInner": false,
+        "settings": {
+          "title": "Design",
+          "percent": 90,
+          "inner_text": "90%",
+          "display_percentage": "show",
+          "color": "#0066cc"
+        },
+        "elements": []
+      }
+    },
+    "star-rating": {
+      "category": "basic",
+      "description": "Classificação com estrelas (avaliação/rating)",
+      "icon": "eicon-star",
+      "is_nested": false,
+      "settings": {
+        "rating_scale": {
+          "type": "number",
+          "required": false,
+          "default": 5,
+          "description": "Escala máxima de estrelas",
+          "options": [
+            5,
+            10
+          ]
+        },
+        "rating": {
+          "type": "number",
+          "required": false,
+          "default": 4.5,
+          "description": "Nota atual (ex: 4.5)"
+        },
+        "title": {
+          "type": "string",
+          "required": false,
+          "description": "Título ou rótulo acima das estrelas"
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "left",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        "star_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor das estrelas preenchidas em hex"
+        },
+        "unmarked_star_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor das estrelas vazias em hex"
+        }
+      },
+      "example": {
+        "id": "abc12361",
+        "elType": "widget",
+        "widgetType": "star-rating",
+        "isInner": false,
+        "settings": {
+          "rating_scale": 5,
+          "rating": 4.5,
+          "title": "Avaliação",
+          "align": "center",
+          "star_color": "#f0b429"
+        },
+        "elements": []
+      }
+    },
+    "basic-gallery": {
+      "category": "basic",
+      "description": "Galeria de imagens em grid, masonry ou justificado com lightbox",
+      "icon": "eicon-gallery-grid",
+      "is_nested": false,
+      "settings": {
+        "wp_gallery": {
+          "type": "array",
+          "required": true,
+          "description": "Array de objetos { id: number, url: string } das imagens"
+        },
+        "gallery_layout": {
+          "type": "string",
+          "required": false,
+          "default": "grid",
+          "options": [
+            "grid",
+            "masonry",
+            "justified"
+          ],
+          "description": "Layout da galeria"
+        },
+        "columns": {
+          "type": "number",
+          "required": false,
+          "default": 3,
+          "description": "Número de colunas"
+        },
+        "spacing": {
+          "type": "object",
+          "required": false,
+          "description": "Espaçamento entre imagens",
+          "schema": "responsive_value"
+        },
+        "lightbox": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ],
+          "description": "Abrir imagens em lightbox ao clicar"
+        }
+      },
+      "example": {
+        "id": "abc12362",
+        "elType": "widget",
+        "widgetType": "basic-gallery",
+        "isInner": false,
+        "settings": {
+          "wp_gallery": [
+            {
+              "id": 1,
+              "url": "https://site.com/foto1.jpg"
+            }
+          ],
+          "gallery_layout": "grid",
+          "columns": 3,
+          "lightbox": "yes"
+        },
+        "elements": []
+      }
+    },
+    "toggle": {
+      "category": "basic",
+      "description": "Toggle expansível (sanfona de item único) com ícone",
+      "icon": "eicon-toggle",
+      "is_nested": false,
+      "settings": {
+        "tabs": {
+          "type": "array",
+          "required": true,
+          "description": "Array com um objeto { tab_title: string, tab_content: string }"
+        },
+        "icon": {
+          "type": "string",
+          "required": false,
+          "description": "Ícone colapsado (ex: fas fa-plus)"
+        },
+        "icon_active": {
+          "type": "string",
+          "required": false,
+          "description": "Ícone expandido (ex: fas fa-minus)"
+        }
+      },
+      "example": {
+        "id": "abc12363",
+        "elType": "widget",
+        "widgetType": "toggle",
+        "isInner": false,
+        "settings": {
+          "tabs": [
+            {
+              "tab_title": "Clique para expandir",
+              "tab_content": "Conteúdo do toggle aqui."
+            }
+          ],
+          "icon": "fas fa-plus",
+          "icon_active": "fas fa-minus"
+        },
+        "elements": []
+      }
+    },
+    "soundcloud": {
+      "category": "basic",
+      "description": "Player embedado do SoundCloud com áudio",
+      "icon": "eicon-sound-cloud",
+      "is_nested": false,
+      "settings": {
+        "url": {
+          "type": "string",
+          "required": true,
+          "description": "URL do áudio no SoundCloud"
+        },
+        "visual": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ],
+          "description": "Modo visual (capa grande)"
+        },
+        "auto_play": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12364",
+        "elType": "widget",
+        "widgetType": "soundcloud",
+        "isInner": false,
+        "settings": {
+          "url": "https://soundcloud.com/user/audio",
+          "visual": "yes"
+        },
+        "elements": []
+      }
+    },
+    "site-logo": {
+      "category": "site",
+      "description": "Logotipo do site com link para home",
+      "icon": "eicon-site-logo",
+      "is_nested": false,
+      "settings": {
+        "image": {
+          "type": "object",
+          "required": false,
+          "description": "Imagem do logo (usa logo padrão se vazio)",
+          "schema": "media"
+        },
+        "link": {
+          "type": "object",
+          "required": false,
+          "description": "Link do logo (default: home)",
+          "schema": "link"
+        },
+        "caption": {
+          "type": "string",
+          "required": false,
+          "description": "Texto alternativo"
+        }
+      },
+      "example": {
+        "id": "abc12365",
+        "elType": "widget",
+        "widgetType": "site-logo",
+        "isInner": false,
+        "settings": {},
+        "elements": []
+      }
+    },
+    "site-title": {
+      "category": "site",
+      "description": "Nome do site configurado em Ajustes > Geral",
+      "icon": "eicon-site-title",
+      "is_nested": false,
+      "settings": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "description": "Sobrescrever o nome do site (vazio = usa config)"
+        },
+        "link": {
+          "type": "object",
+          "required": false,
+          "description": "Link do título",
+          "schema": "link"
+        },
+        "header_size": {
+          "type": "string",
+          "required": false,
+          "default": "h1",
+          "options": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "div",
+            "span",
+            "p"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "left",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12366",
+        "elType": "widget",
+        "widgetType": "site-title",
+        "isInner": false,
+        "settings": {
+          "header_size": "h1",
+          "align": "left"
+        },
+        "elements": []
+      }
+    },
+    "page-title": {
+      "category": "site",
+      "description": "Título da página atual",
+      "icon": "eicon-page-title",
+      "is_nested": false,
+      "settings": {
+        "header_size": {
+          "type": "string",
+          "required": false,
+          "default": "h1",
+          "options": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "div",
+            "span",
+            "p"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "left",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12367",
+        "elType": "widget",
+        "widgetType": "page-title",
+        "isInner": false,
+        "settings": {
+          "header_size": "h1",
+          "align": "center"
+        },
+        "elements": []
+      }
+    },
+    "post-title": {
+      "category": "single",
+      "description": "Título do post atual (uso em single post template)",
+      "icon": "eicon-post-title",
+      "is_nested": false,
+      "settings": {
+        "header_size": {
+          "type": "string",
+          "required": false,
+          "default": "h1",
+          "options": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "div",
+            "span",
+            "p"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "left",
+          "options": [
+            "left",
+            "center",
+            "right"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12368",
+        "elType": "widget",
+        "widgetType": "post-title",
+        "isInner": false,
+        "settings": {
+          "header_size": "h1",
+          "align": "left"
+        },
+        "elements": []
+      }
+    },
+    "post-info": {
+      "category": "single",
+      "description": "Metadados do post: data, autor, hora, comentários, data de modificação",
+      "icon": "eicon-post-info",
+      "is_nested": false,
+      "settings": {
+        "type": {
+          "type": "string",
+          "required": false,
+          "default": "date",
+          "options": [
+            "date",
+            "author",
+            "time",
+            "comments",
+            "modified"
+          ],
+          "description": "Tipo de metadado a exibir"
+        },
+        "icon": {
+          "type": "string",
+          "required": false,
+          "description": "Ícone Font Awesome (ex: fas fa-calendar)"
+        },
+        "separator": {
+          "type": "string",
+          "required": false,
+          "default": "/",
+          "description": "Separador entre múltiplos tipos"
+        }
+      },
+      "example": {
+        "id": "abc12369",
+        "elType": "widget",
+        "widgetType": "post-info",
+        "isInner": false,
+        "settings": {
+          "type": "date",
+          "icon": "fas fa-calendar"
+        },
+        "elements": []
+      }
+    },
+    "post-content": {
+      "category": "single",
+      "description": "Conteúdo completo do post atual",
+      "icon": "eicon-post-content",
+      "is_nested": false,
+      "settings": {},
+      "example": {
+        "id": "abc12370",
+        "elType": "widget",
+        "widgetType": "post-content",
+        "isInner": false,
+        "settings": {},
+        "elements": []
+      }
+    },
+    "post-featured-image": {
+      "category": "single",
+      "description": "Imagem destacada do post atual",
+      "icon": "eicon-featured-image",
+      "is_nested": false,
+      "settings": {
+        "image_size": {
+          "type": "string",
+          "required": false,
+          "default": "full",
+          "options": [
+            "thumbnail",
+            "medium",
+            "large",
+            "full",
+            "custom"
+          ]
+        },
+        "link_to": {
+          "type": "string",
+          "required": false,
+          "default": "none",
+          "options": [
+            "none",
+            "file",
+            "post"
+          ],
+          "description": "Link ao clicar na imagem"
+        }
+      },
+      "example": {
+        "id": "abc12371",
+        "elType": "widget",
+        "widgetType": "post-featured-image",
+        "isInner": false,
+        "settings": {
+          "image_size": "full",
+          "link_to": "none"
+        },
+        "elements": []
+      }
+    },
+    "post-excerpt": {
+      "category": "single",
+      "description": "Resumo/excerpt do post atual",
+      "icon": "eicon-post-excerpt",
+      "is_nested": false,
+      "settings": {
+        "length": {
+          "type": "number",
+          "required": false,
+          "default": 55,
+          "description": "Número de palavras do resumo"
+        },
+        "more_text": {
+          "type": "string",
+          "required": false,
+          "default": "...",
+          "description": "Texto ao final do resumo truncado"
+        }
+      },
+      "example": {
+        "id": "abc12372",
+        "elType": "widget",
+        "widgetType": "post-excerpt",
+        "isInner": false,
+        "settings": {
+          "length": 25,
+          "more_text": "..."
+        },
+        "elements": []
+      }
+    },
+    "post-navigation": {
+      "category": "single",
+      "description": "Links de navegação para post anterior e próximo",
+      "icon": "eicon-post-navigation",
+      "is_nested": false,
+      "settings": {
+        "prev_label": {
+          "type": "string",
+          "required": false,
+          "default": "Anterior",
+          "description": "Rótulo do link anterior"
+        },
+        "next_label": {
+          "type": "string",
+          "required": false,
+          "default": "Próximo",
+          "description": "Rótulo do link próximo"
+        },
+        "arrows": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ],
+          "description": "Exibir setas de navegação"
+        }
+      },
+      "example": {
+        "id": "abc12373",
+        "elType": "widget",
+        "widgetType": "post-navigation",
+        "isInner": false,
+        "settings": {
+          "prev_label": "Anterior",
+          "next_label": "Próximo",
+          "arrows": "yes"
+        },
+        "elements": []
+      }
+    },
+    "author-box": {
+      "category": "single",
+      "description": "Caixa com biografia e avatar do autor do post",
+      "icon": "eicon-person",
+      "is_nested": false,
+      "settings": {
+        "show_avatar": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "author_link": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ],
+          "description": "Link para página do autor"
+        },
+        "link_text": {
+          "type": "string",
+          "required": false,
+          "default": "Ver todos os posts",
+          "description": "Texto do link do autor"
+        },
+        "show_bio": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12374",
+        "elType": "widget",
+        "widgetType": "author-box",
+        "isInner": false,
+        "settings": {
+          "show_avatar": "yes",
+          "show_bio": "yes",
+          "author_link": "yes"
+        },
+        "elements": []
+      }
+    },
+    "search-form": {
+      "category": "site",
+      "description": "Campo de busca do WordPress com botão e placeholder",
+      "icon": "eicon-search",
+      "is_nested": false,
+      "settings": {
+        "placeholder": {
+          "type": "string",
+          "required": false,
+          "default": "Pesquisar...",
+          "description": "Texto placeholder do campo"
+        },
+        "button_text": {
+          "type": "string",
+          "required": false,
+          "default": "Buscar",
+          "description": "Texto do botão de busca"
+        },
+        "toggle_icon": {
+          "type": "string",
+          "required": false,
+          "description": "Ícone para alternar (se usar toggle)"
+        },
+        "skin": {
+          "type": "string",
+          "required": false,
+          "default": "classic",
+          "options": [
+            "classic",
+            "minimal",
+            "full_screen"
+          ],
+          "description": "Estilo do campo de busca"
+        }
+      },
+      "example": {
+        "id": "abc12375",
+        "elType": "widget",
+        "widgetType": "search-form",
+        "isInner": false,
+        "settings": {
+          "placeholder": "Pesquisar no site...",
+          "skin": "classic"
+        },
+        "elements": []
+      }
+    },
+    "nav-menu": {
+      "category": "site",
+      "description": "Menu de navegação WordPress (horizontal, vertical ou dropdown)",
+      "icon": "eicon-nav-menu",
+      "is_nested": false,
+      "settings": {
+        "menu": {
+          "type": "string",
+          "required": false,
+          "description": "Slug ou ID do menu WordPress (dropdown de seleção)"
+        },
+        "layout": {
+          "type": "string",
+          "required": false,
+          "default": "horizontal",
+          "options": [
+            "horizontal",
+            "vertical",
+            "dropdown"
+          ],
+          "description": "Layout do menu"
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "center",
+          "options": [
+            "flex-start",
+            "center",
+            "flex-end",
+            "space-between"
+          ]
+        },
+        "pointer": {
+          "type": "string",
+          "required": false,
+          "default": "underline",
+          "options": [
+            "underline",
+            "framed",
+            "background",
+            "text",
+            "none"
+          ],
+          "description": "Efeito no hover do item"
+        },
+        "toggle": {
+          "type": "string",
+          "required": false,
+          "default": "tablet",
+          "options": [
+            "none",
+            "mobile",
+            "tablet"
+          ],
+          "description": "Breakpoint do menu mobile (hamburger)"
+        }
+      },
+      "example": {
+        "id": "abc12376",
+        "elType": "widget",
+        "widgetType": "nav-menu",
+        "isInner": false,
+        "settings": {
+          "menu": "menu-principal",
+          "layout": "horizontal",
+          "align": "center",
+          "pointer": "underline"
+        },
+        "elements": []
+      }
+    },
+    "animated-headline": {
+      "category": "pro",
+      "description": "Título animado com texto rotativo (rotate, typing, slide, zoom, clip, loading-bar) - Elementor Pro",
+      "icon": "eicon-animated-headline",
+      "is_nested": false,
+      "settings": {
+        "headline_style": {
+          "type": "string",
+          "required": false,
+          "default": "rotate",
+          "options": [
+            "rotate",
+            "typing",
+            "slide",
+            "zoom",
+            "clip",
+            "loading-bar"
+          ],
+          "description": "Estilo de animação"
+        },
+        "before_text": {
+          "type": "string",
+          "required": false,
+          "description": "Texto antes das palavras animadas"
+        },
+        "highlighted_text": {
+          "type": "array",
+          "required": false,
+          "description": "Array de palavras que serão animadas"
+        },
+        "after_text": {
+          "type": "string",
+          "required": false,
+          "description": "Texto após as palavras animadas"
+        },
+        "animation_delay": {
+          "type": "number",
+          "required": false,
+          "default": 2500,
+          "description": "Delay entre animações em ms"
+        }
+      },
+      "example": {
+        "id": "abc12380",
+        "elType": "widget",
+        "widgetType": "animated-headline",
+        "isInner": false,
+        "settings": {
+          "headline_style": "rotate",
+          "before_text": "Seu site",
+          "highlighted_text": [
+            "rápido",
+            "bonito",
+            "seguro"
+          ]
+        },
+        "elements": []
+      }
+    },
+    "price-list": {
+      "category": "pro",
+      "description": "Lista de preços (cardápio/menu) com título, descrição, imagem e preço - Elementor Pro",
+      "icon": "eicon-price-list",
+      "is_nested": false,
+      "settings": {
+        "price_list": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { title, item_description, image, price, has_discount, original_price }"
+        },
+        "title_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor dos títulos dos itens"
+        },
+        "price_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor dos preços"
+        }
+      },
+      "example": {
+        "id": "abc12381",
+        "elType": "widget",
+        "widgetType": "price-list",
+        "isInner": false,
+        "settings": {
+          "price_list": [
+            {
+              "title": "X-Burger",
+              "item_description": "Hambúrguer artesanal",
+              "price": "R$ 25,00"
+            }
+          ]
+        },
+        "elements": []
+      }
+    },
+    "price-table": {
+      "category": "pro",
+      "description": "Tabela de preços com cabeçalho, preço, features e botão CTA - Elementor Pro",
+      "icon": "eicon-price-table",
+      "is_nested": false,
+      "settings": {
+        "header": {
+          "type": "string",
+          "required": false,
+          "description": "Título do plano (ex: Básico, Premium)"
+        },
+        "price": {
+          "type": "string",
+          "required": false,
+          "description": "Valor do plano (ex: 29)"
+        },
+        "currency": {
+          "type": "string",
+          "required": false,
+          "default": "R$",
+          "description": "Símbolo da moeda"
+        },
+        "period": {
+          "type": "string",
+          "required": false,
+          "default": "/mês",
+          "description": "Período (ex: /mês, /ano)"
+        },
+        "features_list": {
+          "type": "array",
+          "required": false,
+          "description": "Array de strings com features/benefícios"
+        },
+        "button_text": {
+          "type": "string",
+          "required": false,
+          "default": "Contratar"
+        },
+        "button_link": {
+          "type": "object",
+          "required": false,
+          "description": "Link do botão",
+          "schema": "link"
+        },
+        "featured": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "options": [
+            "yes",
+            "no"
+          ],
+          "description": "Destacar este plano visualmente"
+        },
+        "ribbon_title": {
+          "type": "string",
+          "required": false,
+          "description": "Texto da faixa de destaque (ex: Mais Popular)"
+        }
+      },
+      "example": {
+        "id": "abc12382",
+        "elType": "widget",
+        "widgetType": "price-table",
+        "isInner": false,
+        "settings": {
+          "header": "Premium",
+          "price": "99",
+          "currency": "R$",
+          "period": "/mês",
+          "features_list": [
+            "Feature 1",
+            "Feature 2"
+          ],
+          "featured": "yes",
+          "ribbon_title": "Mais Popular"
+        },
+        "elements": []
+      }
+    },
+    "flip-box": {
+      "category": "pro",
+      "description": "Card com efeito de flip (frente e verso) com flip/slide/push/zoom - Elementor Pro",
+      "icon": "eicon-flip-box",
+      "is_nested": false,
+      "settings": {
+        "side_a": {
+          "type": "object",
+          "required": false,
+          "description": "{ title, description, image (media), icon (icon_picker), background_color }"
+        },
+        "side_b": {
+          "type": "object",
+          "required": false,
+          "description": "{ title, description, button_text, button_link (link), background_color }"
+        },
+        "flip_effect": {
+          "type": "string",
+          "required": false,
+          "default": "flip",
+          "options": [
+            "flip",
+            "slide",
+            "push",
+            "zoom"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12383",
+        "elType": "widget",
+        "widgetType": "flip-box",
+        "isInner": false,
+        "settings": {
+          "side_a": {
+            "title": "Frente",
+            "background_color": "#0066cc"
+          },
+          "side_b": {
+            "title": "Verso",
+            "button_text": "Saiba Mais",
+            "background_color": "#004499"
+          },
+          "flip_effect": "flip"
+        },
+        "elements": []
+      }
+    },
+    "call-to-action": {
+      "category": "pro",
+      "description": "Banner de call-to-action com ribbon, skin classic/cover e elemento gráfico - Elementor Pro",
+      "icon": "eicon-call-to-action",
+      "is_nested": false,
+      "settings": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "description": "Título do CTA"
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "description": "Texto descritivo"
+        },
+        "button_text": {
+          "type": "string",
+          "required": false,
+          "description": "Texto do botão"
+        },
+        "button_link": {
+          "type": "object",
+          "required": false,
+          "description": "Link do botão",
+          "schema": "link"
+        },
+        "ribbon_title": {
+          "type": "string",
+          "required": false,
+          "description": "Texto da faixa de destaque"
+        },
+        "skin": {
+          "type": "string",
+          "required": false,
+          "default": "classic",
+          "options": [
+            "classic",
+            "cover"
+          ]
+        },
+        "graphic_element": {
+          "type": "string",
+          "required": false,
+          "default": "image",
+          "options": [
+            "image",
+            "icon"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12384",
+        "elType": "widget",
+        "widgetType": "call-to-action",
+        "isInner": false,
+        "settings": {
+          "title": "Comece Agora",
+          "description": "Transforme seu negócio",
+          "button_text": "Fale Conosco",
+          "skin": "classic"
+        },
+        "elements": []
+      }
+    },
+    "slides": {
+      "category": "pro",
+      "description": "Slideshow completo com heading, imagem, botão e efeito Ken Burns - Elementor Pro",
+      "icon": "eicon-slides",
+      "is_nested": false,
+      "settings": {
+        "slides": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { heading, description, button_text, button_link (link), image (media) }"
+        },
+        "transition": {
+          "type": "string",
+          "required": false,
+          "default": "slide",
+          "options": [
+            "slide",
+            "fade"
+          ]
+        },
+        "autoplay": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "navigation": {
+          "type": "string",
+          "required": false,
+          "default": "both",
+          "options": [
+            "both",
+            "dots",
+            "arrows",
+            "none"
+          ]
+        },
+        "ken_burns": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12385",
+        "elType": "widget",
+        "widgetType": "slides",
+        "isInner": false,
+        "settings": {
+          "slides": [
+            {
+              "heading": "Slide 1",
+              "description": "Descrição",
+              "button_text": "Saiba Mais"
+            }
+          ],
+          "transition": "slide",
+          "autoplay": "yes"
+        },
+        "elements": []
+      }
+    },
+    "media-carousel": {
+      "category": "pro",
+      "description": "Carrossel de mídia com imagens e vídeos - Elementor Pro",
+      "icon": "eicon-media-carousel",
+      "is_nested": false,
+      "settings": {
+        "slides": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { type (image/video), image (media), video_url }"
+        },
+        "slides_to_show": {
+          "type": "number",
+          "required": false,
+          "default": 3
+        },
+        "autoplay": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12386",
+        "elType": "widget",
+        "widgetType": "media-carousel",
+        "isInner": false,
+        "settings": {
+          "slides": [
+            {
+              "type": "image",
+              "image": {
+                "url": "https://site.com/foto.jpg"
+              }
+            }
+          ],
+          "slides_to_show": 3
+        },
+        "elements": []
+      }
+    },
+    "testimonial-carousel": {
+      "category": "pro",
+      "description": "Carrossel de depoimentos com foto, nome, cargo e conteúdo - Elementor Pro",
+      "icon": "eicon-testimonial-carousel",
+      "is_nested": false,
+      "settings": {
+        "testimonials": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { content, name, title, image (media) }"
+        },
+        "slides_to_show": {
+          "type": "number",
+          "required": false,
+          "default": 3
+        },
+        "autoplay": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12387",
+        "elType": "widget",
+        "widgetType": "testimonial-carousel",
+        "isInner": false,
+        "settings": {
+          "testimonials": [
+            {
+              "content": "Excelente serviço!",
+              "name": "João Silva",
+              "title": "CEO"
+            }
+          ],
+          "slides_to_show": 2
+        },
+        "elements": []
+      }
+    },
+    "countdown": {
+      "category": "pro",
+      "description": "Contador regressivo (timer) com data alvo e labels customizáveis - Elementor Pro",
+      "icon": "eicon-countdown",
+      "is_nested": false,
+      "settings": {
+        "due_date": {
+          "type": "string",
+          "required": true,
+          "description": "Data alvo no formato YYYY-MM-DD HH:mm:ss"
+        },
+        "show_days": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_hours": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_minutes": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_seconds": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "digits_color": {
+          "type": "string",
+          "required": false,
+          "description": "Cor dos dígitos em hex"
+        },
+        "labels": {
+          "type": "object",
+          "required": false,
+          "description": "{ days, hours, minutes, seconds }"
+        }
+      },
+      "example": {
+        "id": "abc12388",
+        "elType": "widget",
+        "widgetType": "countdown",
+        "isInner": false,
+        "settings": {
+          "due_date": "2026-12-31 23:59:59",
+          "show_days": "yes",
+          "digits_color": "#ff0000"
+        },
+        "elements": []
+      }
+    },
+    "share-buttons": {
+      "category": "pro",
+      "description": "Botões de compartilhamento social com forma, skin e alinhamento - Elementor Pro",
+      "icon": "eicon-share",
+      "is_nested": false,
+      "settings": {
+        "share_buttons": {
+          "type": "array",
+          "required": false,
+          "description": "Array de { social_icon, social_url } — usa redes padrão se vazio"
+        },
+        "shape": {
+          "type": "string",
+          "required": false,
+          "default": "circle",
+          "options": [
+            "circle",
+            "square",
+            "rounded"
+          ]
+        },
+        "skin": {
+          "type": "string",
+          "required": false,
+          "default": "gradient",
+          "options": [
+            "gradient",
+            "minimal",
+            "framed",
+            "boxed",
+            "flat"
+          ]
+        },
+        "align": {
+          "type": "string",
+          "required": false,
+          "default": "center",
+          "options": [
+            "left",
+            "center",
+            "right",
+            "justify"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12389",
+        "elType": "widget",
+        "widgetType": "share-buttons",
+        "isInner": false,
+        "settings": {
+          "shape": "circle",
+          "skin": "gradient",
+          "align": "center"
+        },
+        "elements": []
+      }
+    },
+    "block-quote": {
+      "category": "pro",
+      "description": "Citação estilizada com autor, cargo, foto e botão de tweet - Elementor Pro",
+      "icon": "eicon-blockquote",
+      "is_nested": false,
+      "settings": {
+        "blockquote_content": {
+          "type": "string",
+          "required": true,
+          "description": "Texto da citação"
+        },
+        "author_name": {
+          "type": "string",
+          "required": false,
+          "description": "Nome do autor"
+        },
+        "author_job": {
+          "type": "string",
+          "required": false,
+          "description": "Cargo/profissão do autor"
+        },
+        "author_image": {
+          "type": "object",
+          "required": false,
+          "description": "Foto do autor",
+          "schema": "media"
+        },
+        "tweet_button": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12390",
+        "elType": "widget",
+        "widgetType": "block-quote",
+        "isInner": false,
+        "settings": {
+          "blockquote_content": "A simplicidade é o último grau de sofisticação.",
+          "author_name": "Leonardo da Vinci",
+          "tweet_button": "yes"
+        },
+        "elements": []
+      }
+    },
+    "lottie": {
+      "category": "pro",
+      "description": "Animação Lottie (JSON) com trigger, loop e velocidade - Elementor Pro",
+      "icon": "eicon-lottie",
+      "is_nested": false,
+      "settings": {
+        "source_url": {
+          "type": "string",
+          "required": false,
+          "description": "URL do arquivo Lottie JSON"
+        },
+        "source": {
+          "type": "string",
+          "required": false,
+          "default": "media_file",
+          "options": [
+            "media_file",
+            "external_url"
+          ]
+        },
+        "trigger": {
+          "type": "string",
+          "required": false,
+          "default": "autoplay",
+          "options": [
+            "viewport",
+            "hover",
+            "click",
+            "autoplay"
+          ]
+        },
+        "loop": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "speed": {
+          "type": "number",
+          "required": false,
+          "default": 1,
+          "description": "Velocidade da animação (0.1 a 5)"
+        }
+      },
+      "example": {
+        "id": "abc12391",
+        "elType": "widget",
+        "widgetType": "lottie",
+        "isInner": false,
+        "settings": {
+          "source_url": "https://site.com/animacao.json",
+          "trigger": "viewport",
+          "loop": "yes",
+          "speed": 1
+        },
+        "elements": []
+      }
+    },
+    "code-highlight": {
+      "category": "pro",
+      "description": "Bloco de código com syntax highlighting e tema - Elementor Pro",
+      "icon": "eicon-code-highlight",
+      "is_nested": false,
+      "settings": {
+        "code": {
+          "type": "string",
+          "required": true,
+          "description": "Código fonte a ser exibido com highlight"
+        },
+        "language": {
+          "type": "string",
+          "required": false,
+          "default": "javascript",
+          "description": "Linguagem para highlighting (php, js, css, html, python)"
+        },
+        "theme": {
+          "type": "string",
+          "required": false,
+          "default": "monokai",
+          "options": [
+            "monokai",
+            "github",
+            "dracula",
+            "atom-one-dark",
+            "atom-one-light"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12392",
+        "elType": "widget",
+        "widgetType": "code-highlight",
+        "isInner": false,
+        "settings": {
+          "code": "console.log('Hello World');",
+          "language": "javascript",
+          "theme": "monokai"
+        },
+        "elements": []
+      }
+    },
+    "video-playlist": {
+      "category": "pro",
+      "description": "Playlist de vídeos com abas e navegação interna - Elementor Pro",
+      "icon": "eicon-video-playlist",
+      "is_nested": false,
+      "settings": {
+        "tabs": {
+          "type": "array",
+          "required": true,
+          "description": "Array de { title, youtube_url, vimeo_url, duration }"
+        },
+        "inner_controls": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12393",
+        "elType": "widget",
+        "widgetType": "video-playlist",
+        "isInner": false,
+        "settings": {
+          "tabs": [
+            {
+              "title": "Introdução",
+              "youtube_url": "https://youtube.com/watch?v=abc",
+              "duration": "5:30"
+            }
+          ]
+        },
+        "elements": []
+      }
+    },
+    "table-of-contents": {
+      "category": "pro",
+      "description": "Tabela de conteúdo (TOC) gerada automaticamente dos headings da página - Elementor Pro",
+      "icon": "eicon-table-of-contents",
+      "is_nested": false,
+      "settings": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "default": "Índice",
+          "description": "Título da TOC"
+        },
+        "min_height": {
+          "type": "string",
+          "required": false,
+          "default": "h2",
+          "description": "Heading mínimo a incluir"
+        },
+        "collapse_subitems": {
+          "type": "string",
+          "required": false,
+          "default": "no",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "marker_view": {
+          "type": "string",
+          "required": false,
+          "default": "bullets",
+          "options": [
+            "bullets",
+            "numbers"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12394",
+        "elType": "widget",
+        "widgetType": "table-of-contents",
+        "isInner": false,
+        "settings": {
+          "title": "Índice",
+          "marker_view": "bullets",
+          "collapse_subitems": "no"
+        },
+        "elements": []
+      }
+    },
+    "loop-grid": {
+      "category": "pro",
+      "description": "Grid de posts dinâmicos usando Loop Template (query builder avançado) - Elementor Pro",
+      "icon": "eicon-loop-grid",
+      "is_nested": false,
+      "settings": {
+        "template_id": {
+          "type": "string",
+          "required": false,
+          "description": "ID do Loop Template a ser usado"
+        },
+        "posts_per_page": {
+          "type": "number",
+          "required": false,
+          "default": 6
+        },
+        "columns": {
+          "type": "number",
+          "required": false,
+          "default": 3
+        },
+        "pagination": {
+          "type": "string",
+          "required": false,
+          "default": "numbers",
+          "options": [
+            "none",
+            "numbers",
+            "load_more",
+            "infinite"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12395",
+        "elType": "widget",
+        "widgetType": "loop-grid",
+        "isInner": false,
+        "settings": {
+          "template_id": "123",
+          "posts_per_page": 6,
+          "columns": 3,
+          "pagination": "numbers"
+        },
+        "elements": []
+      }
+    },
+    "loop-carousel": {
+      "category": "pro",
+      "description": "Carrossel de posts dinâmicos usando Loop Template - Elementor Pro",
+      "icon": "eicon-loop-carousel",
+      "is_nested": false,
+      "settings": {
+        "template_id": {
+          "type": "string",
+          "required": false,
+          "description": "ID do Loop Template a ser usado"
+        },
+        "posts_per_page": {
+          "type": "number",
+          "required": false,
+          "default": 6
+        },
+        "slides_to_show": {
+          "type": "number",
+          "required": false,
+          "default": 3
+        },
+        "autoplay": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12396",
+        "elType": "widget",
+        "widgetType": "loop-carousel",
+        "isInner": false,
+        "settings": {
+          "template_id": "123",
+          "posts_per_page": 6,
+          "slides_to_show": 3
+        },
+        "elements": []
+      }
+    },
+    "off-canvas": {
+      "category": "pro",
+      "description": "Painel off-canvas (slide-in) com trigger, overlay e conteúdo - Elementor Pro",
+      "icon": "eicon-off-canvas",
+      "is_nested": false,
+      "settings": {
+        "content": {
+          "type": "object",
+          "required": false,
+          "description": "Conteúdo do painel (HTML/widgets)"
+        },
+        "position": {
+          "type": "string",
+          "required": false,
+          "default": "right",
+          "options": [
+            "left",
+            "right",
+            "top",
+            "bottom"
+          ]
+        },
+        "trigger": {
+          "type": "string",
+          "required": false,
+          "default": "button",
+          "options": [
+            "button",
+            "icon",
+            "link"
+          ]
+        },
+        "overlay": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12397",
+        "elType": "widget",
+        "widgetType": "off-canvas",
+        "isInner": false,
+        "settings": {
+          "position": "right",
+          "trigger": "button",
+          "overlay": "yes"
+        },
+        "elements": []
+      }
+    },
+    "login": {
+      "category": "pro",
+      "description": "Formulário de login WordPress com opções de registro e lembrar senha - Elementor Pro",
+      "icon": "eicon-login",
+      "is_nested": false,
+      "settings": {
+        "show_logged_in_message": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_labels": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_remember_me": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_register": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_lost_password": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "redirect_after_login": {
+          "type": "string",
+          "required": false,
+          "description": "URL para redirecionar após login"
+        }
+      },
+      "example": {
+        "id": "abc12398",
+        "elType": "widget",
+        "widgetType": "login",
+        "isInner": false,
+        "settings": {
+          "show_labels": "yes",
+          "show_remember_me": "yes",
+          "show_lost_password": "yes"
+        },
+        "elements": []
+      }
+    },
+    "portfolio": {
+      "category": "pro",
+      "description": "Grid de portfolio com filtro por categoria, imagem, título e excerpt - Elementor Pro",
+      "icon": "eicon-portfolio",
+      "is_nested": false,
+      "settings": {
+        "posts_per_page": {
+          "type": "number",
+          "required": false,
+          "default": 6
+        },
+        "columns": {
+          "type": "number",
+          "required": false,
+          "default": 3
+        },
+        "show_title": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "show_excerpt": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        },
+        "filter_bar": {
+          "type": "string",
+          "required": false,
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12399",
+        "elType": "widget",
+        "widgetType": "portfolio",
+        "isInner": false,
+        "settings": {
+          "posts_per_page": 6,
+          "columns": 3,
+          "show_title": "yes",
+          "filter_bar": "yes"
+        },
+        "elements": []
+      }
+    },
+    "paypal-button": {
+      "category": "pro",
+      "description": "Botão de pagamento PayPal (buy now, donate ou subscribe) - Elementor Pro",
+      "icon": "eicon-paypal-button",
+      "is_nested": false,
+      "settings": {
+        "item_name": {
+          "type": "string",
+          "required": false,
+          "description": "Nome do item/produto"
+        },
+        "amount": {
+          "type": "string",
+          "required": false,
+          "description": "Valor da transação (ex: 29.90)"
+        },
+        "currency": {
+          "type": "string",
+          "required": false,
+          "default": "BRL",
+          "description": "Código da moeda ISO (BRL, USD, EUR)"
+        },
+        "button_type": {
+          "type": "string",
+          "required": false,
+          "default": "buy_now",
+          "options": [
+            "buy_now",
+            "donate",
+            "subscribe"
+          ]
+        }
+      },
+      "example": {
+        "id": "abc12400",
+        "elType": "widget",
+        "widgetType": "paypal-button",
+        "isInner": false,
+        "settings": {
+          "item_name": "Curso Online",
+          "amount": "199.90",
+          "currency": "BRL",
+          "button_type": "buy_now"
+        },
+        "elements": []
+      }
+    },
+    "stripe-button": {
+      "category": "pro",
+      "description": "Botão de pagamento Stripe com valor, descrição e mensagem de sucesso - Elementor Pro",
+      "icon": "eicon-stripe-button",
+      "is_nested": false,
+      "settings": {
+        "amount": {
+          "type": "string",
+          "required": false,
+          "description": "Valor em centavos (ex: 2990 para R$ 29,90)"
+        },
+        "currency": {
+          "type": "string",
+          "required": false,
+          "default": "brl",
+          "description": "Código da moeda em minúsculo"
+        },
+        "button_text": {
+          "type": "string",
+          "required": false,
+          "default": "Pagar"
+        },
+        "description": {
+          "type": "string",
+          "required": false,
+          "description": "Descrição da transação"
+        },
+        "success_message": {
+          "type": "string",
+          "required": false,
+          "default": "Pagamento realizado com sucesso!"
+        }
+      },
+      "example": {
+        "id": "abc12401",
+        "elType": "widget",
+        "widgetType": "stripe-button",
+        "isInner": false,
+        "settings": {
+          "amount": "2990",
+          "currency": "brl",
+          "button_text": "Pagar R$ 29,90",
+          "description": "Assinatura mensal"
+        },
+        "elements": []
+      }
+    }
+  },
+  "container_settings": {
+    "layout": {
+      "description": "Configurações de layout do container (Flexbox)",
+      "properties": {
+        "container_width": {
+          "type": "string",
+          "description": "boxed|full_width"
+        },
+        "content_width": {
+          "type": "object",
+          "schema": "responsive_value"
+        },
+        "height": {
+          "type": "string",
+          "description": "fit_to_screen|min-height"
+        },
+        "custom_height": {
+          "type": "object",
+          "schema": "responsive_value"
+        },
+        "content_position": {
+          "type": "string",
+          "description": "top|middle|bottom|space-between|space-around|space-evenly"
+        },
+        "html_tag": {
+          "type": "string",
+          "description": "div|section|header|footer|main|article|aside|nav"
+        },
+        "flex_direction": {
+          "type": "string",
+          "description": "row|column|row-reverse|column-reverse"
+        },
+        "flex_align_items": {
+          "type": "string",
+          "description": "flex-start|center|flex-end|stretch|baseline"
+        },
+        "gap": {
+          "type": "object",
+          "schema": "responsive_value"
+        },
+        "overflow": {
+          "type": "string",
+          "description": "visible|hidden|scroll|auto"
+        }
+      }
+    },
+    "style": {
+      "description": "Configurações de estilo do container",
+      "properties": {
+        "background_background": {
+          "type": "string",
+          "description": "classic|gradient"
+        },
+        "background_color": {
+          "type": "string",
+          "description": "Cor de fundo em hex"
+        },
+        "background_image": {
+          "type": "object",
+          "schema": "media"
+        },
+        "background_overlay_color": {
+          "type": "string"
+        },
+        "border_radius": {
+          "type": "object",
+          "schema": "dimension"
+        },
+        "border_width": {
+          "type": "object",
+          "schema": "dimension"
+        },
+        "border_color": {
+          "type": "string"
+        },
+        "box_shadow": {
+          "type": "string",
+          "description": "Sombra da caixa CSS"
+        },
+        "padding": {
+          "type": "object",
+          "schema": "dimension",
+          "description": "Espaçamento interno"
+        },
+        "margin": {
+          "type": "object",
+          "schema": "dimension",
+          "description": "Margem externa"
+        }
+      }
+    }
+  },
+  "recipes": {
+    "hero": {
+      "description": "Seção hero com título grande, subtítulo e botão CTA. Fundo com cor ou imagem.",
+      "usage": "Primeira seção da página, apresentação principal do site",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "height": "min-height",
+            "custom_height": {
+              "unit": "vh",
+              "size": 80
+            },
+            "content_position": "middle",
+            "html_tag": "section"
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Título Principal",
+                "header_size": "h1",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "editor": "<p>Subtítulo ou descrição breve do site.</p>",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "button",
+              "settings": {
+                "text": "Comece Agora",
+                "size": "lg",
+                "align": "center"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "about-section": {
+      "description": "Seção Sobre com imagem à esquerda e texto à direita",
+      "usage": "Segunda/terceira seção da página, apresentação da empresa/pessoa",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "content_position": "middle",
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Sobre Nós",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 30
+                }
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "image",
+                  "settings": {
+                    "image": {
+                      "url": "URL_DA_IMAGEM"
+                    },
+                    "image_size": "full"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "editor": "<p>Texto sobre a empresa/pessoa.</p>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "three-column-cards": {
+      "description": "Grid de 3 cards com ícone, título e descrição (serviços/features)",
+      "usage": "Seção de serviços, benefícios ou features do produto",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Nossos Serviços",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 20
+                }
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-star",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Serviço 1",
+                    "description_text": "Descrição breve"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-heart",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Serviço 2",
+                    "description_text": "Descrição breve"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-bolt",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Serviço 3",
+                    "description_text": "Descrição breve"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "cta-banner": {
+      "description": "Banner de call-to-action com fundo colorido, texto e botão",
+      "usage": "Antes do footer, para converter visitantes",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "background_background": "classic",
+            "background_color": "#0066cc",
+            "content_position": "middle",
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Pronto para começar?",
+                "header_size": "h2",
+                "align": "center",
+                "title_color": "#ffffff"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "button",
+              "settings": {
+                "text": "Fale Conosco",
+                "size": "lg",
+                "align": "center",
+                "button_text_color": "#0066cc",
+                "background_color": "#ffffff"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "footer-basic": {
+      "description": "Rodapé com colunas de texto/links",
+      "usage": "Footer do site",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "background_background": "classic",
+            "background_color": "#1a1a1a",
+            "padding": {
+              "unit": "px",
+              "top": "40",
+              "bottom": "20"
+            }
+          },
+          "elements": [
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 30
+                }
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "editor": "<h3>Empresa</h3><p>Descrição breve</p>",
+                    "text_color": "#cccccc"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "editor": "<h3>Links</h3><p><a href='/'>Home</a><br><a href='/sobre'>Sobre</a><br><a href='/contato'>Contato</a></p>",
+                    "text_color": "#cccccc"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "editor": "<h3>Contato</h3><p>email@site.com</p>",
+                    "text_color": "#cccccc"
+                  }
+                }
+              ]
+            },
+            {
+              "elType": "widget",
+              "widgetType": "divider",
+              "settings": {
+                "color": "#333333"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "editor": "<p style='text-align:center'>© ANO Empresa. Todos os direitos reservados.</p>",
+                "text_color": "#888888"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "contact-section": {
+      "description": "Seção de contato com formulário e informações",
+      "usage": "Página de contato ou seção final",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Entre em Contato",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 30
+                }
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "editor": "<p><strong>Email:</strong> contato@site.com</p><p><strong>Telefone:</strong> (XX) XXXX-XXXX</p><p><strong>Endereço:</strong> Rua Exemplo, 123</p>"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "form",
+                  "settings": {
+                    "form_fields": [
+                      {
+                        "field_type": "text",
+                        "field_label": "Nome",
+                        "required": "yes"
+                      },
+                      {
+                        "field_type": "email",
+                        "field_label": "Email",
+                        "required": "yes"
+                      },
+                      {
+                        "field_type": "textarea",
+                        "field_label": "Mensagem",
+                        "required": "yes"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "faq-section": {
+      "description": "Seção de perguntas frequentes com acordeão",
+      "usage": "Página de FAQ ou seção de dúvidas",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Perguntas Frequentes",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "accordion",
+              "settings": {
+                "tabs": [
+                  {
+                    "tab_title": "Pergunta 1?",
+                    "tab_content": "Resposta da pergunta 1."
+                  },
+                  {
+                    "tab_title": "Pergunta 2?",
+                    "tab_content": "Resposta da pergunta 2."
+                  },
+                  {
+                    "tab_title": "Pergunta 3?",
+                    "tab_content": "Resposta da pergunta 3."
+                  }
+                ],
+                "faq_schema": "yes"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "pricing-section": {
+      "description": "Seção de preços com tabela de 3 colunas lado a lado",
+      "usage": "Página de preços ou landing page",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Nossos Planos",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "editor": "<p style='text-align:center'>Escolha o plano ideal para você</p>"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 20
+                }
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "price-table",
+                  "settings": {
+                    "header": "Básico",
+                    "price": "29",
+                    "currency": "R$",
+                    "period": "/mês",
+                    "features_list": [
+                      "Feature 1",
+                      "Feature 2"
+                    ],
+                    "button_text": "Contratar"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "price-table",
+                  "settings": {
+                    "header": "Premium",
+                    "price": "99",
+                    "currency": "R$",
+                    "period": "/mês",
+                    "features_list": [
+                      "Feature 1",
+                      "Feature 2",
+                      "Feature 3"
+                    ],
+                    "featured": "yes",
+                    "ribbon_title": "Mais Popular",
+                    "button_text": "Contratar"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "price-table",
+                  "settings": {
+                    "header": "Enterprise",
+                    "price": "299",
+                    "currency": "R$",
+                    "period": "/mês",
+                    "features_list": [
+                      "Feature 1",
+                      "Feature 2",
+                      "Feature 3",
+                      "Feature 4"
+                    ],
+                    "button_text": "Contratar"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "team-section": {
+      "description": "Grid de membros da equipe com foto, nome, cargo e ícones sociais",
+      "usage": "Página Sobre ou Equipe",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Nossa Equipe",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 30
+                }
+              },
+              "elements": [
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "image": {
+                          "url": "URL_FOTO1"
+                        },
+                        "image_size": "full"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "Nome Pessoa",
+                        "header_size": "h3",
+                        "align": "center"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p style='text-align:center'>Cargo/Empresa</p>"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "social-icons",
+                      "settings": {
+                        "social_icon_list": [
+                          {
+                            "social_icon": {
+                              "value": "fab fa-linkedin",
+                              "library": "fa-brands"
+                            },
+                            "social_url": "#"
+                          }
+                        ],
+                        "align": "center"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "image": {
+                          "url": "URL_FOTO2"
+                        },
+                        "image_size": "full"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "Nome Pessoa",
+                        "header_size": "h3",
+                        "align": "center"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p style='text-align:center'>Cargo/Empresa</p>"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "social-icons",
+                      "settings": {
+                        "social_icon_list": [
+                          {
+                            "social_icon": {
+                              "value": "fab fa-linkedin",
+                              "library": "fa-brands"
+                            },
+                            "social_url": "#"
+                          }
+                        ],
+                        "align": "center"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "image": {
+                          "url": "URL_FOTO3"
+                        },
+                        "image_size": "full"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "Nome Pessoa",
+                        "header_size": "h3",
+                        "align": "center"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p style='text-align:center'>Cargo/Empresa</p>"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "social-icons",
+                      "settings": {
+                        "social_icon_list": [
+                          {
+                            "social_icon": {
+                              "value": "fab fa-linkedin",
+                              "library": "fa-brands"
+                            },
+                            "social_url": "#"
+                          }
+                        ],
+                        "align": "center"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "portfolio-grid": {
+      "description": "Grid de itens de portfolio com filtro por categoria",
+      "usage": "Página de portfolio ou trabalhos",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Portfolio",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "portfolio",
+              "settings": {
+                "posts_per_page": 9,
+                "columns": 3,
+                "show_title": "yes",
+                "filter_bar": "yes"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "timeline-section": {
+      "description": "Linha do tempo vertical com conteúdo alternado",
+      "usage": "Página de histórico, roadmap ou linha do tempo",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Nossa História",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 0
+                }
+              },
+              "elements": [
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "2020",
+                        "header_size": "h3"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p>Evento do ano 2020</p>"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "spacer",
+                      "settings": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 0
+                }
+              },
+              "elements": [
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "spacer",
+                      "settings": {}
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "2022",
+                        "header_size": "h3"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p>Evento do ano 2022</p>"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "stats-section": {
+      "description": "Grid de números/estatísticas com ícone, contador e rótulo",
+      "usage": "Seção de resultados, números ou métricas da empresa",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "background_background": "classic",
+            "background_color": "#f5f5f5",
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 30
+                }
+              },
+              "elements": [
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "icon",
+                      "settings": {
+                        "selected_icon": {
+                          "value": "fas fa-users",
+                          "library": "fa-solid"
+                        },
+                        "align": "center"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "counter",
+                      "settings": {
+                        "ending_number": 5000,
+                        "number_suffix": "+",
+                        "title": "Clientes Atendidos"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "icon",
+                      "settings": {
+                        "selected_icon": {
+                          "value": "fas fa-check-circle",
+                          "library": "fa-solid"
+                        },
+                        "align": "center"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "counter",
+                      "settings": {
+                        "ending_number": 1200,
+                        "number_suffix": "+",
+                        "title": "Projetos Entregues"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "icon",
+                      "settings": {
+                        "selected_icon": {
+                          "value": "fas fa-globe",
+                          "library": "fa-solid"
+                        },
+                        "align": "center"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "counter",
+                      "settings": {
+                        "ending_number": 30,
+                        "number_suffix": "+",
+                        "title": "Países"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "icon",
+                      "settings": {
+                        "selected_icon": {
+                          "value": "fas fa-award",
+                          "library": "fa-solid"
+                        },
+                        "align": "center"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "counter",
+                      "settings": {
+                        "ending_number": 50,
+                        "number_suffix": "+",
+                        "title": "Prêmios"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "logo-grid": {
+      "description": "Grid de logos de clientes ou parceiros lado a lado",
+      "usage": "Seção de confiança, clientes ou parceiros",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "40",
+              "bottom": "40"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Clientes e Parceiros",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "flex_align_items": "center",
+                "gap": {
+                  "unit": "px",
+                  "size": 40
+                }
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "image",
+                  "settings": {
+                    "image": {
+                      "url": "URL_LOGO1"
+                    },
+                    "image_size": "full"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "image",
+                  "settings": {
+                    "image": {
+                      "url": "URL_LOGO2"
+                    },
+                    "image_size": "full"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "image",
+                  "settings": {
+                    "image": {
+                      "url": "URL_LOGO3"
+                    },
+                    "image_size": "full"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "image",
+                  "settings": {
+                    "image": {
+                      "url": "URL_LOGO4"
+                    },
+                    "image_size": "full"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "image",
+                  "settings": {
+                    "image": {
+                      "url": "URL_LOGO5"
+                    },
+                    "image_size": "full"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "newsletter-section": {
+      "description": "Seção de newsletter com heading, texto e campo de email",
+      "usage": "Seção de captura de email no meio ou final da página",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "background_background": "classic",
+            "background_color": "#f0f4f8",
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            },
+            "content_position": "middle"
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Receba Novidades",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "editor": "<p style='text-align:center'>Cadastre-se e receba conteúdo exclusivo</p>"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "form",
+              "settings": {
+                "form_fields": [
+                  {
+                    "field_type": "email",
+                    "field_label": "Seu melhor email",
+                    "required": "yes"
+                  }
+                ],
+                "submit_label": "Inscrever-se",
+                "button_text_color": "#ffffff",
+                "button_background_color": "#0066cc"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "blog-grid": {
+      "description": "Grid de posts com imagem, título, resumo e link ler mais",
+      "usage": "Página inicial do blog ou página de arquivo",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Últimos Posts",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 30
+                }
+              },
+              "elements": [
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "image": {
+                          "url": "URL_POST"
+                        },
+                        "image_size": "large"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "Título do Post",
+                        "header_size": "h3"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p>Resumo do post...</p>"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "button",
+                      "settings": {
+                        "text": "Ler Mais",
+                        "size": "sm",
+                        "link": {
+                          "url": "#"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "image": {
+                          "url": "URL_POST"
+                        },
+                        "image_size": "large"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "Título do Post",
+                        "header_size": "h3"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p>Resumo do post...</p>"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "button",
+                      "settings": {
+                        "text": "Ler Mais",
+                        "size": "sm",
+                        "link": {
+                          "url": "#"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "elType": "container",
+                  "settings": {},
+                  "elements": [
+                    {
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "image": {
+                          "url": "URL_POST"
+                        },
+                        "image_size": "large"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "title": "Título do Post",
+                        "header_size": "h3"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "editor": "<p>Resumo do post...</p>"
+                      }
+                    },
+                    {
+                      "elType": "widget",
+                      "widgetType": "button",
+                      "settings": {
+                        "text": "Ler Mais",
+                        "size": "sm",
+                        "link": {
+                          "url": "#"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "services-section": {
+      "description": "Grid 2x3 ou 3x2 de icon boxes com serviços ou features",
+      "usage": "Seção de serviços, funcionalidades ou áreas de atuação",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "padding": {
+              "unit": "px",
+              "top": "60",
+              "bottom": "60"
+            }
+          },
+          "elements": [
+            {
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "title": "Nossos Serviços",
+                "header_size": "h2",
+                "align": "center"
+              }
+            },
+            {
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "editor": "<p style='text-align:center'>O que podemos fazer por você</p>"
+              }
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "flex_direction": "row",
+                "gap": {
+                  "unit": "px",
+                  "size": 20
+                },
+                "flex_wrap": "wrap"
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-paint-brush",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Design",
+                    "description_text": "Interfaces incríveis"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-code",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Dev",
+                    "description_text": "Código limpo"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-mobile-alt",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Mobile",
+                    "description_text": "Apps nativos"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-chart-line",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "SEO",
+                    "description_text": "Otimização"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-headset",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Suporte",
+                    "description_text": "24/7"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "icon-box",
+                  "settings": {
+                    "selected_icon": {
+                      "value": "fas fa-shield-alt",
+                      "library": "fa-solid"
+                    },
+                    "title_text": "Segurança",
+                    "description_text": "Proteção SSL"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "split-hero": {
+      "description": "Hero dividido com imagem de um lado e texto+CTA do outro",
+      "usage": "Hero alternativo para landing pages com visual impactante",
+      "structure": [
+        {
+          "elType": "container",
+          "settings": {
+            "height": "min-height",
+            "custom_height": {
+              "unit": "vh",
+              "size": 80
+            },
+            "flex_direction": "row"
+          },
+          "elements": [
+            {
+              "elType": "container",
+              "settings": {
+                "content_position": "middle",
+                "padding": {
+                  "unit": "px",
+                  "top": "60",
+                  "right": "60",
+                  "bottom": "60",
+                  "left": "60"
+                }
+              },
+              "elements": [
+                {
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "title": "Transforme seu Negócio",
+                    "header_size": "h1"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "editor": "<p>Solução completa para sua empresa crescer online.</p>"
+                  }
+                },
+                {
+                  "elType": "widget",
+                  "widgetType": "button",
+                  "settings": {
+                    "text": "Comece Agora",
+                    "size": "lg",
+                    "button_text_color": "#ffffff",
+                    "background_color": "#0066cc"
+                  }
+                }
+              ]
+            },
+            {
+              "elType": "container",
+              "settings": {
+                "background_background": "classic",
+                "background_image": {
+                  "url": "URL_DA_IMAGEM"
+                }
+              },
+              "elements": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "endpoints": {
+    "status": {
+      "method": "GET",
+      "path": "/status",
+      "description": "Retorna status do WordPress, versões e informações do plugin"
+    },
+    "execute-php": {
+      "method": "POST",
+      "path": "/execute-php",
+      "description": "Executa código PHP arbitrário",
+      "params": {
+        "code": "string (required)"
+      }
+    },
+    "read-file": {
+      "method": "POST",
+      "path": "/read-file",
+      "description": "Lê arquivo do servidor",
+      "params": {
+        "path": "string (required)"
+      }
+    },
+    "write-file": {
+      "method": "POST",
+      "path": "/write-file",
+      "description": "Escreve arquivo no servidor",
+      "params": {
+        "path": "string (required)",
+        "content": "string (required)",
+        "is_base64": "bool (optional)"
+      }
+    },
+    "edit-file": {
+      "method": "POST",
+      "path": "/edit-file",
+      "description": "Edita arquivo (find & replace)",
+      "params": {
+        "path": "string (required)",
+        "old_string": "string (required)",
+        "new_string": "string (required)",
+        "replace_all": "bool (optional)"
+      }
+    },
+    "delete-file": {
+      "method": "POST",
+      "path": "/delete-file",
+      "description": "Remove arquivo/diretório",
+      "params": {
+        "path": "string (required)",
+        "recursive": "bool (optional)"
+      }
+    },
+    "list-directory": {
+      "method": "POST",
+      "path": "/list-directory",
+      "description": "Lista arquivos do diretório",
+      "params": {
+        "path": "string",
+        "pattern": "string (glob)",
+        "recursive": "bool",
+        "include_hidden": "bool",
+        "max_depth": "int",
+        "limit": "int"
+      }
+    },
+    "elementor-get": {
+      "method": "POST",
+      "path": "/elementor/get",
+      "description": "Lê dados Elementor de uma página (JSON completo)",
+      "params": {
+        "post_id": "int (required)"
+      }
+    },
+    "elementor-set": {
+      "method": "POST",
+      "path": "/elementor/set",
+      "description": "Grava dados Elementor em uma página (JSON completo)",
+      "params": {
+        "post_id": "int (required)",
+        "data": "string/object (JSON)",
+        "page_settings": "object",
+        "css": "string",
+        "edit_mode": "string"
+      }
+    },
+    "elementor-templates": {
+      "method": "POST",
+      "path": "/elementor/templates",
+      "description": "Lista templates Elementor",
+      "params": {
+        "type": "string (header|footer|page|popup|section)"
+      }
+    },
+    "elementor-get-element": {
+      "method": "POST",
+      "path": "/elementor/get-element",
+      "description": "Busca elemento por ID na página",
+      "params": {
+        "post_id": "int (required)",
+        "element_id": "string (required)"
+      }
+    },
+    "elementor-add-element": {
+      "method": "POST",
+      "path": "/elementor/add-element",
+      "description": "Adiciona container/widget na página",
+      "params": {
+        "post_id": "int (required)",
+        "element": "object (required — container ou widget)",
+        "target_id": "string (ID do container pai)",
+        "position": "int (posição, 0=início)"
+      }
+    },
+    "elementor-update-element": {
+      "method": "POST",
+      "path": "/elementor/update-element",
+      "description": "Atualiza settings de um elemento",
+      "params": {
+        "post_id": "int (required)",
+        "element_id": "string (required)",
+        "settings": "object (required — novos settings)"
+      }
+    },
+    "elementor-remove-element": {
+      "method": "POST",
+      "path": "/elementor/remove-element",
+      "description": "Remove elemento da página",
+      "params": {
+        "post_id": "int (required)",
+        "element_id": "string (required)"
+      }
+    },
+    "elementor-move-element": {
+      "method": "POST",
+      "path": "/elementor/move-element",
+      "description": "Move elemento de posição",
+      "params": {
+        "post_id": "int (required)",
+        "element_id": "string (required)",
+        "new_parent_id": "string (novo container pai)",
+        "position": "int (nova posição)"
+      }
+    },
+    "elementor-duplicate-element": {
+      "method": "POST",
+      "path": "/elementor/duplicate-element",
+      "description": "Duplica elemento na página",
+      "params": {
+        "post_id": "int (required)",
+        "element_id": "string (required)"
+      }
+    },
+    "posts-query": {
+      "method": "POST",
+      "path": "/posts/query",
+      "description": "Consulta posts",
+      "params": {
+        "post_type": "string",
+        "limit": "int",
+        "offset": "int",
+        "status": "string",
+        "search": "string",
+        "category": "string"
+      }
+    },
+    "posts-create": {
+      "method": "POST",
+      "path": "/posts/create",
+      "description": "Cria post",
+      "params": {
+        "title": "string (required)",
+        "content": "string",
+        "status": "string",
+        "excerpt": "string",
+        "categories": "array",
+        "tags": "array",
+        "meta": "object",
+        "thumbnail_url": "string"
+      }
+    },
+    "posts-update": {
+      "method": "POST",
+      "path": "/posts/update",
+      "description": "Atualiza post",
+      "params": {
+        "post_id": "int (required)",
+        "title": "string",
+        "content": "string",
+        "status": "string",
+        "excerpt": "string"
+      }
+    },
+    "categories-create": {
+      "method": "POST",
+      "path": "/categories/create",
+      "description": "Cria categorias em lote",
+      "params": {
+        "categories": "array of { name, slug?, description? }"
+      }
+    },
+    "menus-manage": {
+      "method": "POST",
+      "path": "/menus/manage",
+      "description": "Gerencia menus",
+      "params": {
+        "action": "string (list|create|add_items|set_location|clear)",
+        "menu_name": "string",
+        "menu_id": "int",
+        "items": "array",
+        "location": "string"
+      }
+    },
+    "options": {
+      "method": "POST",
+      "path": "/options",
+      "description": "Lê/escreve opções do WordPress",
+      "params": {
+        "action": "string (get|set|list)",
+        "name": "string",
+        "value": "mixed"
+      }
+    }
+  },
+  "icons_reference": {
+    "description": "Ícones Font Awesome disponíveis no Elementor (bibliotecas padrão)",
+    "libraries": {
+      "fa-solid": {
+        "prefix": "fas",
+        "examples": [
+          "fas fa-star",
+          "fas fa-heart",
+          "fas fa-check",
+          "fas fa-home",
+          "fas fa-envelope",
+          "fas fa-phone",
+          "fas fa-rocket",
+          "fas fa-bolt",
+          "fas fa-shield",
+          "fas fa-gear",
+          "fas fa-arrow-right",
+          "fas fa-location-dot",
+          "fas fa-globe",
+          "fas fa-user",
+          "fas fa-calendar"
+        ]
+      },
+      "fa-regular": {
+        "prefix": "far",
+        "examples": [
+          "far fa-star",
+          "far fa-heart",
+          "far fa-envelope",
+          "far fa-clock"
+        ]
+      },
+      "fa-brands": {
+        "prefix": "fab",
+        "examples": [
+          "fab fa-facebook",
+          "fab fa-instagram",
+          "fab fa-twitter",
+          "fab fa-youtube",
+          "fab fa-whatsapp",
+          "fab fa-linkedin",
+          "fab fa-github"
+        ]
+      }
+    }
+  },
+  "guide": {
+    "getting_started": "1. Chame GET /status para ver versões e endpoints disponíveis. 2. Para construir uma página: crie um post com /posts/create. 3. Use /elementor/set para definir a estrutura inicial. 4. Use /elementor/add-element para adicionar seções e widgets. 5. Use /elementor/update-element para ajustar textos, cores, links.",
+    "building_a_page": "Toda página Elementor começa com um container raiz (content wrapper). Dentro dele, adicione containers de seção com widgets. Siga o padrão: container > container > widget.",
+    "widget_selection": "Use heading para títulos, text-editor para parágrafos, image para fotos, button para CTAs, icon-box para cards de serviço, accordion para FAQs, posts para grade de blog, form para formulários (Elementor Pro).",
+    "best_practices": "Semore defina IDs de 8 caracteres hex. Use containers com gap ao invés de spacers. Centralize conteúdo com content_position: middle. Teste em mobile usando responsive_value com sizes[]. Use recipes como ponto de partida.",
+    "common_mistakes": "NÃO use section/column (legado) — use container. NÃO envie page_settings vazio como string '' — use array [] ou objeto {}. NÃO esqueça de wp_slash no JSON antes de update_post_meta. IDs devem ser únicos na página."
+  },
+  "theme_builder": {
+    "description": "Guia de templates do Theme Builder do Elementor Pro para criar headers, footers e layouts dinâmicos",
+    "templates": {
+      "header": {
+        "description": "Template do cabeçalho do site",
+        "elementor_type": "header",
+        "conditions": "include/singular, include/archive — ou 'Entire Site'",
+        "recommended_widgets": [
+          "site-logo",
+          "nav-menu",
+          "site-title",
+          "search-form",
+          "button",
+          "social-icons",
+          "icon"
+        ],
+        "tips": "Use flex_direction: row para alinhar logo e menu. Defina html_tag: header no container raiz."
+      },
+      "footer": {
+        "description": "Template do rodapé do site",
+        "elementor_type": "footer",
+        "conditions": "include/singular, include/archive — ou 'Entire Site'",
+        "recommended_widgets": [
+          "text-editor",
+          "nav-menu",
+          "social-icons",
+          "image",
+          "icon-list",
+          "heading"
+        ],
+        "tips": "Use background_color escuro no container raiz. Organize em 3-4 colunas."
+      },
+      "single-post": {
+        "description": "Template para posts individuais do blog",
+        "elementor_type": "single-post",
+        "conditions": "include/singular/post",
+        "recommended_widgets": [
+          "post-title",
+          "post-info",
+          "post-content",
+          "post-featured-image",
+          "post-excerpt",
+          "author-box",
+          "post-navigation",
+          "share-buttons"
+        ],
+        "tips": "Use post-content para exibir o corpo do post."
+      },
+      "single-page": {
+        "description": "Template para páginas (pages) do WordPress",
+        "elementor_type": "single-page",
+        "conditions": "include/singular/page",
+        "recommended_widgets": [
+          "page-title",
+          "post-content",
+          "post-featured-image"
+        ],
+        "tips": "Para páginas que não usam layout Elementor customizado."
+      },
+      "archive": {
+        "description": "Template para páginas de arquivo",
+        "elementor_type": "archive",
+        "conditions": "include/archive",
+        "recommended_widgets": [
+          "heading",
+          "loop-grid",
+          "posts",
+          "page-title",
+          "search-form"
+        ],
+        "tips": "Use loop-grid ou posts para exibir a lista."
+      },
+      "search-results": {
+        "description": "Template para resultados de busca",
+        "elementor_type": "search-results",
+        "conditions": "include/search",
+        "recommended_widgets": [
+          "heading",
+          "loop-grid",
+          "posts",
+          "page-title",
+          "search-form"
+        ],
+        "tips": "Inclua search-form no topo."
+      },
+      "error-404": {
+        "description": "Template para página de erro 404",
+        "elementor_type": "error-404",
+        "conditions": "include/404",
+        "recommended_widgets": [
+          "heading",
+          "text-editor",
+          "button",
+          "search-form",
+          "image"
+        ],
+        "tips": "Mensagem amigável com botão para voltar à home."
+      },
+      "loop-item": {
+        "description": "Template de item individual usado como skin dentro de Loop Grid/Loop Carousel",
+        "elementor_type": "loop-item",
+        "conditions": "N/A — usado como skin dentro de loop-grid e loop-carousel",
+        "recommended_widgets": [
+          "post-title",
+          "post-featured-image",
+          "post-excerpt",
+          "post-info",
+          "button",
+          "image"
+        ],
+        "tips": "Célula que se repete no grid/carrossel. Mantenha simples."
+      },
+      "product-archive": {
+        "description": "Template para listagem de produtos WooCommerce",
+        "elementor_type": "product-archive",
+        "conditions": "include/archive/product (requer WooCommerce)",
+        "recommended_widgets": [
+          "heading",
+          "loop-grid",
+          "posts",
+          "page-title"
+        ],
+        "tips": "Requer WooCommerce ativo."
+      },
+      "product-single": {
+        "description": "Template para página de produto individual WooCommerce",
+        "elementor_type": "product-single",
+        "conditions": "include/singular/product (requer WooCommerce)",
+        "recommended_widgets": [
+          "post-title",
+          "post-content",
+          "post-featured-image"
+        ],
+        "tips": "Requer WooCommerce ativo."
+      }
+    },
+    "template_creation": {
+      "description": "Como criar templates do Theme Builder via API",
+      "via_elementor_set": "Use /elementor/set com post_id de um post do tipo 'elementor_library'. O meta _elementor_template_type define o tipo: header, footer, single-post, single-page, archive, search-results, error-404, loop-item, product-archive, product-single.",
+      "via_posts_create": "Use /posts/create com type: 'elementor_library' e meta._elementor_template_type. Depois use /elementor/set para adicionar conteúdo.",
+      "example_create_header": {
+        "step1": "POST /posts/create { title: 'Header Template', type: 'elementor_library', meta: { _elementor_template_type: 'header' } }",
+        "step2": "POST /elementor/set { post_id: <id_retornado>, data: { content: [...] } }"
+      },
+      "important": "Templates são posts do tipo 'elementor_library'. Condições de exibição são configuradas via meta _elementor_conditions (array de objetos include/exclude)."
+    }
+  },
+  "advanced_styling": {
+    "description": "Referência de propriedades de estilo avançado do Elementor para containers e widgets",
+    "typography": {
+      "description": "Configurações de tipografia aplicáveis a qualquer widget com texto",
+      "properties": {
+        "font_family": {
+          "type": "string",
+          "description": "Nome da fonte (ex: 'Roboto') ou fonte do sistema"
+        },
+        "font_size": {
+          "type": "object",
+          "description": "Tamanho da fonte",
+          "schema": "responsive_value"
+        },
+        "font_weight": {
+          "type": "string",
+          "default": "400",
+          "options": [
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900",
+            "bold",
+            "normal"
+          ]
+        },
+        "text_transform": {
+          "type": "string",
+          "default": "none",
+          "options": [
+            "uppercase",
+            "lowercase",
+            "capitalize",
+            "none"
+          ]
+        },
+        "font_style": {
+          "type": "string",
+          "default": "normal",
+          "options": [
+            "normal",
+            "italic",
+            "oblique"
+          ]
+        },
+        "text_decoration": {
+          "type": "string",
+          "default": "none",
+          "options": [
+            "underline",
+            "overline",
+            "line-through",
+            "none"
+          ]
+        },
+        "line_height": {
+          "type": "object",
+          "description": "Altura da linha",
+          "schema": "responsive_value"
+        },
+        "letter_spacing": {
+          "type": "object",
+          "description": "Espaçamento entre letras",
+          "schema": "responsive_value"
+        },
+        "word_spacing": {
+          "type": "object",
+          "description": "Espaçamento entre palavras",
+          "schema": "responsive_value"
+        }
+      }
+    },
+    "backgrounds": {
+      "description": "Configurações de fundo para containers e seções",
+      "properties": {
+        "background_background": {
+          "type": "string",
+          "default": "classic",
+          "options": [
+            "classic",
+            "gradient",
+            "slideshow",
+            "video"
+          ],
+          "description": "Tipo de fundo"
+        },
+        "background_color": {
+          "type": "string",
+          "description": "Cor sólida em hex (#rrggbb) ou rgba(r,g,b,a)"
+        },
+        "background_image": {
+          "type": "object",
+          "description": "Imagem de fundo",
+          "schema": "media"
+        },
+        "background_position": {
+          "type": "string",
+          "default": "center center"
+        },
+        "background_size": {
+          "type": "string",
+          "default": "cover",
+          "options": [
+            "cover",
+            "contain",
+            "auto",
+            "custom"
+          ]
+        },
+        "background_repeat": {
+          "type": "string",
+          "default": "no-repeat",
+          "options": [
+            "no-repeat",
+            "repeat",
+            "repeat-x",
+            "repeat-y"
+          ]
+        },
+        "background_attachment": {
+          "type": "string",
+          "default": "scroll",
+          "options": [
+            "scroll",
+            "fixed"
+          ]
+        },
+        "background_gradient": {
+          "type": "object",
+          "description": "{ angle, color_stops[] } para gradientes"
+        },
+        "background_overlay": {
+          "type": "object",
+          "description": "Camada de overlay (background_overlay_background, background_overlay_color)"
+        }
+      }
+    },
+    "borders": {
+      "description": "Configurações de borda",
+      "properties": {
+        "border": {
+          "type": "string",
+          "default": "none",
+          "options": [
+            "solid",
+            "double",
+            "dotted",
+            "dashed",
+            "groove",
+            "none"
+          ]
+        },
+        "border_width": {
+          "type": "object",
+          "description": "Largura da borda",
+          "schema": "dimension"
+        },
+        "border_color": {
+          "type": "string",
+          "description": "Cor da borda em hex"
+        },
+        "border_radius": {
+          "type": "object",
+          "description": "Arredondamento dos cantos",
+          "schema": "dimension"
+        }
+      }
+    },
+    "box_shadow": {
+      "description": "Sombra da caixa (box-shadow CSS)",
+      "properties": {
+        "box_shadow_type": {
+          "type": "string",
+          "default": "",
+          "options": [
+            "",
+            "outset",
+            "inset"
+          ]
+        },
+        "box_shadow": {
+          "type": "object",
+          "description": "{ horizontal, vertical, blur, spread, color, position }"
+        }
+      }
+    },
+    "text_shadow": {
+      "description": "Sombra de texto (text-shadow CSS)",
+      "properties": {
+        "text_shadow_type": {
+          "type": "string",
+          "default": "",
+          "options": [
+            "",
+            "yes"
+          ]
+        },
+        "text_shadow": {
+          "type": "object",
+          "description": "{ horizontal, vertical, blur, color }"
+        }
+      }
+    },
+    "custom_css": {
+      "description": "CSS customizado para elementos individuais",
+      "usage": "Cada widget/container permite adicionar custom_css na aba Avançado",
+      "selector_patterns": {
+        "selector": "{{WRAPPER}} — wrapper principal do elemento",
+        "selector_before": "{{WRAPPER}}:before — pseudo-elemento antes",
+        "selector_after": "{{WRAPPER}}:after — pseudo-elemento depois",
+        "selector_title": "{{WRAPPER}} .elementor-heading-title — título do elemento",
+        "selector_content": "{{WRAPPER}} .elementor-widget-container — container interno"
+      },
+      "example": "{{WRAPPER}} .elementor-heading-title { text-transform: uppercase; letter-spacing: 2px; }"
+    },
+    "motion_effects": {
+      "description": "Efeitos de movimento e animação na aba Avançado",
+      "entrance_animation": {
+        "description": "Animação de entrada ao carregar a página",
+        "properties": {
+          "animation": {
+            "type": "string",
+            "options": [
+              "fadeIn",
+              "fadeInDown",
+              "fadeInUp",
+              "fadeInLeft",
+              "fadeInRight",
+              "zoomIn",
+              "slideInDown",
+              "slideInUp",
+              "slideInLeft",
+              "slideInRight",
+              "bounce",
+              "none"
+            ]
+          },
+          "animation_duration": {
+            "type": "string",
+            "default": "normal",
+            "options": [
+              "slow",
+              "normal",
+              "fast"
+            ]
+          },
+          "animation_delay": {
+            "type": "number",
+            "default": 0,
+            "description": "Delay em ms"
+          }
+        }
+      },
+      "scroll_effects": {
+        "description": "Efeitos disparados pelo scroll (parallax, opacidade, blur)",
+        "properties": {
+          "motion_fx_scrolling": {
+            "type": "string",
+            "options": [
+              "yes",
+              "no"
+            ]
+          },
+          "motion_fx_translateX_effect": {
+            "type": "string"
+          },
+          "motion_fx_opacity_effect": {
+            "type": "string"
+          },
+          "motion_fx_scale_effect": {
+            "type": "string"
+          },
+          "motion_fx_blur_effect": {
+            "type": "string"
+          },
+          "motion_fx_rotateZ_effect": {
+            "type": "string"
+          }
+        }
+      },
+      "mouse_effects": {
+        "description": "Efeitos que seguem o movimento do mouse (mouse track, 3D tilt)",
+        "properties": {
+          "motion_fx_mouse": {
+            "type": "string",
+            "options": [
+              "yes",
+              "no"
+            ]
+          },
+          "motion_fx_mouseTrack_effect": {
+            "type": "string"
+          },
+          "motion_fx_tilt_effect": {
+            "type": "string"
+          }
+        }
+      },
+      "sticky": {
+        "description": "Elemento fixo (sticky) que acompanha o scroll",
+        "properties": {
+          "sticky": {
+            "type": "string",
+            "default": "",
+            "options": [
+              "",
+              "top",
+              "bottom"
+            ]
+          },
+          "sticky_on": {
+            "type": "array",
+            "default": [
+              "desktop",
+              "tablet",
+              "mobile"
+            ]
+          },
+          "sticky_offset": {
+            "type": "number",
+            "default": 0
+          },
+          "sticky_effects_offset": {
+            "type": "number",
+            "default": 0
+          }
+        }
+      }
+    },
+    "responsive": {
+      "description": "Como usar valores responsivos para adaptar o layout a diferentes dispositivos",
+      "breakpoints": {
+        "desktop": {
+          "min_width": 1025,
+          "description": "Desktop e telas grandes"
+        },
+        "tablet": {
+          "min_width": 768,
+          "max_width": 1024,
+          "description": "Tablets"
+        },
+        "mobile": {
+          "max_width": 767,
+          "description": "Smartphones"
+        }
+      },
+      "responsive_value_format": {
+        "description": "Formato do objeto responsive_value para propriedades responsivas",
+        "example": {
+          "unit": "px",
+          "size": 50,
+          "sizes": [
+            {
+              "breakpoint": "desktop",
+              "value": 50
+            },
+            {
+              "breakpoint": "tablet",
+              "value": 30
+            },
+            {
+              "breakpoint": "mobile",
+              "value": 20
+            }
+          ]
+        }
+      },
+      "tip": "Qualquer propriedade que use o schema responsive_value pode ter valores diferentes por breakpoint. Use sizes[] para especificar valores por dispositivo."
+    }
+  },
+  "layout_patterns": {
+    "description": "Padrões de estrutura de página comuns com seções em ordem recomendada",
+    "landing-page": {
+      "description": "Landing page completa para conversão",
+      "sections": [
+        "hero",
+        "features (icon-box grid)",
+        "about (image + text)",
+        "pricing (price-table 3 colunas)",
+        "testimonials (testimonial-carousel)",
+        "cta (cta-banner)",
+        "footer"
+      ],
+      "total_widgets": "~20 widgets em 7 seções"
+    },
+    "blog-homepage": {
+      "description": "Página inicial de blog",
+      "sections": [
+        "hero simplificado",
+        "featured posts (loop-grid 3 colunas)",
+        "categories (icon-box grid)",
+        "recent posts (posts com paginação)",
+        "newsletter",
+        "footer"
+      ],
+      "total_widgets": "~12 widgets em 6 seções"
+    },
+    "contact-page": {
+      "description": "Página de contato",
+      "sections": [
+        "heading",
+        "map (google_maps)",
+        "contact form + info (2 colunas)",
+        "footer"
+      ],
+      "total_widgets": "~6 widgets em 3 seções"
+    },
+    "single-post": {
+      "description": "Layout de post individual",
+      "sections": [
+        "post-featured-image",
+        "post-title + post-info",
+        "post-content",
+        "author-box",
+        "post-navigation",
+        "share-buttons"
+      ],
+      "total_widgets": "~7 widgets"
+    },
+    "ecommerce-homepage": {
+      "description": "Home de loja virtual (WooCommerce + Elementor Pro)",
+      "sections": [
+        "hero-slider",
+        "categories",
+        "featured products (loop-grid)",
+        "testimonials",
+        "newsletter",
+        "footer"
+      ],
+      "total_widgets": "~10 widgets em 6 seções"
+    },
+    "about-page": {
+      "description": "Página Sobre completa",
+      "sections": [
+        "hero",
+        "mission (image + text)",
+        "team (team-section)",
+        "stats (stats-section)",
+        "timeline (timeline-section)",
+        "cta"
+      ],
+      "total_widgets": "~15 widgets em 6 seções"
+    },
+    "service-page": {
+      "description": "Página de serviço individual",
+      "sections": [
+        "hero",
+        "service detail (image + text)",
+        "features (icon-list)",
+        "related services (icon-box)",
+        "cta"
+      ],
+      "total_widgets": "~8 widgets em 5 seções"
+    },
+    "portfolio-page": {
+      "description": "Página de portfolio com grid e filtros",
+      "sections": [
+        "heading",
+        "portfolio grid (com filter_bar)",
+        "cta",
+        "footer"
+      ],
+      "total_widgets": "~4 widgets em 3 seções"
+    }
+  },
+  "global_settings": {
+    "description": "Configurações globais do Elementor que afetam todo o site",
+    "colors": {
+      "description": "Configurar paleta de cores globais via /posts/create ou /elementor/set",
+      "how_to": "Use /posts/create com type='elementor_library' e meta._elementor_template_type='kit'. Ou use /elementor/set para sobrescrever as page_settings.",
+      "meta_key": "_elementor_page_settings",
+      "properties": {
+        "system_colors": {
+          "type": "array",
+          "description": "Array de { _id, title, color } definindo cores do sistema"
+        },
+        "custom_colors": {
+          "type": "array",
+          "description": "Array de { _id, title, color } para cores customizadas adicionais"
+        }
+      },
+      "example": {
+        "meta": {
+          "_elementor_page_settings": {
+            "system_colors": [
+              {
+                "_id": "primary",
+                "title": "Primary",
+                "color": "#0066cc"
+              },
+              {
+                "_id": "secondary",
+                "title": "Secondary",
+                "color": "#54595f"
+              },
+              {
+                "_id": "text",
+                "title": "Text",
+                "color": "#333333"
+              },
+              {
+                "_id": "accent",
+                "title": "Accent",
+                "color": "#f0b429"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "typography": {
+      "description": "Configurações globais de tipografia",
+      "how_to": "Definir no kit via _elementor_page_settings.system_typography",
+      "properties": {
+        "system_typography": {
+          "type": "array",
+          "description": "Array de { _id, title, typography_* } com fontes do sistema"
+        },
+        "font_family_default": {
+          "type": "string",
+          "description": "Fonte padrão para parágrafos"
+        },
+        "font_family_heading": {
+          "type": "string",
+          "description": "Fonte padrão para headings (h1-h6)"
+        }
+      }
+    },
+    "layout": {
+      "description": "Configurações globais de layout do site",
+      "properties": {
+        "container_width": {
+          "type": "object",
+          "default": {
+            "size": 1140,
+            "unit": "px"
+          },
+          "description": "Largura máxima do container",
+          "schema": "responsive_value"
+        },
+        "content_width": {
+          "type": "object",
+          "default": {
+            "size": 1140,
+            "unit": "px"
+          },
+          "description": "Largura do conteúdo interno"
+        },
+        "space_between_widgets": {
+          "type": "object",
+          "default": {
+            "size": 20,
+            "unit": "px"
+          },
+          "description": "Espaçamento padrão entre widgets"
+        }
+      }
+    },
+    "lightbox": {
+      "description": "Configurações globais do lightbox para imagens",
+      "properties": {
+        "elementor_global_image_lightbox": {
+          "type": "string",
+          "default": "yes",
+          "options": [
+            "yes",
+            "no"
+          ],
+          "description": "Habilitar lightbox global para imagens"
+        },
+        "elementor_enable_lightbox_in_editor": {
+          "type": "string",
+          "options": [
+            "yes",
+            "no"
+          ],
+          "description": "Lightbox no editor"
+        },
+        "elementor_lightbox_color": {
+          "type": "string",
+          "description": "Cor do overlay do lightbox"
+        },
+        "elementor_lightbox_ui_color": {
+          "type": "string",
+          "description": "Cor dos elementos da UI do lightbox"
+        }
+      }
+    },
+    "how_to_set_global": {
+      "description": "Como aplicar configurações globais via API",
+      "method1": "POST /posts/create com type: 'elementor_library' e meta._elementor_template_type: 'kit' para criar o kit global.",
+      "method2": "POST /elementor/set com page_settings contendo as propriedades globais.",
+      "example": "POST /elementor/set { post_id: <kit_post_id>, page_settings: { system_colors: [...], container_width: { size: 1200, unit: 'px' } } }"
+    }
+  }
+}
