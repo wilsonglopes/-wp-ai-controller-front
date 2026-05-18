@@ -8,12 +8,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Globe, Key, Plug, Zap, Copy, Loader2, ShieldCheck, ExternalLink } from "lucide-react"
+import { Globe, Key, Plug, Zap, Copy, Loader2, ExternalLink } from "lucide-react"
 import { toast } from "sonner"
 import { deleteSite, saveAiConfig } from "@/lib/actions"
 import { useRouter } from "next/navigation"
 import { AI_PROVIDERS } from "@/lib/types"
 import type { Site, AiConfig } from "@/lib/types"
+import { BuilderChat } from "@/components/builder-chat"
 
 export function SiteDetailTabs({
   site,
@@ -208,13 +209,17 @@ export function SiteDetailTabs({
           <CardHeader>
             <CardTitle className="text-lg">Construtor IA</CardTitle>
             <CardDescription>
-              Descreva a página que deseja criar e a IA construirá via Elementor
+              Descreva o site que deseja construir e a IA operará o Elementor automaticamente
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Em breve — integração com chat IA para construir páginas automaticamente.
-            </p>
+            {!aiConfig ? (
+              <p className="text-sm text-muted-foreground">
+                Configure um provedor de IA na aba <strong>IA</strong> antes de usar o construtor.
+              </p>
+            ) : (
+              <BuilderChat siteId={site.id} />
+            )}
           </CardContent>
         </Card>
       </TabsContent>
