@@ -1,0 +1,2931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP AI Co-pilot — Dashboard Premium</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           VARIABLE DESIGN TOKENS (Premium Sleek Dark Theme)
+           ============================================================ */
+        :root {
+            --bg-main: #0a0b0e;
+            --bg-sidebar: #101216;
+            --bg-card: rgba(22, 25, 32, 0.7);
+            --bg-card-hover: rgba(30, 34, 43, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(204, 0, 0, 0.25);
+            
+            --color-text-main: #e2e8f0;
+            --color-text-muted: #8a99ad;
+            --color-text-dark: #0f172a;
+            
+            /* Theme brand palette (Argiminas Terracotta & Red) */
+            --color-brand: #cc0000;
+            --color-brand-hover: #990000;
+            --color-brand-glow: rgba(204, 0, 0, 0.15);
+            --color-terracotta: #c4621a;
+            --color-terracotta-glow: rgba(196, 98, 26, 0.15);
+            
+            /* Status Colors */
+            --color-online: #10b981;
+            --color-online-glow: rgba(16, 185, 129, 0.2);
+            --color-offline: #ef4444;
+            --color-offline-glow: rgba(239, 68, 68, 0.2);
+            --color-blue: #3b82f6;
+            --color-blue-glow: rgba(59, 130, 246, 0.2);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-ui: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        /* Reset & Base Rules */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--color-text-main);
+            font-family: var(--font-body);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(204, 0, 0, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(196, 98, 26, 0.04) 0%, transparent 40%);
+        }
+
+        input, button, select, textarea {
+            font-family: inherit;
+            color: inherit;
+        }
+
+        /* Custom Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ============================================================
+           SIDEBAR STYLING
+           ============================================================ */
+        aside {
+            width: 320px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-terracotta) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px var(--color-brand-glow);
+        }
+
+        .logo-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        .logo-text {
+            font-family: var(--font-ui);
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section-title {
+            font-family: var(--font-ui);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+            padding-left: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-add-site {
+            background: transparent;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-add-site:hover {
+            border-color: var(--color-brand);
+            background: rgba(204, 0, 0, 0.05);
+            color: white;
+        }
+
+        /* Sites List */
+        .sites-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .site-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .site-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .site-card.active {
+            border-color: var(--color-brand);
+            background: rgba(204, 0, 0, 0.06);
+            box-shadow: 0 4px 20px var(--color-brand-glow);
+        }
+
+        .site-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .site-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-offline);
+            box-shadow: 0 0 8px var(--color-offline-glow);
+            flex-shrink: 0;
+        }
+
+        .site-status-dot.online {
+            background-color: var(--color-online);
+            box-shadow: 0 0 10px var(--color-online-glow);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .site-meta-text {
+            min-width: 0;
+        }
+
+        .site-name {
+            font-family: var(--font-ui);
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .site-url {
+            font-size: 11px;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .site-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .site-card:hover .site-actions {
+            opacity: 1;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: var(--transition-smooth);
+            color: var(--color-text-muted);
+        }
+
+        .btn-icon:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-icon.delete:hover {
+            color: var(--color-offline);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Sidebar Footer / LLM Config */
+        .sidebar-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-config {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-config:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* ============================================================
+           MAIN WORKSPACE STYLING
+           ============================================================ */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Welcome Workspace (When no site is selected) */
+        .welcome-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .welcome-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-terracotta) 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 30px rgba(204, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .welcome-logo svg {
+            width: 44px;
+            height: 44px;
+            fill: white;
+        }
+
+        .welcome-title {
+            font-family: var(--font-ui);
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--color-text-muted);
+            max-width: 580px;
+            line-height: 1.6;
+            margin-bottom: 48px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 16px;
+            text-align: left;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            background: var(--bg-card-hover);
+        }
+
+        .feature-card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: var(--color-terracotta);
+            transition: var(--transition-smooth);
+        }
+
+        .feature-card:hover .feature-card-icon {
+            background: var(--color-brand);
+            color: white;
+            box-shadow: 0 4px 12px var(--color-brand-glow);
+        }
+
+        .feature-card-title {
+            font-family: var(--font-ui);
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .feature-card-desc {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* Active Workspace (Site Selected) */
+        .active-workspace {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .workspace-header {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .header-site-name {
+            font-family: var(--font-ui);
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header-site-url {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            margin-left: 8px;
+            font-weight: 400;
+        }
+
+        /* Tab Toggles */
+        .workspace-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-text-muted);
+            transition: var(--transition-smooth);
+        }
+
+        .tab-btn:hover {
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: var(--color-brand);
+            color: white;
+            box-shadow: 0 4px 12px var(--color-brand-glow);
+        }
+
+        /* Content Sections */
+        .workspace-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ============================================================
+           TAB 1: PANEL DASHBOARD
+           ============================================================ */
+        .panel-tab-content {
+            display: block;
+            height: 100%;
+            overflow-y: auto;
+            padding: 32px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-terracotta);
+            font-size: 20px;
+        }
+
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-family: var(--font-ui);
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Active Plugins List */
+        .plugins-card {
+            grid-column: span 3;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .plugins-header {
+            font-family: var(--font-ui);
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .plugins-count-badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .plugins-badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .plugin-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--color-text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .plugin-badge.special {
+            background: rgba(196, 98, 26, 0.1);
+            border-color: rgba(196, 98, 26, 0.3);
+            color: #ffb076;
+            font-weight: 600;
+        }
+
+        .plugin-badge.brand {
+            background: rgba(204, 0, 0, 0.1);
+            border-color: rgba(204, 0, 0, 0.3);
+            color: #ff8080;
+            font-weight: 600;
+        }
+
+        /* Two columns details */
+        .details-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .pages-card, .quick-actions-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .card-title {
+            font-family: var(--font-ui);
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Pages List Table */
+        .pages-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .pages-table th, .pages-table td {
+            padding: 12px 16px;
+            font-size: 13px;
+        }
+
+        .pages-table th {
+            border-bottom: 1px solid var(--border-color);
+            color: var(--color-text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .pages-table tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: var(--transition-smooth);
+        }
+
+        .pages-table tr:hover {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .pages-table td a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+
+        .pages-table td a:hover {
+            text-decoration: underline;
+        }
+
+        .page-badge-status {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-online);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Quick Actions */
+        .quick-actions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-action-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 10px;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-action-panel:hover {
+            background: rgba(204, 0, 0, 0.06);
+            border-color: var(--color-brand);
+            transform: translateX(4px);
+            color: white;
+        }
+
+        .btn-action-panel svg {
+            width: 18px;
+            height: 18px;
+            color: var(--color-terracotta);
+        }
+
+        .btn-action-panel:hover svg {
+            color: var(--color-brand);
+        }
+
+        /* ============================================================
+           TAB 2: CHAT CO-PILOT STYLING
+           ============================================================ */
+        .chat-tab-content {
+            display: none;
+            height: 100%;
+            flex-direction: row;
+        }
+
+        .chat-main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        /* Suggested Prompts Header */
+        .suggestions-bar {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            background: rgba(16, 18, 22, 0.4);
+        }
+
+        .suggestion-chip {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: var(--color-text-main);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition-smooth);
+        }
+
+        .suggestion-chip:hover {
+            background: rgba(204, 0, 0, 0.05);
+            border-color: var(--color-brand);
+            color: white;
+        }
+
+        /* Chat Streams */
+        .chat-stream {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            animation: bubble-appear 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes bubble-appear {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-bubble.user {
+            align-self: flex-end;
+        }
+
+        .chat-bubble.ai {
+            align-self: flex-start;
+        }
+
+        .chat-sender-name {
+            font-family: var(--font-ui);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-text-muted);
+            padding: 0 4px;
+        }
+
+        .user .chat-sender-name {
+            text-align: right;
+            color: var(--color-terracotta);
+        }
+
+        .chat-bubble-body {
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .user .chat-bubble-body {
+            background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-terracotta) 100%);
+            color: white;
+            border-bottom-right-radius: 2px;
+            box-shadow: 0 4px 12px rgba(204, 0, 0, 0.15);
+        }
+
+        .ai .chat-bubble-body {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--color-text-main);
+            border-bottom-left-radius: 2px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--color-text-muted);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            45% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* Chat Actions Block */
+        .action-result-block {
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        .action-result-header {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--color-text-muted);
+        }
+
+        .action-result-content {
+            padding: 12px;
+            overflow-x: auto;
+            max-height: 200px;
+            white-space: pre;
+            color: #cbd5e1;
+        }
+
+        .action-success-tag {
+            color: var(--color-online);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .action-error-tag {
+            color: var(--color-offline);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Chat Input Bar */
+        .chat-input-container {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(16, 18, 22, 0.6);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .chat-input-wrapper {
+            flex: 1;
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input-wrapper:focus-within {
+            border-color: var(--color-brand);
+            box-shadow: 0 0 10px var(--color-brand-glow);
+        }
+
+        .chat-input-field {
+            background: transparent;
+            border: none;
+            padding: 14px 18px;
+            width: 100%;
+            font-size: 13px;
+            outline: none;
+            color: white;
+        }
+
+        .chat-input-field::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .btn-send {
+            background: var(--color-brand);
+            border: none;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            color: white;
+            margin-right: 6px;
+            flex-shrink: 0;
+        }
+
+        .btn-send:hover {
+            background: var(--color-brand-hover);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px var(--color-brand-glow);
+        }
+
+        .btn-send svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Drawer / Realtime Debug Console */
+        .console-drawer {
+            width: 380px;
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: #090a0d;
+            flex-shrink: 0;
+        }
+
+        .console-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .console-title {
+            font-family: var(--font-ui);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .console-clear-btn {
+            background: transparent;
+            border: none;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .console-clear-btn:hover {
+            color: white;
+        }
+
+        .console-logs-stream {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+        }
+
+        .log-entry {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 12px;
+        }
+
+        .log-timestamp {
+            color: var(--color-text-muted);
+            margin-bottom: 4px;
+        }
+
+        .log-method-url {
+            font-weight: 600;
+            margin-bottom: 6px;
+            word-break: break-all;
+        }
+
+        .log-method-url.get { color: #10b981; }
+        .log-method-url.post { color: #3b82f6; }
+
+        .log-payload-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            border-radius: 4px;
+            max-height: 140px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 4px;
+            color: #94a3b8;
+        }
+
+        .log-status-line {
+            font-weight: 600;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .log-status-line.success { color: var(--color-online); }
+        .log-status-line.error { color: var(--color-offline); }
+
+        /* ============================================================
+           MODALS STYLING (Premium popups)
+           ============================================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fade-in 0.2s ease-out;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-card {
+            background: #12141c;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 520px;
+            max-width: 90%;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: scale-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scale-up {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-family: var(--font-ui);
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-family: var(--font-ui);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-text-muted);
+        }
+
+        .form-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition-smooth);
+            color: white;
+            width: 100%;
+        }
+
+        .form-input:focus {
+            border-color: var(--color-brand);
+            box-shadow: 0 0 8px var(--color-brand-glow);
+        }
+
+        .form-select {
+            background: #161820;
+            border: 1px solid var(--border-color);
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border: none;
+        }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--color-text-main);
+        }
+
+        .btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn.primary {
+            background: var(--color-brand);
+            color: white;
+            box-shadow: 0 4px 12px var(--color-brand-glow);
+        }
+
+        .btn.primary:hover {
+            background: var(--color-brand-hover);
+        }
+
+        .alert-box {
+            background: rgba(196, 98, 26, 0.1);
+            border: 1px solid rgba(196, 98, 26, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            color: #ffb076;
+            line-height: 1.5;
+            display: flex;
+            gap: 8px;
+        }
+
+        .alert-box svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         SIDEBAR (Gerenciador de Sites & Configurações)
+         ============================================================ -->
+    <aside>
+        <div class="sidebar-header">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+            </div>
+            <span class="logo-text">WP AI Co-pilot</span>
+        </div>
+
+        <div class="sidebar-content">
+            <div>
+                <div class="section-title">
+                    <span>Meus Sites</span>
+                    <button class="btn-icon" id="open-add-site" title="Adicionar Novo Site">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="sites-list" id="sites-list-container">
+                    <!-- Sites injected dynamically -->
+                </div>
+            </div>
+            
+            <div style="margin-top: auto;">
+                <button class="btn-add-site" id="add-first-site-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Adicionar Site
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn-config" id="open-llm-settings">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Configurar Inteligência
+            </button>
+        </div>
+    </aside>
+
+    <!-- ============================================================
+         MAIN WORKSPACE AREA
+         ============================================================ -->
+    <main>
+        <!-- Welcome Screen (Shown by default when no site selected) -->
+        <div class="welcome-workspace" id="welcome-screen">
+            <div class="welcome-logo">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 13H5v-2h14v2z M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+            </div>
+            <h1 class="welcome-title">WordPress AI Co-pilot Hub</h1>
+            <p class="welcome-subtitle">
+                Bem-vindo ao centro de controle remoto de seus portais WordPress. Cadastre seu site com o plugin WP AI Controller e Elementor Pro ativo para poder listar páginas, alterar designs e disparar tarefas por linguagem natural!
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-card-icon">🧱</div>
+                    <h3 class="feature-card-title">Manipular Elementor Pro</h3>
+                    <p class="feature-card-desc">Gerencie e insira seções, containers e colunas de forma estruturada passando schemas JSON via API.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">📁</div>
+                    <h3 class="feature-card-title">Gerenciador de Arquivos</h3>
+                    <p class="feature-card-desc">Leia, altere, escreva ou delete arquivos e diretórios remotos com filtros e restrições de segurança.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">⚡</div>
+                    <h3 class="feature-card-title">Executor PHP Robusto</h3>
+                    <p class="feature-card-desc">Rode scripts PHP diretamente no contexto do WordPress para consultas instantâneas no banco de dados.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">💬</div>
+                    <h3 class="feature-card-title">Assistente Chat IA</h3>
+                    <p class="feature-card-desc">Comande tudo em linguagem natural, convertendo falas em chamadas de automação no WordPress instantaneamente.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Workspace (Shown when site is selected) -->
+        <div class="active-workspace" id="active-workspace-panel">
+            <div class="workspace-header">
+                <div class="header-title-section">
+                    <div class="header-status-indicator">
+                        <span class="site-status-dot online" id="current-status-dot"></span>
+                        <span id="current-status-text">ONLINE</span>
+                    </div>
+                    <h2 class="header-site-name" id="current-site-name">Nome do Site</h2>
+                    <span class="header-site-url" id="current-site-url">http://site.local</span>
+                </div>
+
+                <div class="workspace-tabs">
+                    <button class="tab-btn active" id="tab-btn-dashboard">
+                        📊 Painel Geral
+                    </button>
+                    <button class="tab-btn" id="tab-btn-chat">
+                        💬 Chat Co-pilot
+                    </button>
+                </div>
+            </div>
+
+            <div class="workspace-content">
+                <!-- ==========================================
+                     TAB 1: SITE DASHBOARD
+                     ========================================== -->
+                <div class="panel-tab-content" id="content-tab-dashboard">
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" title="WordPress">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Versão do Core</span>
+                                <span class="stat-value" id="stat-wp-version">-</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" title="PHP">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Versão de Execução</span>
+                                <span class="stat-value" id="stat-php-version">-</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" title="Elementor">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-label">Suporte de Layout</span>
+                                <span class="stat-value" id="stat-elementor-status">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Active Plugins -->
+                        <div class="plugins-card">
+                            <div class="plugins-header">
+                                <span>Plugins Ativos</span>
+                                <span class="plugins-count-badge" id="stat-plugins-count">0 Plugins</span>
+                            </div>
+                            <div class="plugins-badge-container" id="stat-plugins-badges">
+                                <!-- Dynamic plugin badges -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-row">
+                        <!-- Left: Pages list -->
+                        <div class="pages-card">
+                            <h3 class="card-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                Páginas no WordPress
+                            </h3>
+                            <table class="pages-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Título</th>
+                                        <th>Status</th>
+                                        <th>Data de Publicação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pages-table-body">
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; color: var(--color-text-muted);">
+                                            Carregando páginas do site remoto...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Right: Quick actions -->
+                        <div class="quick-actions-card">
+                            <h3 class="card-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                                Ações Rápidas
+                            </h3>
+                            <div class="quick-actions-list">
+                                <button class="btn-action-panel" id="btn-quick-ping">
+                                    🔌 Checar Conexão (Ping)
+                                </button>
+                                <button class="btn-action-panel" id="btn-quick-draft">
+                                    📝 Criar Rascunho de Teste
+                                </button>
+                                <button class="btn-action-panel" id="btn-quick-php">
+                                    ⚙️ Executar PHP (Hello World)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     TAB 2: CHAT CO-PILOT
+                     ========================================== -->
+                <div class="chat-tab-content" id="content-tab-chat">
+                    <div class="chat-main-container">
+                        <div class="suggestions-bar">
+                            <div class="suggestion-chip" onclick="fillChatInput('Listar páginas do site')">📄 Listar Páginas</div>
+                            <div class="suggestion-chip" onclick="fillChatInput('Verificar versão do Elementor e status do site')">🧱 Checar Elementor</div>
+                            <div class="suggestion-chip" onclick="fillChatInput('Listar arquivos na pasta do tema ativo')">📂 Arquivos do Tema</div>
+                            <div class="suggestion-chip" onclick="fillChatInput('Verificar o valor da opção siteurl no banco de dados')">⚙️ Ler siteurl</div>
+                            <div class="suggestion-chip" onclick="fillChatInput('Buscar o layout Elementor da página ID 5')">🔍 Ler Layout Elementor</div>
+                            <div class="suggestion-chip" onclick="fillChatInput('Alterar a cor de fundo do botão na página ID 5 para terracota #c4621a')">🎨 Customizar Botão (Terracota)</div>
+                            <div class="suggestion-chip" onclick="fillChatInput('Mover o widget com ID 7ae8f1a para a coluna 2cd4f3e')">🔁 Mover Elemento</div>
+                            <div class="suggestion-chip" onclick="fillChatInput('Testar Hello World em PHP')">⚙️ Executar PHP</div>
+                        </div>
+
+                        <!-- Chat Messages Screen -->
+                        <div class="chat-stream" id="chat-messages-container">
+                            <div class="chat-bubble ai">
+                                <span class="chat-sender-name">Co-pilot</span>
+                                <div class="chat-bubble-body">
+                                    Olá! Eu sou o seu Assistente IA. Posso ler e manipular o seu WordPress utilizando as ferramentas do **WP AI Controller**. 
+                                    <br><br>
+                                    Como posso te ajudar hoje? Tente usar uma sugestão rápida acima ou descreva o que quer fazer!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Typing state indicator -->
+                        <div id="chat-typing-indicator" style="display: none; padding-left: 32px; padding-bottom: 8px;">
+                            <div class="typing-indicator">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input Bar -->
+                        <div class="chat-input-container">
+                            <div class="chat-input-wrapper">
+                                <input type="text" class="chat-input-field" id="chat-input-field" placeholder="Escreva um comando ou instrução ao Co-pilot...">
+                                <button class="btn-send" id="btn-send-chat" title="Enviar Mensagem">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Realtime Debug Drawer -->
+                    <div class="console-drawer">
+                        <div class="console-header">
+                            <div class="console-title">
+                                <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--color-terracotta); border-radius: 50%;"></span>
+                                Console de Debug
+                            </div>
+                            <button class="console-clear-btn" id="btn-clear-console">
+                                Limpar
+                            </button>
+                        </div>
+                        <div class="console-logs-stream" id="console-logs-container">
+                            <!-- Network logs injected in real time -->
+                            <div class="log-entry" style="color: var(--color-text-muted); text-align: center; padding-top: 20px;">
+                                Nenhuma requisição realizada ainda.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================================
+         MODAL: CADASTRAR NOVO SITE
+         ============================================================ -->
+    <div class="modal-overlay" id="modal-add-site">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="modal-title">Cadastrar Novo Site WordPress</span>
+                <button class="btn-icon" onclick="closeModal('modal-add-site')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nome de Identificação</label>
+                    <input type="text" class="form-input" id="input-site-name" placeholder="Ex: Argiminas Local">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">URL do site</label>
+                    <input type="text" class="form-input" id="input-site-url" placeholder="Ex: http://127.0.0.1:8080/argiminas">
+                    <span style="font-size: 11px; color: var(--color-text-muted)">A URL onde o WordPress está acessível local ou na nuvem.</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">API Key do WP AI Controller</label>
+                    <input type="text" class="form-input" id="input-site-key" placeholder="Insira a chave obtida no WP Admin">
+                </div>
+                
+                <div class="alert-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>
+                        Para conseguir a <strong>API Key</strong>, acesse o painel admin do WordPress, navegue em <strong>Configurações &rarr; AI Controller</strong> e copie a chave listada lá.
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary" onclick="closeModal('modal-add-site')">Cancelar</button>
+                <button class="btn primary" id="btn-save-site">Salvar e Conectar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL: LLM / INTELIGÊNCIA CONFIGS
+         ============================================================ -->
+    <div class="modal-overlay" id="modal-llm-settings">
+        <div class="modal-card">
+            <div class="modal-header">
+                <span class="modal-title">Configurar Modelo de Inteligência</span>
+                <button class="btn-icon" onclick="closeModal('modal-llm-settings')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Provedor IA</label>
+                    <select class="form-select" id="select-llm-provider">
+                        <option value="simulated">Modo Atuador Local (Sem Custos / Simulado)</option>
+                        <option value="gemini">Google Gemini API (Conexão Cloud)</option>
+                        <option value="deepseek">DeepSeek API (Melhor Custo/Benefício)</option>
+                        <option value="ollama">Ollama Server (IA Local Privada)</option>
+                    </select>
+                </div>
+
+                <!-- Gemini Options -->
+                <div class="form-group llm-opt gemini-opt" style="display: none;">
+                    <label class="form-label">Gemini API Key</label>
+                    <input type="password" class="form-input" id="input-gemini-key" placeholder="AIzaSy...">
+                    <span style="font-size: 11px; color: var(--color-text-muted)">Crie uma chave gratuita no Google AI Studio. As chamadas serão feitas direto do seu navegador para a API oficial.</span>
+                </div>
+
+                <!-- DeepSeek Options -->
+                <div class="form-group llm-opt deepseek-opt" style="display: none;">
+                    <label class="form-label">DeepSeek API Key</label>
+                    <input type="password" class="form-input" id="input-deepseek-key" placeholder="sk-...">
+                    <span style="font-size: 11px; color: var(--color-text-muted)">Chave oficial da plataforma DeepSeek. Preço ultra acessível e modelo muito inteligente.</span>
+                </div>
+
+                <!-- Ollama Options -->
+                <div class="form-group llm-opt ollama-opt" style="display: none;">
+                    <label class="form-label">URL do Ollama</label>
+                    <input type="text" class="form-input" id="input-ollama-url" placeholder="http://127.0.0.1:11434">
+                </div>
+                <div class="form-group llm-opt ollama-opt" style="display: none;">
+                    <label class="form-label">Nome do Modelo</label>
+                    <input type="text" class="form-input" id="input-ollama-model" placeholder="deepseek-r1:8b">
+                </div>
+
+                <div class="alert-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span>
+                        O <strong>Modo Atuador Local</strong> interpreta comandos estruturados direto no seu computador. Conectando a chave do <strong>Gemini</strong> ou <strong>Ollama</strong>, o assistente usará raciocínio linguístico avançado para operar tarefas altamente complexas no Elementor.
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary" onclick="closeModal('modal-llm-settings')">Cancelar</button>
+                <button class="btn primary" id="btn-save-llm">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         LOGICA JAVASCRIPT APLICATIVA E CONHECIMENTO
+         ============================================================ -->
+    <script src="knowledge-base.js"></script>
+    <script>
+        // State Variables
+        let sites = [];
+        let activeSiteId = null;
+        let llmConfig = {
+            provider: 'simulated',
+            geminiKey: '',
+            deepseekKey: '',
+            ollamaUrl: 'http://127.0.0.1:11434',
+            ollamaModel: 'deepseek-r1:8b'
+        };
+
+        // Initialize App on DOM Load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderSitesList();
+            setupEventListeners();
+            
+            // Check default site connectivity
+            if (sites.length > 0) {
+                selectSite(sites[0].id);
+                pingAllSites();
+            } else {
+                showWelcomeScreen();
+            }
+        });
+
+        // Load persisted configurations
+        function loadState() {
+            const savedSites = localStorage.getItem('aic_sites');
+            if (savedSites) {
+                sites = JSON.parse(savedSites);
+            } else {
+                // Seed a mock/local default site to make setup easier for user
+                sites = [
+                    {
+                        id: '1716300000001',
+                        name: 'Argiminas Local',
+                        url: 'http://127.0.0.1:8080/argiminas',
+                        apiKey: 'V7ZIXRuPJC2h3ucs3lI2T0IlyDGGIQVebGFDGauuAQmHbPmH',
+                        status: 'offline',
+                        wpVersion: '-',
+                        elementorVersion: '-'
+                    }
+                ];
+                saveState();
+            }
+
+            const savedLLM = localStorage.getItem('aic_llm');
+            if (savedLLM) {
+                llmConfig = JSON.parse(savedLLM);
+            }
+        }
+
+        // Save active state to localStorage
+        function saveState() {
+            localStorage.setItem('aic_sites', JSON.stringify(sites));
+            localStorage.setItem('aic_llm', JSON.stringify(llmConfig));
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Modal Add Site triggers
+            document.getElementById('open-add-site').addEventListener('click', () => openModal('modal-add-site'));
+            document.getElementById('add-first-site-btn').addEventListener('click', () => openModal('modal-add-site'));
+            document.getElementById('btn-save-site').addEventListener('click', handleSaveSite);
+
+            // Modal LLM triggers
+            document.getElementById('open-llm-settings').addEventListener('click', () => {
+                // Populate forms
+                document.getElementById('select-llm-provider').value = llmConfig.provider;
+                document.getElementById('input-gemini-key').value = llmConfig.geminiKey || '';
+                document.getElementById('input-deepseek-key').value = llmConfig.deepseekKey || '';
+                document.getElementById('input-ollama-url').value = llmConfig.ollamaUrl || 'http://127.0.0.1:11434';
+                document.getElementById('input-ollama-model').value = llmConfig.ollamaModel || 'deepseek-r1:8b';
+                toggleLLMFields(llmConfig.provider);
+                openModal('modal-llm-settings');
+            });
+            
+            document.getElementById('select-llm-provider').addEventListener('change', (e) => {
+                toggleLLMFields(e.target.value);
+            });
+            
+            document.getElementById('btn-save-llm').addEventListener('click', handleSaveLLM);
+
+            // Tabs toggles
+            document.getElementById('tab-btn-dashboard').addEventListener('click', () => switchTab('dashboard'));
+            document.getElementById('tab-btn-chat').addEventListener('click', () => switchTab('chat'));
+
+            // Quick Actions Panel
+            document.getElementById('btn-quick-ping').addEventListener('click', () => triggerQuickPing(true));
+            document.getElementById('btn-quick-draft').addEventListener('click', triggerQuickDraft);
+            document.getElementById('btn-quick-php').addEventListener('click', triggerQuickPHP);
+
+            // Chat actions
+            document.getElementById('btn-send-chat').addEventListener('click', handleSendChatMessage);
+            document.getElementById('chat-input-field').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleSendChatMessage();
+            });
+
+            document.getElementById('btn-clear-console').addEventListener('click', () => {
+                document.getElementById('console-logs-container').innerHTML = `
+                    <div class="log-entry" style="color: var(--color-text-muted); text-align: center; padding-top: 20px;">
+                        Console limpo. Nenhuma nova requisição.
+                    </div>
+                `;
+            });
+        }
+
+        // ============================================================
+        // MODALS ENGINE
+        // ============================================================
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function toggleLLMFields(provider) {
+            // Hide all
+            document.querySelectorAll('.llm-opt').forEach(el => el.style.display = 'none');
+            
+            // Show selected
+            if (provider === 'gemini') {
+                document.querySelectorAll('.gemini-opt').forEach(el => el.style.display = 'flex');
+            } else if (provider === 'deepseek') {
+                document.querySelectorAll('.deepseek-opt').forEach(el => el.style.display = 'flex');
+            } else if (provider === 'ollama') {
+                document.querySelectorAll('.ollama-opt').forEach(el => el.style.display = 'flex');
+            }
+        }
+
+        function handleSaveSite() {
+            const name = document.getElementById('input-site-name').value.trim();
+            let url = document.getElementById('input-site-url').value.trim();
+            const key = document.getElementById('input-site-key').value.trim();
+
+            if (!name || !url || !key) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+
+            // Standardize URL: strip trailing slash
+            if (url.endsWith('/')) {
+                url = url.slice(0, -1);
+            }
+
+            const newSite = {
+                id: Date.now().toString(),
+                name,
+                url,
+                apiKey: key,
+                status: 'offline',
+                wpVersion: '-',
+                elementorVersion: '-'
+            };
+
+            sites.push(newSite);
+            saveState();
+            renderSitesList();
+            closeModal('modal-add-site');
+            
+            // Clear inputs
+            document.getElementById('input-site-name').value = '';
+            document.getElementById('input-site-url').value = '';
+            document.getElementById('input-site-key').value = '';
+
+            // Auto-select the newly added site
+            selectSite(newSite.id);
+            triggerQuickPing(true);
+        }
+
+        function handleSaveLLM() {
+            llmConfig.provider = document.getElementById('select-llm-provider').value;
+            llmConfig.geminiKey = document.getElementById('input-gemini-key').value.trim();
+            llmConfig.deepseekKey = document.getElementById('input-deepseek-key').value.trim();
+            llmConfig.ollamaUrl = document.getElementById('input-ollama-url').value.trim();
+            llmConfig.ollamaModel = document.getElementById('input-ollama-model').value.trim();
+
+            saveState();
+            closeModal('modal-llm-settings');
+            
+            // Log setting change in chat stream if active
+            if (activeSiteId) {
+                appendChatMessage('ai', `Configurações de inteligência atualizadas com sucesso! Provedor selecionado: **${llmConfig.provider.toUpperCase()}**.`);
+            }
+        }
+
+        // ============================================================
+        // SITES RENDERING & MANAGEMENT
+        // ============================================================
+        function renderSitesList() {
+            const container = document.getElementById('sites-list-container');
+            container.innerHTML = '';
+
+            if (sites.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 16px; text-align: center; color: var(--color-text-muted); font-size: 13px;">
+                        Nenhum site cadastrado.
+                    </div>
+                `;
+                return;
+            }
+
+            sites.forEach(site => {
+                const card = document.createElement('div');
+                card.className = `site-card ${site.id === activeSiteId ? 'active' : ''}`;
+                card.onclick = () => selectSite(site.id);
+
+                card.innerHTML = `
+                    <div class="site-info">
+                        <span class="site-status-dot ${site.status === 'online' ? 'online' : ''}" id="dot-${site.id}"></span>
+                        <div class="site-meta-text">
+                            <div class="site-name">${escapeHTML(site.name)}</div>
+                            <div class="site-url">${escapeHTML(site.url)}</div>
+                        </div>
+                    </div>
+                    <div class="site-actions">
+                        <button class="btn-icon delete" onclick="event.stopPropagation(); handleDeleteSite('${site.id}')" title="Deletar site">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function handleDeleteSite(id) {
+            if (!confirm('Deseja realmente remover este site da lista de controle?')) {
+                return;
+            }
+
+            sites = sites.filter(s => s.id !== id);
+            saveState();
+            
+            if (activeSiteId === id) {
+                activeSiteId = null;
+                if (sites.length > 0) {
+                    selectSite(sites[0].id);
+                } else {
+                    showWelcomeScreen();
+                }
+            }
+            
+            renderSitesList();
+        }
+
+        function selectSite(id) {
+            activeSiteId = id;
+            const site = sites.find(s => s.id === id);
+            if (!site) return;
+
+            // Update UI elements
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('active-workspace-panel').style.display = 'flex';
+            
+            document.getElementById('current-site-name').innerText = site.name;
+            document.getElementById('current-site-url').innerText = site.url;
+            document.getElementById('current-site-url').href = site.url;
+            
+            const dot = document.getElementById('current-status-dot');
+            const text = document.getElementById('current-status-text');
+            if (site.status === 'online') {
+                dot.className = 'site-status-dot online';
+                text.innerText = 'ONLINE';
+                text.style.color = 'var(--color-online)';
+            } else {
+                dot.className = 'site-status-dot';
+                text.innerText = 'OFFLINE';
+                text.style.color = 'var(--color-offline)';
+            }
+
+            // STATS panel
+            document.getElementById('stat-wp-version').innerText = site.wpVersion || '-';
+            document.getElementById('stat-php-version').innerText = site.phpVersion || '-';
+            document.getElementById('stat-elementor-status').innerText = site.elementorVersion ? `Instalado (${site.elementorVersion})` : 'Inativo';
+            
+            // Highlight selected card
+            document.querySelectorAll('.site-card').forEach(card => card.classList.remove('active'));
+            renderSitesList();
+
+            // Clear chat stream and set greeting
+            const stream = document.getElementById('chat-messages-container');
+            stream.innerHTML = `
+                <div class="chat-bubble ai">
+                    <span class="chat-sender-name">Co-pilot</span>
+                    <div class="chat-bubble-body">
+                        Conectado ao painel de **${escapeHTML(site.name)}**. 
+                        Como posso ajudar você a manipular seu site WordPress ou Elementor hoje?
+                    </div>
+                </div>
+            `;
+
+            // Load remote data
+            triggerQuickPing(false);
+            fetchPagesList();
+        }
+
+        function showWelcomeScreen() {
+            document.getElementById('welcome-screen').style.display = 'flex';
+            document.getElementById('active-workspace-panel').style.display = 'none';
+            activeSiteId = null;
+        }
+
+        function switchTab(tab) {
+            const btnDash = document.getElementById('tab-btn-dashboard');
+            const btnChat = document.getElementById('tab-btn-chat');
+            const contentDash = document.getElementById('content-tab-dashboard');
+            const contentChat = document.getElementById('content-tab-chat');
+
+            if (tab === 'dashboard') {
+                btnDash.classList.add('active');
+                btnChat.classList.remove('active');
+                contentDash.style.display = 'block';
+                contentChat.style.display = 'none';
+                fetchPagesList(); // Refresh
+            } else {
+                btnDash.classList.remove('active');
+                btnChat.classList.add('active');
+                contentDash.style.display = 'none';
+                contentChat.style.display = 'flex';
+            }
+        }
+
+        // ============================================================
+        // API CONTROLLER REMOTE CALLS (Actuator Actions)
+        // ============================================================
+        
+        // Log request/response into console drawer
+        function logConsoleRequest(method, url, payload, status, responseText) {
+            const container = document.getElementById('console-logs-container');
+            
+            // Remove clear placeholder if present
+            if (container.querySelector('[style*="text-align: center"]')) {
+                container.innerHTML = '';
+            }
+
+            const timestamp = new Date().toLocaleTimeString();
+            const logId = 'log-' + Date.now();
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <div class="log-timestamp">[${timestamp}]</div>
+                <div class="log-method-url ${method.toLowerCase()}"><strong>${method}</strong> ${escapeHTML(url)}</div>
+                <div style="font-weight:600; color:var(--color-text-muted); margin-bottom:4px;">Request Payload:</div>
+                <div class="log-payload-box">${escapeHTML(JSON.stringify(payload, null, 2))}</div>
+                <div class="log-status-line ${status >= 200 && status < 300 ? 'success' : 'error'}">
+                    <span>Response Code: ${status}</span>
+                </div>
+                <div style="font-weight:600; color:var(--color-text-muted); margin-top:6px; margin-bottom:4px;">Response Body:</div>
+                <div class="log-payload-box">${escapeHTML(responseText)}</div>
+            `;
+            
+            container.insertBefore(entry, container.firstChild);
+        }
+
+        async function makeRemoteCall(site, endpoint, method = 'POST', body = null) {
+            const url = `${site.url}/wp-json/ai-controller/v1/${endpoint}`;
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-API-Key': site.apiKey
+            };
+
+            const fetchOptions = {
+                method: method,
+                headers: headers
+            };
+
+            if (body && method === 'POST') {
+                fetchOptions.body = JSON.stringify(body);
+            }
+
+            try {
+                const response = await fetch(url, fetchOptions);
+                const responseText = await response.text();
+                
+                logConsoleRequest(method, url, body || {}, response.status, responseText);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error ${response.status}: ${responseText}`);
+                }
+
+                return JSON.parse(responseText);
+            } catch (err) {
+                console.error("Remote Call Failed: ", err);
+                logConsoleRequest(method, url, body || {}, 500, err.message);
+                throw err;
+            }
+        }
+
+        // Quick Ping to verify active status
+        async function triggerQuickPing(showNotifications = true) {
+            const site = sites.find(s => s.id === activeSiteId);
+            if (!site) return;
+
+            try {
+                if (showNotifications) {
+                    appendChatMessage('system', `Pinging ${site.url}...`);
+                }
+
+                const result = await makeRemoteCall(site, 'status', 'GET');
+                
+                // Update local state details
+                site.status = 'online';
+                site.wpVersion = result.wordpress || '-';
+                site.phpVersion = result.php || '-';
+                site.elementorVersion = result.elementor && result.elementor.active ? result.elementor.version : null;
+
+                // Sync badges
+                const badgesContainer = document.getElementById('stat-plugins-badges');
+                badgesContainer.innerHTML = '';
+                
+                if (result.active_plugins && Array.isArray(result.active_plugins)) {
+                    document.getElementById('stat-plugins-count').innerText = `${result.active_plugins.length} Plugins Ativos`;
+                    result.active_plugins.forEach(p => {
+                        const isSpecial = p.includes('elementor') || p.includes('ai-controller');
+                        const isBrand = p.includes('ai-controller');
+                        const cleanName = p.split('/')[0];
+                        
+                        const badge = document.createElement('span');
+                        badge.className = `plugin-badge ${isBrand ? 'brand' : (isSpecial ? 'special' : '')}`;
+                        badge.innerText = cleanName;
+                        badgesContainer.appendChild(badge);
+                    });
+                }
+
+                saveState();
+                
+                // Update DOM directly instead of calling selectSite to prevent infinite loop
+                if (site.id === activeSiteId) {
+                    document.getElementById('stat-wp-version').innerText = site.wpVersion;
+                    document.getElementById('stat-php-version').innerText = site.phpVersion;
+                    document.getElementById('stat-elementor-status').innerText = site.elementorVersion ? `Instalado (${site.elementorVersion})` : 'Inativo';
+                    
+                    const dot = document.getElementById('current-status-dot');
+                    const text = document.getElementById('current-status-text');
+                    dot.className = 'site-status-dot online';
+                    text.innerText = 'ONLINE';
+                    text.style.color = 'var(--color-online)';
+                }
+                renderSitesList(); // Just updates the sidebar
+
+                if (showNotifications) {
+                    appendChatMessage('ai', `Conexão verificada! O WordPress está **Online** respondendo na versão **${site.wpVersion}**.`);
+                }
+            } catch (err) {
+                site.status = 'offline';
+                saveState();
+                
+                if (site.id === activeSiteId) {
+                    const dot = document.getElementById('current-status-dot');
+                    const text = document.getElementById('current-status-text');
+                    dot.className = 'site-status-dot';
+                    text.innerText = 'OFFLINE';
+                    text.style.color = 'var(--color-offline)';
+                }
+                renderSitesList();
+                
+                if (showNotifications) {
+                    appendChatMessage('system', `Falha de conexão com o site: ${err.message}. Verifique a URL e a API Key.`);
+                }
+            }
+        }
+
+        // Fetch pages list to populate layout table
+        async function fetchPagesList() {
+            const site = sites.find(s => s.id === activeSiteId);
+            if (!site || site.status !== 'online') return;
+
+            const tbody = document.getElementById('pages-table-body');
+
+            try {
+                const response = await makeRemoteCall(site, 'posts/query', 'POST', {
+                    post_type: 'page',
+                    limit: 8
+                });
+
+                tbody.innerHTML = '';
+                if (response.success && response.posts && response.posts.length > 0) {
+                    response.posts.forEach(p => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${p.ID}</td>
+                            <td><a href="${p.permalink}" target="_blank"><strong>${escapeHTML(p.title)}</strong></a> <span style="font-size:11px;color:var(--color-text-muted)">(${p.slug})</span></td>
+                            <td><span class="page-badge-status">${p.status.toUpperCase()}</span></td>
+                            <td>${new Date(p.date).toLocaleDateString()}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Nenhuma página cadastrada.</td></tr>`;
+                }
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-offline);">Erro ao puxar dados das páginas: ${escapeHTML(err.message)}</td></tr>`;
+            }
+        }
+
+        // Quick action: Create Quick Page Draft
+        async function triggerQuickDraft() {
+            const site = sites.find(s => s.id === activeSiteId);
+            if (!site || site.status !== 'online') return;
+
+            appendChatMessage('system', 'Criando rascunho de página teste...');
+
+            try {
+                const title = "Página de Teste Co-pilot " + new Date().toLocaleTimeString();
+                const result = await makeRemoteCall(site, 'posts/create', 'POST', {
+                    title: title,
+                    content: '<!-- wp:paragraph --><p>Criada com sucesso via WP AI Co-pilot Dashboard!</p><!-- /wp:paragraph -->',
+                    status: 'draft',
+                    post_type: 'page'
+                });
+
+                if (result.success) {
+                    appendChatMessage('ai', `Página de Rascunho criada com sucesso! <br> **Título:** ${title} <br> **ID:** ${result.post_id} <br> **Link:** <a href="${result.permalink}" target="_blank">${result.permalink}</a>`);
+                    fetchPagesList(); // Refresh
+                }
+            } catch (err) {
+                appendChatMessage('ai', `Erro ao criar página: **${err.message}**`);
+            }
+        }
+
+        // Quick action: Execute safe PHP script
+        async function triggerQuickPHP() {
+            const site = sites.find(s => s.id === activeSiteId);
+            if (!site || site.status !== 'online') return;
+
+            appendChatMessage('system', 'Enviando script PHP de teste...');
+
+            try {
+                const result = await makeRemoteCall(site, 'execute-php', 'POST', {
+                    code: 'echo "Olá! Executando PHP com sucesso na versão " . PHP_VERSION;'
+                });
+
+                if (result.success) {
+                    appendChatMessage('ai', `Script PHP rodado com sucesso! <br> **Retorno:** <code style="background:rgba(0,0,0,0.3);padding:4px 8px;border-radius:4px;font-family:monospace;">${result.output}</code>`);
+                }
+            } catch (err) {
+                appendChatMessage('ai', `Erro ao rodar PHP: **${err.message}**`);
+            }
+        }
+
+        // Ping all registered sites to verify connectivity in background
+        function pingAllSites() {
+            sites.forEach(site => {
+                fetch(`${site.url}/wp-json/ai-controller/v1/status`, {
+                    method: 'GET',
+                    headers: { 'X-API-Key': site.apiKey }
+                })
+                .then(res => {
+                    if (res.ok) {
+                        site.status = 'online';
+                    } else {
+                        site.status = 'offline';
+                    }
+                    saveState();
+                    renderSitesList();
+                })
+                .catch(() => {
+                    site.status = 'offline';
+                    saveState();
+                    renderSitesList();
+                });
+            });
+        }
+
+        // ============================================================
+        // CHAT INTERACTION ENGINE
+        // ============================================================
+        function fillChatInput(text) {
+            document.getElementById('chat-input-field').value = text;
+            document.getElementById('chat-input-field').focus();
+        }
+
+        function appendChatMessage(sender, text, actionBlock = null) {
+            const container = document.getElementById('chat-messages-container');
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${sender}`;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'chat-sender-name';
+            nameSpan.innerText = sender === 'ai' ? 'Co-pilot' : (sender === 'user' ? 'Você' : 'Sistema');
+            bubble.appendChild(nameSpan);
+
+            const body = document.createElement('div');
+            body.className = 'chat-bubble-body';
+            body.innerHTML = text;
+
+            if (actionBlock) {
+                body.appendChild(actionBlock);
+            }
+
+            bubble.appendChild(body);
+            container.appendChild(bubble);
+            
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('chat-typing-indicator').style.display = 'block';
+            const container = document.getElementById('chat-messages-container');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('chat-typing-indicator').style.display = 'none';
+        }
+
+        async function handleSendChatMessage() {
+            const input = document.getElementById('chat-input-field');
+            const query = input.value.trim();
+            if (!query) return;
+
+            // Clear input
+            input.value = '';
+
+            const site = sites.find(s => s.id === activeSiteId);
+            if (!site) {
+                alert('Selecione ou adicione um site primeiro!');
+                return;
+            }
+
+            // Append User message
+            appendChatMessage('user', escapeMarkdown(query));
+            showTypingIndicator();
+
+            try {
+                // Route message depending on LLM config
+                if (llmConfig.provider === 'gemini' && llmConfig.geminiKey) {
+                    await processGeminiChat(site, query);
+                } else if (llmConfig.provider === 'deepseek' && llmConfig.deepseekKey) {
+                    await processDeepSeekChat(site, query);
+                } else if (llmConfig.provider === 'ollama') {
+                    await processOllamaChat(site, query);
+                } else {
+                    // Fallback to local structured parsing (Simulated Command Actuator)
+                    await processSimulatedChat(site, query);
+                }
+            } catch (err) {
+                appendChatMessage('ai', `Desculpe, ocorreu um erro no processamento: **${escapeHTML(err.message)}**`);
+            } finally {
+                hideTypingIndicator();
+            }
+        }
+
+        // ============================================================
+        // 1. LOCAL COMMAND INTERPRETER (Simulated/Dev Mode)
+        // ============================================================
+        async function processSimulatedChat(site, query) {
+            const cleanQuery = query.toLowerCase().trim();
+            
+            // Artificial delay to make it realistic
+            await new Promise(r => setTimeout(r, 800));
+
+            // HELP
+            if (cleanQuery.includes('ajuda') || cleanQuery.includes('help') || cleanQuery.includes('/ajuda')) {
+                appendChatMessage('ai', `
+                    No **Modo Atuador Local**, posso executar os seguintes comandos de infraestrutura diretamente:
+                    <br><br>
+                    *   📁 **Listar páginas:** \`Listar páginas\` ou \`Ver páginas\`
+                    *   📝 **Criar Página:** \`Criar rascunho de página chamado 'Nome'\`
+                    *   ⚙️ **Executar PHP:** \`Executar PHP echo "Oi";\`
+                    *   🔌 **Ping:** \`Checar conexão\` ou \`status\`
+                `);
+                return;
+            }
+
+            // PING / STATUS
+            if (cleanQuery.includes('status') || cleanQuery.includes('ping') || cleanQuery.includes('conex')) {
+                try {
+                    const res = await makeRemoteCall(site, 'status', 'GET');
+                    appendChatMessage('ai', `
+                        **Status Recebido!** <br>
+                        🔌 WordPress: **${res.wordpress}** <br>
+                        🖥️ PHP: **${res.php}** <br>
+                        🧱 Elementor: **${res.elementor && res.elementor.active ? 'Instalado & Ativo' : 'Inativo'}**
+                    `);
+                } catch (e) {
+                    appendChatMessage('ai', `Falha ao tentar pingar a API: **${e.message}**`);
+                }
+                return;
+            }
+
+            // LIST PAGES
+            if (cleanQuery.includes('listar') || cleanQuery.includes('ver pág') || cleanQuery.includes('mostrar pág')) {
+                try {
+                    const res = await makeRemoteCall(site, 'posts/query', 'POST', { post_type: 'page', limit: 10 });
+                    if (res.success && res.posts) {
+                        let html = `Encontrei **${res.posts.length}** páginas ativas no site:<br><ul style="padding-left:20px; margin-top:8px;">`;
+                        res.posts.forEach(p => {
+                            html += `<li><strong>${escapeHTML(p.title)}</strong> (ID: ${p.ID}) - <a href="${p.permalink}" target="_blank">${p.slug}</a> [${p.status}]</li>`;
+                        });
+                        html += `</ul>`;
+                        appendChatMessage('ai', html);
+                    } else {
+                        appendChatMessage('ai', 'Não encontrei nenhuma página.');
+                    }
+                } catch (e) {
+                    appendChatMessage('ai', `Falha ao carregar páginas: **${e.message}**`);
+                }
+                return;
+            }
+
+            // CREATE PAGE
+            if (cleanQuery.includes('criar') && cleanQuery.includes('pág')) {
+                // Extract title
+                let title = "Nova Página " + Date.now();
+                const titleMatch = query.match(/chamado ['"](.+?)['"]/i) || query.match(/com o título ['"](.+?)['"]/i) || query.match(/criar página (.+)/i);
+                if (titleMatch && titleMatch[1]) {
+                    title = titleMatch[1];
+                }
+
+                try {
+                    const res = await makeRemoteCall(site, 'posts/create', 'POST', {
+                        title: title,
+                        status: 'draft',
+                        post_type: 'page'
+                    });
+                    if (res.success) {
+                        appendChatMessage('ai', `
+                            Página criada com sucesso no WordPress!<br><br>
+                            🆔 **ID:** ${res.post_id}<br>
+                            📝 **Título:** ${title}<br>
+                            🔗 **Rascunho:** <a href="${res.permalink}" target="_blank">Ver Rascunho Remoto</a>
+                        `);
+                    }
+                } catch (e) {
+                    appendChatMessage('ai', `Erro ao criar página: **${e.message}**`);
+                }
+                return;
+            }
+
+            // EXECUTE PHP
+            if (cleanQuery.includes('executar php') || cleanQuery.startsWith('php ')) {
+                const code = query.replace(/executar php/i, '').replace(/^php/i, '').trim();
+                if (!code) {
+                    appendChatMessage('ai', 'Por favor, passe o código PHP que quer rodar.');
+                    return;
+                }
+
+                try {
+                    const res = await makeRemoteCall(site, 'execute-php', 'POST', { code: code });
+                    appendChatMessage('ai', `
+                        PHP executado com sucesso!<br>
+                        **Resultado impresso:**
+                        <pre style="background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; font-family:monospace; margin-top:8px;">${escapeHTML(res.output || '(Sem saída gerada)')}</pre>
+                    `);
+                } catch (e) {
+                    appendChatMessage('ai', `Erro ao rodar PHP: **${e.message}**`);
+                }
+                return;
+            }
+
+            // DEFAULT
+            appendChatMessage('ai', `
+                Recebi sua mensagem no **Modo Atuador Local**: <br>
+                *"${escapeHTML(query)}"*
+                <br><br>
+                Este modo não processa linguagem natural livre. Para que eu consiga entender frases livres e convertê-las em ações complexas de design do **Elementor Pro**, configure uma **Chave do Gemini** ou **Ollama** clicando no botão **Configurar Inteligência** no rodapé esquerdo!
+            `);
+        }
+
+          async function processGeminiChat(site, query) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${llmConfig.geminiKey}`;
+            
+            // Base Knowledge from external file (RAG Injection)
+            const knowledgeBase = typeof window.WPAIKnowledgeBase !== 'undefined' ? window.WPAIKnowledgeBase : '';
+
+            // Construct System Prompt instructing the model to translate text to tools
+            const systemInstruction = `
+Você é o WP AI Co-pilot, um orquestrador de Inteligência Artificial para WordPress e Elementor Pro.
+O usuário quer operar tarefas no WordPress. Suas mensagens devem SEMPRE vir em um JSON estruturado estrito.
+As ferramentas disponíveis na REST API do plugin "WP AI Controller" e seus endpoints são:
+
+1. Endpoint: "status" (GET)
+   - Descrição: Checa status do site, PHP, core e plugins ativos. Sem parâmetros.
+
+2. Endpoint: "execute-php" (POST)
+   - Descrição: Executa código PHP arbitrário no WordPress. Use para queries SQL customizadas ($wpdb) ou ler dados avançados.
+   - Parâmetros JSON: { "code": string }
+
+3. Endpoint: "read-file" (POST)
+   - Descrição: Lê o conteúdo de um arquivo (caminho relativo ao ABSPATH do WordPress).
+   - Parâmetros JSON: { "path": string (ex: "wp-content/themes/kadence/functions.php") }
+
+4. Endpoint: "write-file" (POST)
+   - Descrição: Grava ou cria um arquivo no servidor.
+   - Parâmetros JSON: { "path": string, "content": string, "is_base64": boolean (opcional) }
+
+5. Endpoint: "edit-file" (POST)
+   - Descrição: Substitui strings de texto cirurgicamente em um arquivo existente (find & replace).
+   - Parâmetros JSON: { "path": string, "old_string": string, "new_string": string, "replace_all": boolean (opcional) }
+
+6. Endpoint: "delete-file" (POST)
+   - Descrição: Exclui um arquivo ou pasta de forma segura.
+   - Parâmetros JSON: { "path": string, "recursive": boolean (opcional) }
+
+7. Endpoint: "list-directory" (POST)
+   - Descrição: Lista arquivos e pastas em um caminho do servidor.
+   - Parâmetros JSON: { "path": string, "pattern": string (glob, opcional), "recursive": boolean (opcional), "max_depth": integer (opcional), "limit": integer (opcional) }
+
+8. Endpoint: "elementor/get" (POST)
+   - Descrição: Puxa a árvore de layout de Elementor inteira de uma página ou post.
+   - Parâmetros JSON: { "post_id": integer }
+
+9. Endpoint: "elementor/set" (POST)
+   - Descrição: Sobrescreve o layout de Elementor completo de uma página com um array JSON de seções.
+   - Parâmetros JSON: { "post_id": integer, "data": array, "page_settings": object (opcional), "css": string (opcional) }
+
+10. Endpoint: "elementor/templates" (POST)
+    - Descrição: Lista os templates salvos na biblioteca do Elementor.
+    - Parâmetros JSON: { "type": string (opcional, ex: "section" | "page") }
+
+11. Endpoint: "posts/query" (POST)
+    - Descrição: Consulta posts ou páginas com filtros avançados.
+    - Parâmetros JSON: { "post_type": string, "limit": integer, "offset": integer, "category": string, "orderby": string, "order": "DESC" | "ASC", "post_status": string, "search": string }
+
+12. Endpoint: "posts/create" (POST)
+    - Descrição: Cria um post, página ou custom post type.
+    - Parâmetros JSON: { "title": string, "content": string, "post_type": string, "status": "draft" | "publish", "excerpt": string, "categories": array, "tags": array, "meta": object, "thumbnail_url": string }
+
+13. Endpoint: "posts/update" (POST)
+    - Descrição: Atualiza campos padrão de um post ou página.
+    - Parâmetros JSON: { "post_id": integer, "title": string, "content": string, "status": string, "excerpt": string, "categories": array, "tags": array }
+
+14. Endpoint: "categories/create" (POST)
+    - Descrição: Cria uma ou mais categorias de posts.
+    - Parâmetros JSON: { "categories": [ { "name": string, "slug": string, "description": string } ] }
+
+15. Endpoint: "menus/manage" (POST)
+    - Descrição: Lista, cria, adiciona itens ou define localizações de menus de navegação do site.
+    - Parâmetros JSON: { "action": "list" | "create" | "add_items" | "set_location" | "clear", "menu_name": string, "menu_id": integer, "items": array, "location": string }
+
+16. Endpoint: "options" (POST)
+    - Descrição: Lê, define ou lista opções globais da tabela wp_options.
+    - Parâmetros JSON: { "action": "get" | "set" | "list", "name": string, "value": any, "prefix": string }
+
+17. Endpoint: "elementor/get-element" (POST)
+    - Descrição: Busca cirurgicamente um widget ou container específico de Elementor usando o ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string }
+
+18. Endpoint: "elementor/add-element" (POST)
+    - Descrição: Adiciona cirurgicamente um widget ou container em uma página, sem alterar o resto do layout.
+    - Parâmetros JSON: { "post_id": integer, "element": object (JSON do widget), "target_id": string (ID da coluna/container pai), "position": integer (opcional) }
+
+19. Endpoint: "elementor/update-element" (POST)
+    - Descrição: Altera cirurgicamente propriedades de settings de um widget pelo ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string, "settings": object, "merge": boolean (opcional) }
+
+20. Endpoint: "elementor/remove-element" (POST)
+    - Descrição: Exclui cirurgicamente um widget ou container pelo ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string }
+
+21. Endpoint: "elementor/move-element" (POST)
+    - Descrição: Move um widget para outra coluna pai ou outra posição.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string, "new_parent_id": string, "position": integer }
+
+22. Endpoint: "elementor/duplicate-element" (POST)
+    - Descrição: Duplica um widget ou container pelo ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string }
+
+Se a pergunta puder ser traduzida em uma chamada de API acima, preencha o campo "apiCall" no JSON de resposta. Caso contrário (ou se for apenas uma conversa fiada ou explicação), deixe "apiCall" como null.
+
+Formato OBRIGATÓRIO da sua resposta (deve ser estritamente esse JSON e NADA mais):
+{
+  "thought": "Seu raciocínio interno em português",
+  "apiCall": {
+    "endpoint": "nome-do-endpoint",
+    "method": "GET" | "POST",
+    "body": { ... parâmetros ... }
+  } ou null,
+  "message": "Mensagem amigável para exibir ao usuário explicando o que está sendo executado."
+}
+
+# BASE DE CONHECIMENTO UNIVERSAL (RAG Context)
+${knowledgeBase}
+            `;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                role: 'user',
+                                parts: [{ text: query }]
+                            }
+                        ],
+                        systemInstruction: {
+                            parts: [{ text: systemInstruction }]
+                        },
+                        generationConfig: {
+                            responseMimeType: "application/json"
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`Erro na API do Gemini: ${response.status} - ${text}`);
+                }
+
+                const json = await response.json();
+                const replyText = json.candidates[0].content.parts[0].text;
+                const result = JSON.parse(replyText);
+
+                // Check if the AI wants to call a remote API tool
+                if (result.apiCall) {
+                    const call = result.apiCall;
+                    appendChatMessage('system', `AI disparando ferramenta remota: <strong>${call.endpoint}</strong>...`);
+                    
+                    try {
+                        const apiResult = await makeRemoteCall(site, call.endpoint, call.method, call.body);
+                        
+                        // Create a beautiful expandable visual code box of the result
+                        const actionBlock = document.createElement('div');
+                        actionBlock.className = 'action-result-block';
+                        actionBlock.innerHTML = `
+                            <div class="action-result-header">
+                                <span>WP API Result: /${call.endpoint}</span>
+                                <span class="action-success-tag">SUCESSO</span>
+                            </div>
+                            <div class="action-result-content">${escapeHTML(JSON.stringify(apiResult, null, 2))}</div>
+                        `;
+
+                        appendChatMessage('ai', `${result.message}<br><br>*Requisição executada via WP AI Controller:*`, actionBlock);
+                        
+                        if (call.endpoint.includes('create') || call.endpoint.includes('update')) {
+                            fetchPagesList(); // Auto-refresh table
+                        }
+                    } catch (apiErr) {
+                        const actionBlock = document.createElement('div');
+                        actionBlock.className = 'action-result-block';
+                        actionBlock.innerHTML = `
+                            <div class="action-result-header">
+                                <span>WP API Result: /${call.endpoint}</span>
+                                <span class="action-error-tag">FALHA</span>
+                            </div>
+                            <div class="action-result-content">${escapeHTML(apiErr.message)}</div>
+                        `;
+                        appendChatMessage('ai', `Tentei executar a ação solicitada, mas a API do WordPress retornou um erro:`, actionBlock);
+                    }
+                } else {
+                    // Normal text response
+                    appendChatMessage('ai', result.message);
+                }
+            } catch (err) {
+                appendChatMessage('ai', `Falha ao chamar o modelo Gemini Cloud: **${err.message}**. Verifique sua chave de API e conexão de rede.`);
+            }
+        }
+
+        // ============================================================
+        // 3. DEEPSEEK API CONNECTOR
+        // ============================================================
+        async function processDeepSeekChat(site, query) {
+            const url = 'https://api.deepseek.com/chat/completions';
+            
+            // Base Knowledge from external file (RAG Injection)
+            const knowledgeBase = typeof window.WPAIKnowledgeBase !== 'undefined' ? window.WPAIKnowledgeBase : '';
+
+            // Construct System Prompt instructing the model to translate text to tools
+            const systemInstruction = `
+Você é o WP AI Co-pilot, um orquestrador de Inteligência Artificial para WordPress e Elementor Pro.
+O usuário quer operar tarefas no WordPress. Suas mensagens devem SEMPRE vir em um JSON estruturado estrito.
+As ferramentas disponíveis na REST API do plugin "WP AI Controller" e seus endpoints são:
+
+1. Endpoint: "status" (GET)
+   - Descrição: Checa status do site, PHP, core e plugins ativos. Sem parâmetros.
+
+2. Endpoint: "execute-php" (POST)
+   - Descrição: Executa código PHP arbitrário no WordPress. Use para queries SQL customizadas ($wpdb) ou ler dados avançados.
+   - Parâmetros JSON: { "code": string }
+
+3. Endpoint: "read-file" (POST)
+   - Descrição: Lê o conteúdo de um arquivo (caminho relativo ao ABSPATH do WordPress).
+   - Parâmetros JSON: { "path": string (ex: "wp-content/themes/kadence/functions.php") }
+
+4. Endpoint: "write-file" (POST)
+   - Descrição: Grava ou cria um arquivo no servidor.
+   - Parâmetros JSON: { "path": string, "content": string, "is_base64": boolean (opcional) }
+
+5. Endpoint: "edit-file" (POST)
+   - Descrição: Substitui strings de texto cirurgicamente em um arquivo existente (find & replace).
+   - Parâmetros JSON: { "path": string, "old_string": string, "new_string": string, "replace_all": boolean (opcional) }
+
+6. Endpoint: "delete-file" (POST)
+   - Descrição: Exclui um arquivo ou pasta de forma segura.
+   - Parâmetros JSON: { "path": string, "recursive": boolean (opcional) }
+
+7. Endpoint: "list-directory" (POST)
+   - Descrição: Lista arquivos e pastas em um caminho do servidor.
+   - Parâmetros JSON: { "path": string, "pattern": string (glob, opcional), "recursive": boolean (opcional), "max_depth": integer (opcional), "limit": integer (opcional) }
+
+8. Endpoint: "elementor/get" (POST)
+   - Descrição: Puxa a árvore de layout de Elementor inteira de uma página ou post.
+   - Parâmetros JSON: { "post_id": integer }
+
+9. Endpoint: "elementor/set" (POST)
+   - Descrição: Sobrescreve o layout de Elementor completo de uma página com um array JSON de seções.
+   - Parâmetros JSON: { "post_id": integer, "data": array, "page_settings": object (opcional), "css": string (opcional) }
+
+10. Endpoint: "elementor/templates" (POST)
+    - Descrição: Lista os templates salvos na biblioteca do Elementor.
+    - Parâmetros JSON: { "type": string (opcional, ex: "section" | "page") }
+
+11. Endpoint: "posts/query" (POST)
+    - Descrição: Consulta posts ou páginas com filtros avançados.
+    - Parâmetros JSON: { "post_type": string, "limit": integer, "offset": integer, "category": string, "orderby": string, "order": "DESC" | "ASC", "post_status": string, "search": string }
+
+12. Endpoint: "posts/create" (POST)
+    - Descrição: Cria um post, página ou custom post type.
+    - Parâmetros JSON: { "title": string, "content": string, "post_type": string, "status": "draft" | "publish", "excerpt": string, "categories": array, "tags": array, "meta": object, "thumbnail_url": string }
+
+13. Endpoint: "posts/update" (POST)
+    - Descrição: Atualiza campos padrão de um post ou página.
+    - Parâmetros JSON: { "post_id": integer, "title": string, "content": string, "status": string, "excerpt": string, "categories": array, "tags": array }
+
+14. Endpoint: "categories/create" (POST)
+    - Descrição: Cria uma ou mais categorias de posts.
+    - Parâmetros JSON: { "categories": [ { "name": string, "slug": string, "description": string } ] }
+
+15. Endpoint: "menus/manage" (POST)
+    - Descrição: Lista, cria, adiciona itens ou define localizações de menus de navegação do site.
+    - Parâmetros JSON: { "action": "list" | "create" | "add_items" | "set_location" | "clear", "menu_name": string, "menu_id": integer, "items": array, "location": string }
+
+16. Endpoint: "options" (POST)
+    - Descrição: Lê, define ou lista opções globais da tabela wp_options.
+    - Parâmetros JSON: { "action": "get" | "set" | "list", "name": string, "value": any, "prefix": string }
+
+17. Endpoint: "elementor/get-element" (POST)
+    - Descrição: Busca cirurgicamente um widget ou container específico de Elementor usando o ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string }
+
+18. Endpoint: "elementor/add-element" (POST)
+    - Descrição: Adiciona cirurgicamente um widget ou container em uma página, sem alterar o resto do layout.
+    - Parâmetros JSON: { "post_id": integer, "element": object (JSON do widget), "target_id": string (ID da coluna/container pai), "position": integer (opcional) }
+
+19. Endpoint: "elementor/update-element" (POST)
+    - Descrição: Altera cirurgicamente propriedades de settings de um widget pelo ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string, "settings": object, "merge": boolean (opcional) }
+
+20. Endpoint: "elementor/remove-element" (POST)
+    - Descrição: Exclui cirurgicamente um widget ou container pelo ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string }
+
+21. Endpoint: "elementor/move-element" (POST)
+    - Descrição: Move um widget para outra coluna pai ou outra posição.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string, "new_parent_id": string, "position": integer }
+
+22. Endpoint: "elementor/duplicate-element" (POST)
+    - Descrição: Duplica um widget ou container pelo ID de 7 caracteres.
+    - Parâmetros JSON: { "post_id": integer, "element_id": string }
+
+Se a pergunta puder ser traduzida em uma chamada de API acima, preencha o campo "apiCall" no JSON de resposta. Caso contrário (ou se for apenas uma conversa fiada ou explicação), deixe "apiCall" como null.
+
+Formato OBRIGATÓRIO da sua resposta (deve ser estritamente esse JSON e NADA mais):
+{
+  "thought": "Seu raciocínio interno em português",
+  "apiCall": {
+    "endpoint": "nome-do-endpoint",
+    "method": "GET" | "POST",
+    "body": { ... parâmetros ... }
+  } ou null,
+  "message": "Mensagem amigável para exibir ao usuário explicando o que está sendo executado."
+}
+
+# BASE DE CONHECIMENTO UNIVERSAL (RAG Context)
+${knowledgeBase}
+            `;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${llmConfig.deepseekKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            { role: 'system', content: systemInstruction },
+                            { role: 'user', content: query }
+                        ],
+                        response_format: { type: 'json_object' }
+                    })
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`Erro na API DeepSeek: ${response.status} - ${text}`);
+                }
+
+                const json = await response.json();
+                const replyText = json.choices[0].message.content;
+                const result = JSON.parse(replyText);
+
+                // Check if the AI wants to call a remote API tool
+                if (result.apiCall) {
+                    const call = result.apiCall;
+                    appendChatMessage('system', `AI disparando ferramenta remota: <strong>${call.endpoint}</strong>...`);
+                    
+                    try {
+                        const apiResult = await makeRemoteCall(site, call.endpoint, call.method, call.body);
+                        
+                        const actionBlock = document.createElement('div');
+                        actionBlock.className = 'action-result-block';
+                        actionBlock.innerHTML = `
+                            <div class="action-result-header">
+                                <span>WP API Result: /${call.endpoint}</span>
+                                <span class="action-success-tag">SUCESSO</span>
+                            </div>
+                            <div class="action-result-content">${escapeHTML(JSON.stringify(apiResult, null, 2))}</div>
+                        `;
+
+                        appendChatMessage('ai', `${result.message}<br><br>*Requisição executada via WP AI Controller:*`, actionBlock);
+                        
+                        if (call.endpoint.includes('create') || call.endpoint.includes('update')) {
+                            fetchPagesList(); // Auto-refresh table
+                        }
+                    } catch (apiErr) {
+                        const actionBlock = document.createElement('div');
+                        actionBlock.className = 'action-result-block';
+                        actionBlock.innerHTML = `
+                            <div class="action-result-header">
+                                <span>WP API Result: /${call.endpoint}</span>
+                                <span class="action-error-tag">FALHA</span>
+                            </div>
+                            <div class="action-result-content">${escapeHTML(apiErr.message)}</div>
+                        `;
+                        appendChatMessage('ai', `Tentei executar a ação solicitada, mas a API do WordPress retornou um erro:`, actionBlock);
+                    }
+                } else {
+                    // Normal text response
+                    appendChatMessage('ai', result.message);
+                }
+            } catch (err) {
+                appendChatMessage('ai', `Falha ao chamar o modelo DeepSeek: **${err.message}**. Verifique sua chave de API e conexão de rede.`);
+            }
+        }
+
+        // ============================================================
+        // 4. LOCAL OLLAMA SERVER CONNECTOR
+        // ============================================================
+        async function processOllamaChat(site, query) {
+            const url = `${llmConfig.ollamaUrl}/api/generate`;
+            
+            const systemPrompt = `
+Você é o WP AI Co-pilot. Você analisa comandos em português e os traduz em JSON estruturado para chamar a REST API do WordPress WP AI Controller.
+As rotas de API válidas são: status (GET), posts/query (POST), posts/create (POST), execute-php (POST).
+Você DEVE responder estritamente no formato JSON abaixo e mais nada:
+{
+  "thought": "seu raciocinio em portugues",
+  "apiCall": {
+    "endpoint": "status" | "posts/query" | "posts/create" | "execute-php",
+    "method": "GET" | "POST",
+    "body": { ... parametros ... }
+  } ou null,
+  "message": "Sua resposta explicativa ao usuario"
+}
+            `;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: llmConfig.ollamaModel,
+                        prompt: `System: ${systemPrompt}\nUser: ${query}`,
+                        stream: false,
+                        format: "json"
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error ${response.status}`);
+                }
+
+                const json = await response.json();
+                const result = JSON.parse(json.response);
+
+                if (result.apiCall) {
+                    const call = result.apiCall;
+                    appendChatMessage('system', `Ollama disparando ferramenta: <strong>${call.endpoint}</strong>...`);
+                    
+                    try {
+                        const apiResult = await makeRemoteCall(site, call.endpoint, call.method, call.body);
+                        
+                        const actionBlock = document.createElement('div');
+                        actionBlock.className = 'action-result-block';
+                        actionBlock.innerHTML = `
+                            <div class="action-result-header">
+                                <span>Ollama Actuator Result: /${call.endpoint}</span>
+                                <span class="action-success-tag">SUCESSO</span>
+                            </div>
+                            <div class="action-result-content">${escapeHTML(JSON.stringify(apiResult, null, 2))}</div>
+                        `;
+
+                        appendChatMessage('ai', `${result.message}<br><br>*Ação executada com sucesso:*`, actionBlock);
+                        fetchPagesList();
+                    } catch (apiErr) {
+                        appendChatMessage('ai', `Erro ao executar a ferramenta no WordPress via Ollama: **${apiErr.message}**`);
+                    }
+                } else {
+                    appendChatMessage('ai', result.message);
+                }
+            } catch (err) {
+                appendChatMessage('ai', `Falha ao tentar conectar ao Ollama local em **${llmConfig.ollamaUrl}**: **${err.message}**. Verifique se o Ollama está rodando em segundo plano e configurado para aceitar CORS.`);
+            }
+        }
+
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function escapeMarkdown(str) {
+            return escapeHTML(str)
+                .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
+                .replace(/`(.*?)`/g, '<code style="background:rgba(255,255,255,0.06);padding:2px 4px;border-radius:4px;font-family:monospace;">$1</code>');
+        }
+    </script>
+</body>
+</html>
