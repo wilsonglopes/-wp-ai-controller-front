@@ -1701,6 +1701,8 @@
             ollamaUrl: 'http://127.0.0.1:11434',
             ollamaModel: 'deepseek-r1:8b'
         };
+        let geminiHistory = [];
+        let deepseekHistory = [];
 
         // Initialize App on DOM Load
         document.addEventListener('DOMContentLoaded', () => {
@@ -1946,6 +1948,10 @@
             activeSiteId = id;
             const site = sites.find(s => s.id === id);
             if (!site) return;
+
+            // Reset chat history when switching sites
+            geminiHistory = [];
+            deepseekHistory = [];
 
             // Update UI elements
             document.getElementById('welcome-screen').style.display = 'none';
@@ -2623,17 +2629,23 @@ Formato OBRIGATÓRIO da sua resposta (deve ser estritamente esse JSON e NADA mai
 ${knowledgeBase}
             `;
 
+            // Add user message to Gemini history
+            geminiHistory.push({
+                role: 'user',
+                parts: [{ text: query }]
+            });
+
+            // Limit history size to last 12 messages (6 turns) to prevent context bloat
+            while (geminiHistory.length > 12) {
+                geminiHistory.shift();
+            }
+
             try {
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [
-                            {
-                                role: 'user',
-                                parts: [{ text: query }]
-                            }
-                        ],
+                        contents: geminiHistory,
                         systemInstruction: {
                             parts: [{ text: systemInstruction }]
                         },
@@ -2650,6 +2662,13 @@ ${knowledgeBase}
 
                 const json = await response.json();
                 const replyText = json.candidates[0].content.parts[0].text;
+                
+                // Add model response to history
+                geminiHistory.push({
+                    role: 'model',
+                    parts: [{ text: replyText }]
+                });
+
                 const result = JSON.parse(replyText);
 
                 // Check if the AI wants to call a remote API tool
@@ -2816,6 +2835,17 @@ Formato OBRIGATÓRIO da sua resposta (deve ser estritamente esse JSON e NADA mai
 ${knowledgeBase}
             `;
 
+            // Add user message to DeepSeek history
+            deepseekHistory.push({
+                role: 'user',
+                content: query
+            });
+
+            // Limit history size to last 12 messages (6 turns) to prevent context bloat
+            while (deepseekHistory.length > 12) {
+                deepseekHistory.shift();
+            }
+
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -2827,7 +2857,7 @@ ${knowledgeBase}
                         model: 'deepseek-chat',
                         messages: [
                             { role: 'system', content: systemInstruction },
-                            { role: 'user', content: query }
+                            ...deepseekHistory
                         ],
                         response_format: { type: 'json_object' }
                     })
@@ -2840,6 +2870,13 @@ ${knowledgeBase}
 
                 const json = await response.json();
                 const replyText = json.choices[0].message.content;
+                
+                // Add assistant response to history
+                deepseekHistory.push({
+                    role: 'assistant',
+                    content: replyText
+                });
+
                 const result = JSON.parse(replyText);
 
                 // Check if the AI wants to call a remote API tool
